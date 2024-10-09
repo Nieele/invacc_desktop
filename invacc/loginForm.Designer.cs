@@ -58,12 +58,12 @@
             // 
             label2.AutoSize = true;
             label2.BackColor = Color.FromArgb(127, 140, 141);
-            label2.Font = new Font("Javanese Text", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Font = new Font("Javanese Text", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label2.ForeColor = Color.FromArgb(236, 240, 241);
-            label2.Location = new Point(25, 120);
+            label2.Location = new Point(20, 115);
             label2.Margin = new Padding(0);
             label2.Name = "label2";
-            label2.Size = new Size(116, 47);
+            label2.Size = new Size(131, 54);
             label2.TabIndex = 1;
             label2.Text = "username";
             label2.TextAlign = ContentAlignment.MiddleCenter;
@@ -71,38 +71,38 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Javanese Text", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.Font = new Font("Javanese Text", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label3.ForeColor = Color.FromArgb(236, 240, 241);
-            label3.Location = new Point(25, 190);
+            label3.Location = new Point(20, 185);
             label3.Name = "label3";
-            label3.Size = new Size(115, 47);
+            label3.Size = new Size(127, 54);
             label3.TabIndex = 2;
             label3.Text = "password";
             // 
             // tboxUsername
             // 
             tboxUsername.BackColor = Color.FromArgb(236, 240, 241);
-            tboxUsername.Font = new Font("Franklin Gothic Medium", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            tboxUsername.Font = new Font("Franklin Gothic Medium", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
             tboxUsername.ForeColor = Color.FromArgb(52, 73, 94);
             tboxUsername.Location = new Point(25, 160);
             tboxUsername.MaxLength = 32;
-            tboxUsername.Multiline = true;
             tboxUsername.Name = "tboxUsername";
-            tboxUsername.Size = new Size(300, 30);
+            tboxUsername.Size = new Size(300, 29);
             tboxUsername.TabIndex = 3;
+            tboxUsername.KeyDown += textBox_KeyDown;
             // 
             // tboxPassword
             // 
             tboxPassword.BackColor = Color.FromArgb(236, 240, 241);
-            tboxPassword.Font = new Font("Franklin Gothic Medium", 12F, FontStyle.Bold);
+            tboxPassword.Font = new Font("Franklin Gothic Medium", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
             tboxPassword.ForeColor = Color.FromArgb(52, 73, 94);
             tboxPassword.Location = new Point(25, 230);
             tboxPassword.MaxLength = 32;
-            tboxPassword.Multiline = true;
             tboxPassword.Name = "tboxPassword";
             tboxPassword.PasswordChar = '*';
-            tboxPassword.Size = new Size(300, 30);
+            tboxPassword.Size = new Size(300, 29);
             tboxPassword.TabIndex = 4;
+            tboxPassword.KeyDown += textBox_KeyDown;
             // 
             // checkbxShowPassword
             // 

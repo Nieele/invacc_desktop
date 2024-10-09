@@ -68,7 +68,8 @@ namespace invacc
             string sqlConnectionArg = "Server=localhost;Port=5432;User Id=" + tboxUsername.Text + ";Password=" + tboxPassword.Text + ";Database=RentalDB;";
             using (NpgsqlConnection con = GetConnection(sqlConnectionArg))
             {
-                try {
+                try
+                {
                     con.Open();
                     if (con.State == ConnectionState.Open)
                     {
@@ -76,9 +77,19 @@ namespace invacc
                         form2.Show();
                     }
                 }
-                catch {
+                catch
+                {
                     MessageBox.Show("Incorrect login or password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void textBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btnLogin.PerformClick();
             }
         }
     }
