@@ -100,6 +100,7 @@
             tboxPassword.MaxLength = 32;
             tboxPassword.Multiline = true;
             tboxPassword.Name = "tboxPassword";
+            tboxPassword.PasswordChar = '*';
             tboxPassword.Size = new Size(300, 30);
             tboxPassword.TabIndex = 4;
             // 
@@ -117,6 +118,7 @@
             checkbxShowPassword.Text = "Show Password";
             checkbxShowPassword.TextAlign = ContentAlignment.MiddleCenter;
             checkbxShowPassword.UseVisualStyleBackColor = true;
+            checkbxShowPassword.CheckedChanged += CheckbxShowPassword_CheckedChanged;
             // 
             // btnLogin
             // 

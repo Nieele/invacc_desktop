@@ -67,5 +67,17 @@ namespace invacc
         {
             return new NpgsqlConnection(@"Server=localhost;Port=5432;User Id=postgres;Password=root;Database=RentalDB;");
         }
+
+        private void CheckbxShowPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkbxShowPassword.Checked)
+            {
+                tboxPassword.PasswordChar = '\0';
+            }
+            else
+            {
+                tboxPassword.PasswordChar = '*';
+            }
+        }
     }
 }
