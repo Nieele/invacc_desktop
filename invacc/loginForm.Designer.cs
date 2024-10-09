@@ -89,7 +89,7 @@
             tboxUsername.Name = "tboxUsername";
             tboxUsername.Size = new Size(300, 29);
             tboxUsername.TabIndex = 3;
-            tboxUsername.KeyDown += textBox_KeyDown;
+            tboxUsername.KeyDown += TextBox_KeyDown;
             // 
             // tboxPassword
             // 
@@ -102,7 +102,7 @@
             tboxPassword.PasswordChar = '*';
             tboxPassword.Size = new Size(300, 29);
             tboxPassword.TabIndex = 4;
-            tboxPassword.KeyDown += textBox_KeyDown;
+            tboxPassword.KeyDown += TextBox_KeyDown;
             // 
             // checkbxShowPassword
             // 
@@ -133,7 +133,7 @@
             btnLogin.TabIndex = 6;
             btnLogin.Text = "login";
             btnLogin.UseVisualStyleBackColor = false;
-            btnLogin.Click += btnLogin_Click;
+            btnLogin.Click += BtnLogin_Click;
             // 
             // lblHaventAcc
             // 

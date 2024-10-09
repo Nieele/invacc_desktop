@@ -25,66 +25,87 @@ namespace invacc
         const int WM_NCLBUTTONDOWN = 0xA1;
         const int HT_CAPTION = 0x2;
 
-        private void Move_window(object sender, MouseEventArgs e)
+        public FrmLogin()
+        {
+            InitializeComponent();
+            AttachMoveWindowHandlers();
+        }
+
+        // Attach mouse event handlers for moving the window
+        private void AttachMoveWindowHandlers()
+        {
+            this.MouseDown += MoveWindow;
+            lblNameProg.MouseDown += MoveWindow;
+        }
+
+        // Method to handle window movement
+        private void MoveWindow(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
                 ReleaseCapture();
-                _ = SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+                _ = SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, IntPtr.Zero);
             }
         }
 
-        public FrmLogin()
-        {
-            InitializeComponent();
-            this.MouseDown += new MouseEventHandler(Move_window);
-            lblNameProg.MouseDown += new MouseEventHandler(Move_window);
-        }
-
+        // Close the window
         private void BtnCloseWindow_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
+        // Method to show/hide the password
+        private void CheckbxShowPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            tboxPassword.PasswordChar = checkbxShowPassword.Checked ? '\0' : '*';
+        }
+
+        // Get database connection
         private static NpgsqlConnection GetConnection(string connectionString)
         {
             return new NpgsqlConnection(connectionString);
         }
 
-        private void CheckbxShowPassword_CheckedChanged(object sender, EventArgs e)
+        // Handle the login button click event
+        private void BtnLogin_Click(object sender, EventArgs e)
         {
-            if (checkbxShowPassword.Checked)
+            string connectionString = $"Server=localhost;Port=5432;User Id={tboxUsername.Text};Password={tboxPassword.Text};Database=RentalDB;";
+            using var con = GetConnection(connectionString);
+            TryLogin(con);
+        }
+
+        // Attempt to open the database connection and proceed if successful
+        private static void TryLogin(NpgsqlConnection con)
+        {
+            try
             {
-                tboxPassword.PasswordChar = '\0';
+                con.Open();
+                if (con.State == ConnectionState.Open)
+                {
+                    OpenMainForm();
+                }
             }
-            else
+            catch
             {
-                tboxPassword.PasswordChar = '*';
+                ShowLoginError();
             }
         }
 
-        private void btnLogin_Click(object sender, EventArgs e)
+        // Open the main form after successful login
+        private static void OpenMainForm()
         {
-            string sqlConnectionArg = "Server=localhost;Port=5432;User Id=" + tboxUsername.Text + ";Password=" + tboxPassword.Text + ";Database=RentalDB;";
-            using (NpgsqlConnection con = GetConnection(sqlConnectionArg))
-            {
-                try
-                {
-                    con.Open();
-                    if (con.State == ConnectionState.Open)
-                    {
-                        Form form2 = new mainForm();
-                        form2.Show();
-                    }
-                }
-                catch
-                {
-                    MessageBox.Show("Incorrect login or password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            var form2 = new mainForm();
+            form2.Show();
         }
 
-        private void textBox_KeyDown(object sender, KeyEventArgs e)
+        // Show an error message when login fails
+        private static void ShowLoginError()
+        {
+            MessageBox.Show("Incorrect login or password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        // Handle Enter key press to trigger login
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
