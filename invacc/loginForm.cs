@@ -4,12 +4,14 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Npgsql;
+using System.Windows.Forms;
 
 namespace invacc
 {
@@ -37,12 +39,6 @@ namespace invacc
             InitializeComponent();
             this.MouseDown += new MouseEventHandler(Move_window);
             lblNameProg.MouseDown += new MouseEventHandler(Move_window);
-
-            // test connection to database
-            //if (TestConnection())
-            //{
-            //    this.BackColor = SystemColors.Window;
-            //}
         }
 
         private void BtnCloseWindow_Click(object sender, EventArgs e)
@@ -50,22 +46,9 @@ namespace invacc
             this.Close();
         }
 
-        private static bool TestConnection()
+        private static NpgsqlConnection GetConnection(string connectionString)
         {
-            using (NpgsqlConnection con = GetConnection())
-            {
-                con.Open();
-                if (con.State == ConnectionState.Open)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private static NpgsqlConnection GetConnection()
-        {
-            return new NpgsqlConnection(@"Server=localhost;Port=5432;User Id=postgres;Password=root;Database=RentalDB;");
+            return new NpgsqlConnection(connectionString);
         }
 
         private void CheckbxShowPassword_CheckedChanged(object sender, EventArgs e)
@@ -77,6 +60,25 @@ namespace invacc
             else
             {
                 tboxPassword.PasswordChar = '*';
+            }
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            string sqlConnectionArg = "Server=localhost;Port=5432;User Id=" + tboxUsername.Text + ";Password=" + tboxPassword.Text + ";Database=RentalDB;";
+            using (NpgsqlConnection con = GetConnection(sqlConnectionArg))
+            {
+                try {
+                    con.Open();
+                    if (con.State == ConnectionState.Open)
+                    {
+                        Form form2 = new mainForm();
+                        form2.Show();
+                    }
+                }
+                catch {
+                    MessageBox.Show("Incorrect login or password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

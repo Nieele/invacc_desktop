@@ -133,6 +133,7 @@
             btnLogin.TabIndex = 6;
             btnLogin.Text = "login";
             btnLogin.UseVisualStyleBackColor = false;
+            btnLogin.Click += btnLogin_Click;
             // 
             // lblHaventAcc
             // 
