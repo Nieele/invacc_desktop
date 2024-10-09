@@ -37,6 +37,7 @@
             btnLogin = new Button();
             lblHaventAcc = new Label();
             lblRegister = new Label();
+            btnCloseWindow = new Button();
             SuspendLayout();
             // 
             // lblNameProg
@@ -154,12 +155,27 @@
             lblRegister.TabIndex = 8;
             lblRegister.Text = "Register";
             // 
-            // frmLogin
+            // btnCloseWindow
+            // 
+            btnCloseWindow.BackColor = Color.FromArgb(62, 83, 104);
+            btnCloseWindow.BackgroundImageLayout = ImageLayout.None;
+            btnCloseWindow.FlatStyle = FlatStyle.Popup;
+            btnCloseWindow.ForeColor = Color.FromArgb(236, 240, 241);
+            btnCloseWindow.Location = new Point(325, 0);
+            btnCloseWindow.Name = "btnCloseWindow";
+            btnCloseWindow.Size = new Size(25, 25);
+            btnCloseWindow.TabIndex = 9;
+            btnCloseWindow.Text = "X";
+            btnCloseWindow.UseVisualStyleBackColor = false;
+            btnCloseWindow.Click += BtnCloseWindow_Click;
+            // 
+            // FrmLogin
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(127, 140, 141);
             ClientSize = new Size(350, 530);
+            Controls.Add(btnCloseWindow);
             Controls.Add(lblRegister);
             Controls.Add(lblHaventAcc);
             Controls.Add(btnLogin);
@@ -170,7 +186,7 @@
             Controls.Add(label2);
             Controls.Add(lblNameProg);
             FormBorderStyle = FormBorderStyle.None;
-            Name = "frmLogin";
+            Name = "FrmLogin";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Login";
             ResumeLayout(false);
@@ -188,5 +204,6 @@
         private Button btnLogin;
         private Label lblHaventAcc;
         private Label lblRegister;
+        private Button btnCloseWindow;
     }
 }

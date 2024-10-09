@@ -37,5 +37,10 @@ namespace invacc
             this.MouseDown += new MouseEventHandler(Move_window);
             lblNameProg.MouseDown += new MouseEventHandler(Move_window);
         }
+
+        private void BtnCloseWindow_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
