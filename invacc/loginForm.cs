@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Npgsql;
 
 namespace invacc
 {
@@ -36,11 +37,35 @@ namespace invacc
             InitializeComponent();
             this.MouseDown += new MouseEventHandler(Move_window);
             lblNameProg.MouseDown += new MouseEventHandler(Move_window);
+
+            // test connection to database
+            //if (TestConnection())
+            //{
+            //    this.BackColor = SystemColors.Window;
+            //}
         }
 
         private void BtnCloseWindow_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private static bool TestConnection()
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                con.Open();
+                if (con.State == ConnectionState.Open)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static NpgsqlConnection GetConnection()
+        {
+            return new NpgsqlConnection(@"Server=localhost;Port=5432;User Id=postgres;Password=root;Database=RentalDB;");
         }
     }
 }
