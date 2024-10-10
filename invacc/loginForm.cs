@@ -87,7 +87,10 @@ namespace invacc
             }
             catch
             {
-                ShowLoginError();
+                if (con.State == ConnectionState.Closed)
+                {
+                    ShowLoginError();
+                }
             }
         }
 
@@ -101,7 +104,7 @@ namespace invacc
         // Show an error message when login fails
         private static void ShowLoginError()
         {
-            MessageBox.Show("Incorrect login or password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Unable to connect to the database.\nMake sure that PostgreSQL is running and the username and password are correct.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         // Handle Enter key press to trigger login
