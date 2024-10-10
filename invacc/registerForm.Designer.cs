@@ -79,6 +79,7 @@
             lblLogin.Size = new Size(60, 36);
             lblLogin.TabIndex = 18;
             lblLogin.Text = "Login";
+            lblLogin.Click += lblLogin_Click;
             // 
             // lblHaventAcc
             // 

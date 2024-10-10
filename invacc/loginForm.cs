@@ -51,7 +51,7 @@ namespace invacc
         // Close the window
         private void BtnCloseWindow_Click(object sender, EventArgs e)
         {
-            Close();
+            Application.Exit();
         }
 
         // Method to show/hide the password
@@ -119,9 +119,16 @@ namespace invacc
 
         private void LblRegister_Click(object sender, EventArgs e)
         {
-            var registerForm = new RegisterForm();
-            registerForm.Show();
-            this.Hide();
+            using (var registerForm = new RegisterForm())
+            {
+                this.Hide();
+                var result = registerForm.ShowDialog();
+
+                if (Application.OpenForms.Count > 0)
+                {
+                    this.Show();
+                }
+            }
         }
     }
 }

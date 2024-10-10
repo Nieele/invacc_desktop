@@ -48,5 +48,10 @@ namespace invacc
         {
             Application.Exit();
         }
+
+        private void lblLogin_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+        }
     }
 }
