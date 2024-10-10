@@ -39,7 +39,7 @@ namespace invacc
         }
 
         // Method to handle window movement
-        private void MoveWindow(object sender, MouseEventArgs e)
+        private void MoveWindow(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {

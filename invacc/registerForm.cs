@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +9,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace invacc
 {
@@ -35,7 +38,7 @@ namespace invacc
         }
 
         // Method to handle window movement
-        private void MoveWindow(object sender, MouseEventArgs e)
+        private void MoveWindow(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -52,6 +55,69 @@ namespace invacc
         private void lblLogin_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
+        }
+
+        // Method to show/hide the password
+        private void checkbxShowPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            tboxPassword.PasswordChar = checkbxShowPassword.Checked ? '\0' : '*';
+            tboxConfirmPassword.PasswordChar = checkbxShowPassword.Checked ? '\0' : '*';
+        }
+
+        // Get database connection
+        private static NpgsqlConnection GetConnection(string connectionString)
+        {
+            return new NpgsqlConnection(connectionString);
+        }
+
+        // Attempt to open the database connection and proceed if successful
+        private void TryLogin(NpgsqlConnection con)
+        {
+            try
+            {
+                con.Open();
+                if (con.State == ConnectionState.Open)
+                {
+                    string query = $"CREATE USER {tboxUsername.Text} LOGIN PASSWORD '{tboxPassword.Text}';";
+                    using (var command = new NpgsqlCommand(query, con))
+                    {
+                        var reader = command.ExecuteReader();
+                    }
+                    MessageBox.Show("Registration was successful", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.DialogResult = DialogResult.OK;
+                }
+            }
+            catch
+            {
+                if (con.State == ConnectionState.Closed)
+                {
+                    MessageBox.Show("Unable to connect to the database.\nMake sure that PostgreSQL is running", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void btnRegister_Click(object sender, EventArgs e)
+        {
+            if (tboxPassword.Text != tboxConfirmPassword.Text)
+            {
+                MessageBox.Show("The passwords are different", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tboxPassword.Clear();
+                tboxConfirmPassword.Clear();
+            } 
+            else if (tboxPassword.TextLength < 4)
+            {
+                MessageBox.Show("The password cannot be less than 4", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tboxPassword.Clear();
+                tboxConfirmPassword.Clear();
+            }
+            else
+            {
+                string connectionString = "Server=localhost;Port=5432;User Id=register;Password=password;Database=RentalDB;";
+                using (var con = GetConnection(connectionString))
+                {
+                    TryLogin(con);
+                }
+            }
         }
     }
 }

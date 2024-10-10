@@ -32,7 +32,7 @@
             btnCloseWindow = new Button();
             lblLogin = new Label();
             lblHaventAcc = new Label();
-            btnLogin = new Button();
+            btnRegister = new Button();
             checkbxShowPassword = new CheckBox();
             tboxPassword = new TextBox();
             tboxUsername = new TextBox();
@@ -63,7 +63,7 @@
             btnCloseWindow.Location = new Point(325, 0);
             btnCloseWindow.Name = "btnCloseWindow";
             btnCloseWindow.Size = new Size(25, 25);
-            btnCloseWindow.TabIndex = 10;
+            btnCloseWindow.TabIndex = 0;
             btnCloseWindow.Text = "X";
             btnCloseWindow.UseVisualStyleBackColor = false;
             btnCloseWindow.Click += btnCloseWindow_Click;
@@ -92,19 +92,20 @@
             lblHaventAcc.TabIndex = 17;
             lblHaventAcc.Text = "Already have an accound?";
             // 
-            // btnLogin
+            // btnRegister
             // 
-            btnLogin.BackColor = Color.FromArgb(52, 73, 94);
-            btnLogin.Cursor = Cursors.Hand;
-            btnLogin.FlatAppearance.BorderColor = Color.IndianRed;
-            btnLogin.Font = new Font("Javanese Text", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnLogin.ForeColor = Color.FromArgb(236, 240, 241);
-            btnLogin.Location = new Point(25, 415);
-            btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(300, 45);
-            btnLogin.TabIndex = 16;
-            btnLogin.Text = "register";
-            btnLogin.UseVisualStyleBackColor = false;
+            btnRegister.BackColor = Color.FromArgb(52, 73, 94);
+            btnRegister.Cursor = Cursors.Hand;
+            btnRegister.FlatAppearance.BorderColor = Color.IndianRed;
+            btnRegister.Font = new Font("Javanese Text", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnRegister.ForeColor = Color.FromArgb(236, 240, 241);
+            btnRegister.Location = new Point(25, 415);
+            btnRegister.Name = "btnRegister";
+            btnRegister.Size = new Size(300, 45);
+            btnRegister.TabIndex = 5;
+            btnRegister.Text = "register";
+            btnRegister.UseVisualStyleBackColor = false;
+            btnRegister.Click += btnRegister_Click;
             // 
             // checkbxShowPassword
             // 
@@ -116,10 +117,11 @@
             checkbxShowPassword.Location = new Point(173, 336);
             checkbxShowPassword.Name = "checkbxShowPassword";
             checkbxShowPassword.Size = new Size(152, 40);
-            checkbxShowPassword.TabIndex = 15;
+            checkbxShowPassword.TabIndex = 4;
             checkbxShowPassword.Text = "Show Password";
             checkbxShowPassword.TextAlign = ContentAlignment.MiddleCenter;
             checkbxShowPassword.UseVisualStyleBackColor = true;
+            checkbxShowPassword.CheckedChanged += checkbxShowPassword_CheckedChanged;
             // 
             // tboxPassword
             // 
@@ -131,7 +133,7 @@
             tboxPassword.Name = "tboxPassword";
             tboxPassword.PasswordChar = '*';
             tboxPassword.Size = new Size(300, 29);
-            tboxPassword.TabIndex = 14;
+            tboxPassword.TabIndex = 2;
             // 
             // tboxUsername
             // 
@@ -142,7 +144,7 @@
             tboxUsername.MaxLength = 32;
             tboxUsername.Name = "tboxUsername";
             tboxUsername.Size = new Size(300, 29);
-            tboxUsername.TabIndex = 13;
+            tboxUsername.TabIndex = 1;
             // 
             // lblPassword
             // 
@@ -190,7 +192,7 @@
             tboxConfirmPassword.Name = "tboxConfirmPassword";
             tboxConfirmPassword.PasswordChar = '*';
             tboxConfirmPassword.Size = new Size(300, 29);
-            tboxConfirmPassword.TabIndex = 20;
+            tboxConfirmPassword.TabIndex = 3;
             // 
             // RegisterForm
             // 
@@ -204,7 +206,7 @@
             Controls.Add(tboxPassword);
             Controls.Add(lblConfirmPassword);
             Controls.Add(lblHaventAcc);
-            Controls.Add(btnLogin);
+            Controls.Add(btnRegister);
             Controls.Add(checkbxShowPassword);
             Controls.Add(lblPassword);
             Controls.Add(lblUsername);
@@ -223,7 +225,7 @@
         private Button btnCloseWindow;
         private Label lblLogin;
         private Label lblHaventAcc;
-        private Button btnLogin;
+        private Button btnRegister;
         private CheckBox checkbxShowPassword;
         private TextBox tboxPassword;
         private TextBox tboxUsername;
