@@ -73,7 +73,7 @@
             lblLogin.Cursor = Cursors.Hand;
             lblLogin.Font = new Font("Javanese Text", 12F, FontStyle.Bold);
             lblLogin.ForeColor = Color.FromArgb(192, 255, 255);
-            lblLogin.Location = new Point(228, 465);
+            lblLogin.Location = new Point(251, 465);
             lblLogin.Name = "lblLogin";
             lblLogin.Size = new Size(60, 36);
             lblLogin.TabIndex = 18;
@@ -196,11 +196,11 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(127, 140, 141);
             ClientSize = new Size(350, 530);
+            Controls.Add(lblLogin);
             Controls.Add(tboxConfirmPassword);
             Controls.Add(tboxUsername);
             Controls.Add(tboxPassword);
             Controls.Add(lblConfirmPassword);
-            Controls.Add(lblLogin);
             Controls.Add(lblHaventAcc);
             Controls.Add(btnLogin);
             Controls.Add(checkbxShowPassword);
