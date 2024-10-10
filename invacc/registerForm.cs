@@ -87,8 +87,12 @@ namespace invacc
                     this.DialogResult = DialogResult.OK;
                 }
             }
-            catch
+            catch (PostgresException ex)
             {
+                if (ex.SqlState == "42710")
+                {
+                    MessageBox.Show("User already exists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 if (con.State == ConnectionState.Closed)
                 {
                     MessageBox.Show("Unable to connect to the database.\nMake sure that PostgreSQL is running", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
