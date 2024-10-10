@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             lblNameProg = new Label();
-            label2 = new Label();
-            label3 = new Label();
+            lblUsername = new Label();
+            lblPassword = new Label();
             tboxUsername = new TextBox();
             tboxPassword = new TextBox();
             checkbxShowPassword = new CheckBox();
@@ -54,30 +54,30 @@
             lblNameProg.Text = "Login";
             lblNameProg.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // label2
+            // lblUsername
             // 
-            label2.AutoSize = true;
-            label2.BackColor = Color.FromArgb(127, 140, 141);
-            label2.Font = new Font("Javanese Text", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.FromArgb(236, 240, 241);
-            label2.Location = new Point(20, 115);
-            label2.Margin = new Padding(0);
-            label2.Name = "label2";
-            label2.Size = new Size(131, 54);
-            label2.TabIndex = 1;
-            label2.Text = "username";
-            label2.TextAlign = ContentAlignment.MiddleCenter;
+            lblUsername.AutoSize = true;
+            lblUsername.BackColor = Color.FromArgb(127, 140, 141);
+            lblUsername.Font = new Font("Javanese Text", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblUsername.ForeColor = Color.FromArgb(236, 240, 241);
+            lblUsername.Location = new Point(20, 115);
+            lblUsername.Margin = new Padding(0);
+            lblUsername.Name = "lblUsername";
+            lblUsername.Size = new Size(131, 54);
+            lblUsername.TabIndex = 1;
+            lblUsername.Text = "username";
+            lblUsername.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // label3
+            // lblPassword
             // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Javanese Text", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.ForeColor = Color.FromArgb(236, 240, 241);
-            label3.Location = new Point(20, 185);
-            label3.Name = "label3";
-            label3.Size = new Size(127, 54);
-            label3.TabIndex = 2;
-            label3.Text = "password";
+            lblPassword.AutoSize = true;
+            lblPassword.Font = new Font("Javanese Text", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPassword.ForeColor = Color.FromArgb(236, 240, 241);
+            lblPassword.Location = new Point(20, 185);
+            lblPassword.Name = "lblPassword";
+            lblPassword.Size = new Size(127, 54);
+            lblPassword.TabIndex = 2;
+            lblPassword.Text = "password";
             // 
             // tboxUsername
             // 
@@ -127,7 +127,7 @@
             btnLogin.FlatAppearance.BorderColor = Color.IndianRed;
             btnLogin.Font = new Font("Javanese Text", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnLogin.ForeColor = Color.FromArgb(236, 240, 241);
-            btnLogin.Location = new Point(25, 384);
+            btnLogin.Location = new Point(25, 415);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(300, 45);
             btnLogin.TabIndex = 6;
@@ -140,7 +140,7 @@
             lblHaventAcc.AutoSize = true;
             lblHaventAcc.Font = new Font("Javanese Text", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblHaventAcc.ForeColor = Color.FromArgb(236, 240, 241);
-            lblHaventAcc.Location = new Point(40, 455);
+            lblHaventAcc.Location = new Point(37, 465);
             lblHaventAcc.Name = "lblHaventAcc";
             lblHaventAcc.Size = new Size(198, 36);
             lblHaventAcc.TabIndex = 7;
@@ -152,7 +152,7 @@
             lblRegister.Cursor = Cursors.Hand;
             lblRegister.Font = new Font("Javanese Text", 12F, FontStyle.Bold);
             lblRegister.ForeColor = Color.FromArgb(192, 255, 255);
-            lblRegister.Location = new Point(228, 455);
+            lblRegister.Location = new Point(229, 465);
             lblRegister.Name = "lblRegister";
             lblRegister.Size = new Size(82, 36);
             lblRegister.TabIndex = 8;
@@ -186,8 +186,8 @@
             Controls.Add(checkbxShowPassword);
             Controls.Add(tboxPassword);
             Controls.Add(tboxUsername);
-            Controls.Add(label3);
-            Controls.Add(label2);
+            Controls.Add(lblPassword);
+            Controls.Add(lblUsername);
             Controls.Add(lblNameProg);
             FormBorderStyle = FormBorderStyle.None;
             Name = "FrmLogin";
@@ -200,8 +200,8 @@
         #endregion
 
         private Label lblNameProg;
-        private Label label2;
-        private Label label3;
+        private Label lblUsername;
+        private Label lblPassword;
         private TextBox tboxUsername;
         private TextBox tboxPassword;
         private CheckBox checkbxShowPassword;
