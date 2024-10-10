@@ -66,6 +66,7 @@
             btnCloseWindow.TabIndex = 10;
             btnCloseWindow.Text = "X";
             btnCloseWindow.UseVisualStyleBackColor = false;
+            btnCloseWindow.Click += btnCloseWindow_Click;
             // 
             // lblLogin
             // 
