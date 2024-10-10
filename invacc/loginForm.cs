@@ -116,5 +116,12 @@ namespace invacc
                 btnLogin.PerformClick();
             }
         }
+
+        private void LblRegister_Click(object sender, EventArgs e)
+        {
+            var registerForm = new RegisterForm();
+            registerForm.Show();
+            this.Hide();
+        }
     }
 }

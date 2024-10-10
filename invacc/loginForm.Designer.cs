@@ -157,6 +157,7 @@
             lblRegister.Size = new Size(82, 36);
             lblRegister.TabIndex = 8;
             lblRegister.Text = "Register";
+            lblRegister.Click += LblRegister_Click;
             // 
             // btnCloseWindow
             // 
