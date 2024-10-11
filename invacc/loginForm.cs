@@ -17,35 +17,10 @@ namespace invacc
 {
     public partial class FrmLogin : Form
     {
-        [DllImport("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr LPAR);
-        [DllImport("user32.dll")]
-        public static extern bool ReleaseCapture();
-
-        const int WM_NCLBUTTONDOWN = 0xA1;
-        const int HT_CAPTION = 0x2;
-
         public FrmLogin()
         {
             InitializeComponent();
-            AttachMoveWindowHandlers();
-        }
-
-        // Attach mouse event handlers for moving the window
-        private void AttachMoveWindowHandlers()
-        {
-            this.MouseDown += MoveWindow;
-            lblNameProg.MouseDown += MoveWindow;
-        }
-
-        // Method to handle window movement
-        private void MoveWindow(object? sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                ReleaseCapture();
-                _ = SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, IntPtr.Zero);
-            }
+            WindowMover.Attach(this, lblNameProg);
         }
 
         // Close the window
