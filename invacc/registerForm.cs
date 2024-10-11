@@ -64,14 +64,8 @@ namespace invacc
             tboxConfirmPassword.PasswordChar = checkbxShowPassword.Checked ? '\0' : '*';
         }
 
-        // Get database connection
-        private static NpgsqlConnection GetConnection(string connectionString)
-        {
-            return new NpgsqlConnection(connectionString);
-        }
-
         // Attempt to open the database connection and proceed if successful
-        private void TryLogin(NpgsqlConnection con)
+        private void TryRegister(NpgsqlConnection con)
         {
             try
             {
@@ -100,26 +94,30 @@ namespace invacc
             }
         }
 
+        private void ClearPasswordBoxes()
+        {
+            tboxPassword.Clear();
+            tboxConfirmPassword.Clear();
+        }
+
         private void btnRegister_Click(object sender, EventArgs e)
         {
             if (tboxPassword.Text != tboxConfirmPassword.Text)
             {
                 MessageHelper.ErrorDifferentPassword();
-                tboxPassword.Clear();
-                tboxConfirmPassword.Clear();
+                ClearPasswordBoxes();
             } 
             else if (tboxPassword.TextLength < 4)
             {
                 MessageHelper.ErrorShortPassword();
-                tboxPassword.Clear();
-                tboxConfirmPassword.Clear();
+                ClearPasswordBoxes();
             }
             else
             {
                 string connectionString = "Server=localhost;Port=5432;User Id=register;Password=password;Database=RentalDB;";
-                using (var con = GetConnection(connectionString))
+                using (var con = new NpgsqlConnection(connectionString))
                 {
-                    TryLogin(con);
+                    TryRegister(con);
                 }
             }
         }
