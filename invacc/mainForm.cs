@@ -1,8 +1,8 @@
 namespace invacc
 {
-    public partial class mainForm : Form
+    public partial class FrmMain : Form
     {
-        public mainForm()
+        public FrmMain()
         {
             InitializeComponent();
         }

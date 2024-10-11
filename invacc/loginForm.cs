@@ -23,29 +23,21 @@ namespace invacc
             WindowMover.Attach(this, lblNameProg);
         }
 
-        // Close the window
         private void BtnCloseWindow_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        // Method to show/hide the password
+        // show/hide password
         private void CheckbxShowPassword_CheckedChanged(object sender, EventArgs e)
         {
             tboxPassword.PasswordChar = checkbxShowPassword.Checked ? '\0' : '*';
         }
 
-        // Get database connection
-        private static NpgsqlConnection GetConnection(string connectionString)
-        {
-            return new NpgsqlConnection(connectionString);
-        }
-
-        // Handle the login button click event
         private void BtnLogin_Click(object sender, EventArgs e)
         {
             string connectionString = $"Server=localhost;Port=5432;User Id={tboxUsername.Text};Password={tboxPassword.Text};Database=RentalDB;";
-            using var con = GetConnection(connectionString);
+            using var con = new NpgsqlConnection(connectionString);
             TryLogin(con);
         }
 
@@ -72,8 +64,8 @@ namespace invacc
         // Open the main form after successful login
         private static void OpenMainForm()
         {
-            var form2 = new mainForm();
-            form2.Show();
+            var mainForm = new FrmMain();
+            mainForm.Show();
         }
 
         // Handle Enter key press to trigger login
@@ -86,9 +78,10 @@ namespace invacc
             }
         }
 
+        // Switching to the registration window
         private void LblRegister_Click(object sender, EventArgs e)
         {
-            using (var registerForm = new RegisterForm())
+            using (var registerForm = new FrmRegister())
             {
                 this.Hide();
                 var result = registerForm.ShowDialog();

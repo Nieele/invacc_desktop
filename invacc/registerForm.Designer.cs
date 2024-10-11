@@ -1,6 +1,6 @@
 ﻿namespace invacc
 {
-    partial class RegisterForm
+    partial class FrmRegister
     {
         /// <summary>
         /// Required designer variable.
@@ -194,7 +194,7 @@
             tboxConfirmPassword.Size = new Size(300, 29);
             tboxConfirmPassword.TabIndex = 3;
             // 
-            // RegisterForm
+            // FrmRegister
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -213,7 +213,7 @@
             Controls.Add(btnCloseWindow);
             Controls.Add(lblNameProgRegister);
             FormBorderStyle = FormBorderStyle.None;
-            Name = "RegisterForm";
+            Name = "FrmRegister";
             Text = "Register";
             ResumeLayout(false);
             PerformLayout();

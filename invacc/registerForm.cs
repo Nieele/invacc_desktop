@@ -14,9 +14,9 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace invacc
 {
-    public partial class RegisterForm : Form
+    public partial class FrmRegister : Form
     {
-        public RegisterForm()
+        public FrmRegister()
         {
             InitializeComponent();
             WindowMover.Attach(this, lblNameProgRegister);
@@ -32,14 +32,14 @@ namespace invacc
             this.DialogResult = DialogResult.OK;
         }
 
-        // Method to show/hide the password
+        // show/hide password
         private void checkbxShowPassword_CheckedChanged(object sender, EventArgs e)
         {
             tboxPassword.PasswordChar = checkbxShowPassword.Checked ? '\0' : '*';
             tboxConfirmPassword.PasswordChar = checkbxShowPassword.Checked ? '\0' : '*';
         }
 
-        // Attempt to open the database connection and proceed if successful
+        // Attempt to open the database connection and try register
         private void TryRegister()
         {
             var status = DatabaseHelper.ExecuteRegisterQuery(tboxUsername.Text, tboxPassword.Text);
