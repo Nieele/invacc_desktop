@@ -89,7 +89,7 @@ namespace invacc
             {
                 if (con.State == ConnectionState.Closed)
                 {
-                    ShowLoginError();
+                    MessageHelper.ErrorUnableConnectOrFailedEntry();
                 }
             }
         }
@@ -99,12 +99,6 @@ namespace invacc
         {
             var form2 = new mainForm();
             form2.Show();
-        }
-
-        // Show an error message when login fails
-        private static void ShowLoginError()
-        {
-            MessageBox.Show("Unable to connect to the database.\nMake sure that PostgreSQL is running and the username and password are correct.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         // Handle Enter key press to trigger login

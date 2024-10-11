@@ -83,7 +83,7 @@ namespace invacc
                     {
                         var reader = command.ExecuteReader();
                     }
-                    MessageBox.Show("Registration was successful", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageHelper.InfoRegistrationSuccess();
                     this.DialogResult = DialogResult.OK;
                 }
             }
@@ -91,11 +91,11 @@ namespace invacc
             {
                 if (ex.SqlState == "42710")
                 {
-                    MessageBox.Show("User already exists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageHelper.ErrorUserAlreadyExist();
                 }
                 if (con.State == ConnectionState.Closed)
                 {
-                    MessageBox.Show("Unable to connect to the database.\nMake sure that PostgreSQL is running", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageHelper.ErrorUnableConnectDB();
                 }
             }
         }
@@ -104,13 +104,13 @@ namespace invacc
         {
             if (tboxPassword.Text != tboxConfirmPassword.Text)
             {
-                MessageBox.Show("The passwords are different", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageHelper.ErrorDifferentPassword();
                 tboxPassword.Clear();
                 tboxConfirmPassword.Clear();
             } 
             else if (tboxPassword.TextLength < 4)
             {
-                MessageBox.Show("The password cannot be less than 4", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageHelper.ErrorShortPassword();
                 tboxPassword.Clear();
                 tboxConfirmPassword.Clear();
             }
