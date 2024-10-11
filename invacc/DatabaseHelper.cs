@@ -22,7 +22,7 @@ namespace invacc
 
         private static NpgsqlConnection GetRegisterConnection()
         {
-            string connectionString = $"Server=localhost;Port=5432;User Id=register;Password=password;Database=RentalDB;";
+            string connectionString = $"Server=localhost;Port=5432;User Id=register;Password=password;Database=RentalDB;Pooling=false;";
             return new NpgsqlConnection(connectionString);
         }
 
