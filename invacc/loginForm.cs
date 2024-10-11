@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Npgsql;
 using System.Windows.Forms;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace invacc
 {
@@ -20,7 +21,7 @@ namespace invacc
         public FrmLogin()
         {
             InitializeComponent();
-            WindowMover.Attach(this, lblNameProg);
+            WindowMover.Attach(this, lblNameProgLogin);
         }
 
         private void BtnCloseWindow_Click(object sender, EventArgs e)
@@ -36,36 +37,34 @@ namespace invacc
 
         private void BtnLogin_Click(object sender, EventArgs e)
         {
-            string connectionString = $"Server=localhost;Port=5432;User Id={tboxUsername.Text};Password={tboxPassword.Text};Database=RentalDB;";
-            using var con = new NpgsqlConnection(connectionString);
-            TryLogin(con);
+            TryLogin();
         }
 
         // Attempt to open the database connection and proceed if successful
-        private static void TryLogin(NpgsqlConnection con)
+        private void TryLogin()
         {
-            try
+            using (var con = DatabaseHelper.CreateLoginConnection(tboxUsername.Text, tboxPassword.Text))
             {
-                con.Open();
-                if (con.State == ConnectionState.Open)
+                var status = DatabaseHelper.ExecuteLoginQuery(con);
+                switch (status)
                 {
-                    OpenMainForm();
-                }
-            }
-            catch
-            {
-                if (con.State == ConnectionState.Closed)
-                {
-                    MessageHelper.ErrorUnableConnectOrFailedEntry();
+                    case DatabaseHelper.ReturnState.OK:
+                        OpenMainForm(con);
+                        break;
+                    case DatabaseHelper.ReturnState.ErrorConnection:
+                        MessageHelper.ErrorUnableConnectOrFailedEntry();
+                        break;
                 }
             }
         }
 
         // Open the main form after successful login
-        private static void OpenMainForm()
+        private static void OpenMainForm(NpgsqlConnection session)
         {
-            var mainForm = new FrmMain();
-            mainForm.Show();
+            using (var mainForm = new FrmMain(session))
+            {
+                mainForm.ShowDialog();
+            }
         }
 
         // Handle Enter key press to trigger login

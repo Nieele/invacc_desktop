@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            lblNameProg = new Label();
+            lblNameProgLogin = new Label();
             lblUsername = new Label();
             lblPassword = new Label();
             tboxUsername = new TextBox();
@@ -40,19 +40,19 @@
             btnCloseWindow = new Button();
             SuspendLayout();
             // 
-            // lblNameProg
+            // lblNameProgLogin
             // 
-            lblNameProg.BackColor = Color.FromArgb(52, 73, 94);
-            lblNameProg.Dock = DockStyle.Top;
-            lblNameProg.Font = new Font("Javanese Text", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNameProg.ForeColor = Color.White;
-            lblNameProg.Location = new Point(0, 0);
-            lblNameProg.Name = "lblNameProg";
-            lblNameProg.RightToLeft = RightToLeft.No;
-            lblNameProg.Size = new Size(350, 92);
-            lblNameProg.TabIndex = 0;
-            lblNameProg.Text = "Login";
-            lblNameProg.TextAlign = ContentAlignment.MiddleCenter;
+            lblNameProgLogin.BackColor = Color.FromArgb(52, 73, 94);
+            lblNameProgLogin.Dock = DockStyle.Top;
+            lblNameProgLogin.Font = new Font("Javanese Text", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNameProgLogin.ForeColor = Color.White;
+            lblNameProgLogin.Location = new Point(0, 0);
+            lblNameProgLogin.Name = "lblNameProgLogin";
+            lblNameProgLogin.RightToLeft = RightToLeft.No;
+            lblNameProgLogin.Size = new Size(350, 92);
+            lblNameProgLogin.TabIndex = 0;
+            lblNameProgLogin.Text = "Login";
+            lblNameProgLogin.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblUsername
             // 
@@ -188,7 +188,7 @@
             Controls.Add(tboxUsername);
             Controls.Add(lblPassword);
             Controls.Add(lblUsername);
-            Controls.Add(lblNameProg);
+            Controls.Add(lblNameProgLogin);
             FormBorderStyle = FormBorderStyle.None;
             Name = "FrmLogin";
             StartPosition = FormStartPosition.CenterScreen;
@@ -199,7 +199,7 @@
 
         #endregion
 
-        private Label lblNameProg;
+        private Label lblNameProgLogin;
         private Label lblUsername;
         private Label lblPassword;
         private TextBox tboxUsername;

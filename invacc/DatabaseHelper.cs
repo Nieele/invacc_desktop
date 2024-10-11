@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace invacc
 {
@@ -19,8 +20,7 @@ namespace invacc
             UnknownError
         }
 
-
-        private static NpgsqlConnection GetRegisterConnection()
+        public static NpgsqlConnection CreateRegisterConnection()
         {
             string connectionString = $"Server=localhost;Port=5432;User Id=register;Password=password;Database=RentalDB;Pooling=false;";
             return new NpgsqlConnection(connectionString);
@@ -30,7 +30,7 @@ namespace invacc
         {
             string query = $"CREATE USER {username} LOGIN PASSWORD '{password}';";
 
-            using (var con = GetRegisterConnection())
+            using (var con = CreateRegisterConnection())
             {
                 try
                 {
@@ -62,6 +62,32 @@ namespace invacc
             }
 
             return ReturnState.OK;
+        }
+
+        public static NpgsqlConnection CreateLoginConnection(string username, string password)
+        {
+            string connectionString = $"Server=localhost;Port=5432;User Id={username};Password={password};Database=RentalDB;Pooling=false;";
+            return new NpgsqlConnection(connectionString);
+        }
+
+        public static ReturnState ExecuteLoginQuery(NpgsqlConnection con)
+        {
+            try
+            {
+                con.Open();
+                if (con.State == ConnectionState.Open)
+                {
+                    return ReturnState.OK;
+                }
+            }
+            catch
+            {
+                if (con.State == ConnectionState.Closed)
+                {
+                    return ReturnState.ErrorConnection;
+                }
+            }
+            return ReturnState.UnknownError;
         }
     }
 }
