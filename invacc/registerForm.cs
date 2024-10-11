@@ -40,32 +40,21 @@ namespace invacc
         }
 
         // Attempt to open the database connection and proceed if successful
-        private void TryRegister(NpgsqlConnection con)
+        private void TryRegister()
         {
-            try
+            var status = DatabaseHelper.ExecuteRegisterQuery(tboxUsername.Text, tboxPassword.Text);
+            switch (status)
             {
-                con.Open();
-                if (con.State == ConnectionState.Open)
-                {
-                    string query = $"CREATE USER {tboxUsername.Text} LOGIN PASSWORD '{tboxPassword.Text}';";
-                    using (var command = new NpgsqlCommand(query, con))
-                    {
-                        var reader = command.ExecuteReader();
-                    }
+                case DatabaseHelper.ReturnState.OK:
                     MessageHelper.InfoRegistrationSuccess();
                     this.DialogResult = DialogResult.OK;
-                }
-            }
-            catch (PostgresException ex)
-            {
-                if (ex.SqlState == "42710")
-                {
+                    break;
+                case DatabaseHelper.ReturnState.UserAlreadyExist:
                     MessageHelper.ErrorUserAlreadyExist();
-                }
-                if (con.State == ConnectionState.Closed)
-                {
+                    break;
+                case DatabaseHelper.ReturnState.ErrorConnection:
                     MessageHelper.ErrorUnableConnectDB();
-                }
+                    break;
             }
         }
 
@@ -89,11 +78,7 @@ namespace invacc
             }
             else
             {
-                string connectionString = "Server=localhost;Port=5432;User Id=register;Password=password;Database=RentalDB;";
-                using (var con = new NpgsqlConnection(connectionString))
-                {
-                    TryRegister(con);
-                }
+                TryRegister();
             }
         }
     }
