@@ -38,7 +38,7 @@
             picAccount = new PictureBox();
             panelSide = new Panel();
             btnPanelModeration = new Button();
-            label1 = new Label();
+            lblUserRole = new Label();
             lblUsername = new Label();
             btnPanelInventory = new Button();
             btnPanelRentalItems = new Button();
@@ -143,7 +143,7 @@
             panelSide.BackColor = Color.FromArgb(52, 73, 94);
             panelSide.BorderStyle = BorderStyle.FixedSingle;
             panelSide.Controls.Add(btnPanelModeration);
-            panelSide.Controls.Add(label1);
+            panelSide.Controls.Add(lblUserRole);
             panelSide.Controls.Add(lblUsername);
             panelSide.Controls.Add(btnPanelInventory);
             panelSide.Controls.Add(btnPanelRentalItems);
@@ -169,17 +169,17 @@
             btnPanelModeration.Text = "Moderation";
             btnPanelModeration.UseVisualStyleBackColor = false;
             // 
-            // label1
+            // lblUserRole
             // 
-            label1.Font = new Font("UD Digi Kyokasho NP-B", 9F, FontStyle.Bold, GraphicsUnit.Point, 128);
-            label1.ForeColor = Color.FromArgb(236, 240, 241);
-            label1.Location = new Point(0, 122);
-            label1.Margin = new Padding(0);
-            label1.Name = "label1";
-            label1.Size = new Size(150, 20);
-            label1.TabIndex = 5;
-            label1.Text = "unknown";
-            label1.TextAlign = ContentAlignment.MiddleCenter;
+            lblUserRole.Font = new Font("UD Digi Kyokasho NP-B", 9F, FontStyle.Bold, GraphicsUnit.Point, 128);
+            lblUserRole.ForeColor = Color.FromArgb(236, 240, 241);
+            lblUserRole.Location = new Point(0, 122);
+            lblUserRole.Margin = new Padding(0);
+            lblUserRole.Name = "lblUserRole";
+            lblUserRole.Size = new Size(150, 20);
+            lblUserRole.TabIndex = 5;
+            lblUserRole.Text = "unknown";
+            lblUserRole.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblUsername
             // 
@@ -257,7 +257,7 @@
         private Button btnPanelRentalItems;
         private PictureBox picProgIcon;
         private Label lblUsername;
-        private Label label1;
+        private Label lblUserRole;
         private Button btnPanelModeration;
     }
 }

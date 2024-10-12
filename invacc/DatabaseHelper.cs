@@ -82,5 +82,39 @@ namespace invacc
             }
             return ReturnState.UnknownError;
         }
+
+        public static string GetCurrentUser(NpgsqlConnection con)
+        {
+            string? currentUser = "null";
+            using (var cmd = new NpgsqlCommand("SELECT current_user;", con))
+            {
+                currentUser = cmd.ExecuteScalar() as string;
+            }
+
+            return currentUser;
+        }
+
+        public static string GetUserRole(NpgsqlConnection con)
+        {
+            string sql = "SELECT STRING_AGG(rolname, ',') AS roles FROM pg_roles WHERE pg_has_role(current_user, rolname, 'member');";
+            using (var cmd = new NpgsqlCommand(sql, con))
+            {
+                var roles = cmd.ExecuteScalar() as string;
+
+                if (roles != null && roles.IndexOf("moderator", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return "Moderator";
+                }
+                else if (roles != null && roles.IndexOf("worker", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return "Worker";
+                }
+                else
+                {
+                    return "Unknown";
+                }
+            }
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 using Npgsql;
+using System.Drawing;
 
 namespace invacc
 {
@@ -11,6 +12,9 @@ namespace invacc
             InitializeComponent();
             _session = session;
             WindowMover.Attach(this, panelTitleBar, lblNameProgInventory, picProgIcon);
+
+            lblUsername.Text = DatabaseHelper.GetCurrentUser(_session);
+            lblUserRole.Text = DatabaseHelper.GetUserRole(_session);
         }
 
         private void BtnTitleBarClose_Click(object sender, EventArgs e)
