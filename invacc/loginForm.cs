@@ -7,7 +7,7 @@ namespace invacc
         public FrmLogin()
         {
             InitializeComponent();
-            WindowMover.Attach(this, lblNameProgLogin);
+            WindowMover.Attach(this, this, lblNameProgLogin);
         }
 
         private void BtnCloseWindow_Click(object sender, EventArgs e)

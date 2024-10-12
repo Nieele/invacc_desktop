@@ -5,7 +5,7 @@
         public FrmRegister()
         {
             InitializeComponent();
-            WindowMover.Attach(this, lblNameProgRegister);
+            WindowMover.Attach(this, this, lblNameProgRegister);
         }
 
         private void btnCloseWindow_Click(object sender, EventArgs e)

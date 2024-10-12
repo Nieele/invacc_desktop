@@ -16,8 +16,6 @@ namespace invacc
         // Attach mouse event handlers for moving the window
         public static void Attach(Form form, params Control[] controls)
         {
-            form.MouseDown += (sender, e) => MoveWindow(form, e);
-
             foreach (var control in controls)
             {
                 control.MouseDown += (sender, e) => MoveWindow(form, e);
