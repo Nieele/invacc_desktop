@@ -67,7 +67,7 @@ namespace invacc
         }
 
         // Open the main form after successful login
-        private static void OpenMainForm(NpgsqlConnection session)
+        private void OpenMainForm(NpgsqlConnection session)
         {
             using (var mainForm = new FrmMain(session))
             {
@@ -90,11 +90,16 @@ namespace invacc
         {
             using (var registerForm = new FrmRegister())
             {
+                registerForm.StartPosition = FormStartPosition.Manual;
+                registerForm.Location = this.Location;
+
                 this.Hide();
                 var result = registerForm.ShowDialog();
 
                 if (Application.OpenForms.Count > 0)
                 {
+                    this.StartPosition = FormStartPosition.Manual;
+                    this.Location = registerForm.Location;
                     this.Show();
                 }
             }
