@@ -42,7 +42,7 @@
             lblUsername = new Label();
             btnPanelInventory = new Button();
             btnPanelRentalItems = new Button();
-            panel1 = new Panel();
+            panelDataInfo = new Panel();
             panelTitleBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picProgIcon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picAccount).BeginInit();
@@ -171,6 +171,7 @@
             btnPanelModeration.TabIndex = 6;
             btnPanelModeration.Text = "Moderation";
             btnPanelModeration.UseVisualStyleBackColor = false;
+            btnPanelModeration.Click += BtnPanelModeration_Click;
             // 
             // lblUserRole
             // 
@@ -209,6 +210,7 @@
             btnPanelInventory.TabIndex = 3;
             btnPanelInventory.Text = "Inventory";
             btnPanelInventory.UseVisualStyleBackColor = false;
+            btnPanelInventory.Click += BtnPanelInventory_Click;
             // 
             // btnPanelRentalItems
             // 
@@ -224,16 +226,17 @@
             btnPanelRentalItems.TabIndex = 2;
             btnPanelRentalItems.Text = "Rented Items";
             btnPanelRentalItems.UseVisualStyleBackColor = false;
+            btnPanelRentalItems.Click += BtnPanelRentalItems_Click;
             // 
-            // panel1
+            // panelDataInfo
             // 
-            panel1.BackColor = Color.FromArgb(127, 140, 141);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(150, 22);
-            panel1.Margin = new Padding(0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(650, 428);
-            panel1.TabIndex = 3;
+            panelDataInfo.BackColor = Color.FromArgb(127, 140, 141);
+            panelDataInfo.Dock = DockStyle.Fill;
+            panelDataInfo.Location = new Point(150, 22);
+            panelDataInfo.Margin = new Padding(0);
+            panelDataInfo.Name = "panelDataInfo";
+            panelDataInfo.Size = new Size(650, 428);
+            panelDataInfo.TabIndex = 3;
             // 
             // FrmMain
             // 
@@ -242,7 +245,7 @@
             BackColor = Color.FromArgb(127, 140, 141);
             BackgroundImageLayout = ImageLayout.None;
             ClientSize = new Size(800, 450);
-            Controls.Add(panel1);
+            Controls.Add(panelDataInfo);
             Controls.Add(panelSide);
             Controls.Add(panelTitleBar);
             FormBorderStyle = FormBorderStyle.None;
@@ -273,6 +276,6 @@
         private Label lblUsername;
         private Label lblUserRole;
         private Button btnPanelModeration;
-        private Panel panel1;
+        private Panel panelDataInfo;
     }
 }
