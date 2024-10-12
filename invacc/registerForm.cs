@@ -1,18 +1,4 @@
-﻿using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-
-namespace invacc
+﻿namespace invacc
 {
     public partial class FrmRegister : Form
     {
@@ -79,7 +65,7 @@ namespace invacc
             {
                 MessageHelper.ErrorDifferentPassword();
                 ClearPasswordBoxes();
-            } 
+            }
             else if (tboxPassword.TextLength < 4)
             {
                 MessageHelper.ErrorShortPassword();
