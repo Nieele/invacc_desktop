@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
-            panel1 = new Panel();
+            panelTitleBar = new Panel();
             picProgIcon = new PictureBox();
             lblNameProgInventory = new Label();
             btnTitleBarClose = new Button();
@@ -42,24 +42,24 @@
             lblUsername = new Label();
             btnPanelInventory = new Button();
             btnPanelRentalItems = new Button();
-            panel1.SuspendLayout();
+            panelTitleBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picProgIcon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picAccount).BeginInit();
             panelSide.SuspendLayout();
             SuspendLayout();
             // 
-            // panel1
+            // panelTitleBar
             // 
-            panel1.BackColor = Color.FromArgb(97, 110, 111);
-            panel1.Controls.Add(picProgIcon);
-            panel1.Controls.Add(lblNameProgInventory);
-            panel1.Controls.Add(btnTitleBarClose);
-            panel1.Controls.Add(btnTitleBarExpand);
-            panel1.Controls.Add(btnTitleBarMinimize);
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(800, 22);
-            panel1.TabIndex = 0;
+            panelTitleBar.BackColor = Color.FromArgb(97, 110, 111);
+            panelTitleBar.Controls.Add(picProgIcon);
+            panelTitleBar.Controls.Add(lblNameProgInventory);
+            panelTitleBar.Controls.Add(btnTitleBarClose);
+            panelTitleBar.Controls.Add(btnTitleBarExpand);
+            panelTitleBar.Controls.Add(btnTitleBarMinimize);
+            panelTitleBar.Location = new Point(0, 0);
+            panelTitleBar.Name = "panelTitleBar";
+            panelTitleBar.Size = new Size(800, 22);
+            panelTitleBar.TabIndex = 0;
             // 
             // picProgIcon
             // 
@@ -94,6 +94,7 @@
             btnTitleBarClose.Size = new Size(30, 20);
             btnTitleBarClose.TabIndex = 2;
             btnTitleBarClose.UseVisualStyleBackColor = false;
+            btnTitleBarClose.Click += BtnTitleBarClose_Click;
             // 
             // btnTitleBarExpand
             // 
@@ -108,6 +109,7 @@
             btnTitleBarExpand.Size = new Size(30, 20);
             btnTitleBarExpand.TabIndex = 1;
             btnTitleBarExpand.UseVisualStyleBackColor = false;
+            btnTitleBarExpand.Click += BtnTitleBarExpand_Click;
             // 
             // btnTitleBarMinimize
             // 
@@ -123,6 +125,7 @@
             btnTitleBarMinimize.Size = new Size(30, 20);
             btnTitleBarMinimize.TabIndex = 0;
             btnTitleBarMinimize.UseVisualStyleBackColor = false;
+            btnTitleBarMinimize.Click += BtnTitleBarMinimize_Click;
             // 
             // picAccount
             // 
@@ -226,15 +229,15 @@
             BackColor = Color.FromArgb(127, 140, 141);
             BackgroundImageLayout = ImageLayout.None;
             ClientSize = new Size(800, 450);
-            Controls.Add(panel1);
+            Controls.Add(panelTitleBar);
             Controls.Add(panelSide);
             FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMain";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Inventory";
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
+            panelTitleBar.ResumeLayout(false);
+            panelTitleBar.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picProgIcon).EndInit();
             ((System.ComponentModel.ISupportInitialize)picAccount).EndInit();
             panelSide.ResumeLayout(false);
@@ -243,7 +246,7 @@
 
         #endregion
 
-        private Panel panel1;
+        private Panel panelTitleBar;
         private Button btnTitleBarMinimize;
         private Button btnTitleBarClose;
         private Button btnTitleBarExpand;
