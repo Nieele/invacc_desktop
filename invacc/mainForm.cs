@@ -72,5 +72,10 @@ namespace invacc
         {
             OpenChildForm(new moderationForm());
         }
+
+        private void BtnLogout_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

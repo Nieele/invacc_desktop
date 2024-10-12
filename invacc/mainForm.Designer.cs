@@ -37,6 +37,7 @@
             btnTitleBarMinimize = new Button();
             picAccount = new PictureBox();
             panelSide = new Panel();
+            btnLogout = new Button();
             btnPanelModeration = new Button();
             lblUserRole = new Label();
             lblUsername = new Label();
@@ -144,6 +145,7 @@
             // 
             panelSide.BackColor = Color.FromArgb(52, 73, 94);
             panelSide.BorderStyle = BorderStyle.FixedSingle;
+            panelSide.Controls.Add(btnLogout);
             panelSide.Controls.Add(btnPanelModeration);
             panelSide.Controls.Add(lblUserRole);
             panelSide.Controls.Add(lblUsername);
@@ -156,6 +158,22 @@
             panelSide.Name = "panelSide";
             panelSide.Size = new Size(150, 428);
             panelSide.TabIndex = 2;
+            // 
+            // btnLogout
+            // 
+            btnLogout.BackColor = Color.FromArgb(102, 123, 134);
+            btnLogout.BackgroundImageLayout = ImageLayout.None;
+            btnLogout.FlatAppearance.BorderSize = 0;
+            btnLogout.FlatStyle = FlatStyle.Flat;
+            btnLogout.Font = new Font("UD Digi Kyokasho NP-B", 9F, FontStyle.Bold);
+            btnLogout.ForeColor = Color.FromArgb(236, 240, 241);
+            btnLogout.Location = new Point(0, 379);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(148, 36);
+            btnLogout.TabIndex = 7;
+            btnLogout.Text = "Logout";
+            btnLogout.UseVisualStyleBackColor = false;
+            btnLogout.Click += BtnLogout_Click;
             // 
             // btnPanelModeration
             // 
@@ -277,5 +295,6 @@
         private Label lblUserRole;
         private Button btnPanelModeration;
         private Panel panelDataInfo;
+        private Button btnLogout;
     }
 }
