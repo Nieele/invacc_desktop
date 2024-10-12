@@ -59,7 +59,12 @@ namespace invacc
             {
                 this.Hide();
                 mainForm.ShowDialog();
-                this.Show();
+
+                if (Application.OpenForms.Count > 0)
+                {
+                    this.StartPosition = FormStartPosition.CenterScreen;
+                    this.Show();
+                }
             }
         }
 
