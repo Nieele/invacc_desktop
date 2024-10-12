@@ -42,6 +42,7 @@
             lblUsername = new Label();
             btnPanelInventory = new Button();
             btnPanelRentalItems = new Button();
+            panel1 = new Panel();
             panelTitleBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picProgIcon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picAccount).BeginInit();
@@ -56,6 +57,7 @@
             panelTitleBar.Controls.Add(btnTitleBarClose);
             panelTitleBar.Controls.Add(btnTitleBarExpand);
             panelTitleBar.Controls.Add(btnTitleBarMinimize);
+            panelTitleBar.Dock = DockStyle.Top;
             panelTitleBar.Location = new Point(0, 0);
             panelTitleBar.Name = "panelTitleBar";
             panelTitleBar.Size = new Size(800, 22);
@@ -148,6 +150,7 @@
             panelSide.Controls.Add(btnPanelInventory);
             panelSide.Controls.Add(btnPanelRentalItems);
             panelSide.Controls.Add(picAccount);
+            panelSide.Dock = DockStyle.Left;
             panelSide.Location = new Point(0, 22);
             panelSide.Margin = new Padding(0);
             panelSide.Name = "panelSide";
@@ -222,6 +225,16 @@
             btnPanelRentalItems.Text = "Rented Items";
             btnPanelRentalItems.UseVisualStyleBackColor = false;
             // 
+            // panel1
+            // 
+            panel1.BackColor = Color.FromArgb(127, 140, 141);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(150, 22);
+            panel1.Margin = new Padding(0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(650, 428);
+            panel1.TabIndex = 3;
+            // 
             // FrmMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -229,8 +242,9 @@
             BackColor = Color.FromArgb(127, 140, 141);
             BackgroundImageLayout = ImageLayout.None;
             ClientSize = new Size(800, 450);
-            Controls.Add(panelTitleBar);
+            Controls.Add(panel1);
             Controls.Add(panelSide);
+            Controls.Add(panelTitleBar);
             FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmMain";
@@ -259,5 +273,6 @@
         private Label lblUsername;
         private Label lblUserRole;
         private Button btnPanelModeration;
+        private Panel panel1;
     }
 }
