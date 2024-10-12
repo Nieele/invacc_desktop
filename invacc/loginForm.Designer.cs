@@ -162,15 +162,17 @@
             // 
             // btnCloseWindow
             // 
-            btnCloseWindow.BackColor = Color.FromArgb(62, 83, 104);
-            btnCloseWindow.BackgroundImageLayout = ImageLayout.None;
-            btnCloseWindow.FlatStyle = FlatStyle.Popup;
+            btnCloseWindow.BackColor = Color.FromArgb(52, 73, 94);
+            btnCloseWindow.BackgroundImage = (Image)resources.GetObject("btnCloseWindow.BackgroundImage");
+            btnCloseWindow.BackgroundImageLayout = ImageLayout.Stretch;
+            btnCloseWindow.FlatAppearance.BorderColor = Color.FromArgb(42, 63, 84);
+            btnCloseWindow.FlatAppearance.BorderSize = 2;
+            btnCloseWindow.FlatStyle = FlatStyle.Flat;
             btnCloseWindow.ForeColor = Color.FromArgb(236, 240, 241);
             btnCloseWindow.Location = new Point(325, 0);
             btnCloseWindow.Name = "btnCloseWindow";
             btnCloseWindow.Size = new Size(25, 25);
             btnCloseWindow.TabIndex = 9;
-            btnCloseWindow.Text = "X";
             btnCloseWindow.UseVisualStyleBackColor = false;
             btnCloseWindow.Click += BtnCloseWindow_Click;
             // 
