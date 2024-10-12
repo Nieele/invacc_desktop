@@ -71,7 +71,9 @@ namespace invacc
         {
             using (var mainForm = new FrmMain(session))
             {
+                this.Hide();
                 mainForm.ShowDialog();
+                this.Show();
             }
         }
 
