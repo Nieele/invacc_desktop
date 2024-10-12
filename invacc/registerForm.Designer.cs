@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRegister));
             lblNameProgRegister = new Label();
             btnCloseWindow = new Button();
             lblLogin = new Label();
@@ -216,6 +217,7 @@
             Controls.Add(btnCloseWindow);
             Controls.Add(lblNameProgRegister);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmRegister";
             Text = "Register";
             ResumeLayout(false);
