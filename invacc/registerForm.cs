@@ -51,15 +51,24 @@ namespace invacc
                     break;
                 case DatabaseHelper.ReturnState.UserAlreadyExist:
                     MessageHelper.ErrorUserAlreadyExist();
+                    ClearFields();
                     break;
                 case DatabaseHelper.ReturnState.ErrorConnection:
                     MessageHelper.ErrorUnableConnectDB();
+                    ClearFields();
                     break;
             }
         }
 
         private void ClearPasswordBoxes()
         {
+            tboxPassword.Clear();
+            tboxConfirmPassword.Clear();
+        }
+
+        private void ClearFields()
+        {
+            tboxUsername.Clear();
             tboxPassword.Clear();
             tboxConfirmPassword.Clear();
         }

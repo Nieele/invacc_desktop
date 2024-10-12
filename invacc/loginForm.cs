@@ -40,6 +40,12 @@ namespace invacc
             TryLogin();
         }
 
+        private void ClearFields()
+        {
+            tboxUsername.Clear();
+            tboxPassword.Clear();
+        }
+
         // Attempt to open the database connection and proceed if successful
         private void TryLogin()
         {
@@ -49,10 +55,12 @@ namespace invacc
                 switch (status)
                 {
                     case DatabaseHelper.ReturnState.OK:
+                        ClearFields();
                         OpenMainForm(con);
                         break;
                     case DatabaseHelper.ReturnState.ErrorConnection:
                         MessageHelper.ErrorUnableConnectOrFailedEntry();
+                        ClearFields();
                         break;
                 }
             }
