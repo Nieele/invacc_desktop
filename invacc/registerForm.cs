@@ -81,5 +81,15 @@ namespace invacc
                 TryRegister();
             }
         }
+
+        // Handle Enter key press to trigger login
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btnRegister.PerformClick();
+            }
+        }
     }
 }

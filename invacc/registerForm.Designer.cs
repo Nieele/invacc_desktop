@@ -134,6 +134,7 @@
             tboxPassword.PasswordChar = '*';
             tboxPassword.Size = new Size(300, 29);
             tboxPassword.TabIndex = 2;
+            tboxPassword.KeyDown += TextBox_KeyDown;
             // 
             // tboxUsername
             // 
@@ -145,6 +146,7 @@
             tboxUsername.Name = "tboxUsername";
             tboxUsername.Size = new Size(300, 29);
             tboxUsername.TabIndex = 1;
+            tboxUsername.KeyDown += TextBox_KeyDown;
             // 
             // lblPassword
             // 
@@ -193,6 +195,7 @@
             tboxConfirmPassword.PasswordChar = '*';
             tboxConfirmPassword.Size = new Size(300, 29);
             tboxConfirmPassword.TabIndex = 3;
+            tboxConfirmPassword.KeyDown += TextBox_KeyDown;
             // 
             // FrmRegister
             // 
