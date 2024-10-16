@@ -1,3 +1,4 @@
+CREATE TABLE IF NOT EXISTS Warehouses (
     id       serial        PRIMARY KEY,
     name     varchar(50)   NOT NULL  UNIQUE,
     phone    varchar(15)   NOT NULL  UNIQUE,
@@ -27,8 +28,8 @@ CREATE TABLE IF NOT EXISTS ItemsInfo (
 CREATE TABLE IF NOT EXISTS ItemsServiceHistory (
     id             serial  PRIMARY KEY,
     item_id        int     NOT NULL,
-    old_quantity   int     NOT NULL  CHECK (old_quantity >= 0 AND old_quantity <= 100),
-    new_quantity   int     NOT NULL  CHECK (new_quantity >= 0 AND new_quantity <= 100),
+    old_quality    int     NOT NULL  CHECK (old_quality >= 0 AND old_quality <= 100),
+    new_quality    int     NOT NULL  CHECK (new_quality >= 0 AND new_quality <= 100),
     change_reason  text    NOT NULL,
     FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -114,9 +115,10 @@ CREATE TYPE delivery_status AS ENUM ('request', 'shipped', 'received');
 
 CREATE TABLE IF NOT EXISTS WarehousesOrders (
     id                        serial           PRIMARY KEY,
-    item_id                   int              NOT NULL,
+    uuid_delivery             uuid             NOT NULL  DEFAULT gen_random_uuid()  UNIQUE,
+    item_id                   int              NOT NULL  UNIQUE,
     destination_warehouse_id  int              NOT NULL,
-    status                    delivery_status  NOT NULL,
+    status                    delivery_status  NOT NULL  DEFAULT 'request',
     FOREIGN KEY (item_id)                  REFERENCES Items (id)      ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (destination_warehouse_id) REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -128,14 +130,16 @@ CREATE TABLE IF NOT EXISTS WarehousesOrdersHistory (
     destination_warehouse_id  int        NOT NULL,
     sending_time              timestamp  NULL       DEFAULT NULL,
     receiving_time            timestamp  NULL       DEFAULT NULL,
-    FOREIGN KEY (item_id)                  REFERENCES Items (id)      ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (source_warehouse_id)      REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (destination_warehouse_id) REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE
+    uuid_delivery             uuid       NULL       UNIQUE,
+    FOREIGN KEY (item_id)                  REFERENCES Items (id)                       ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (source_warehouse_id)      REFERENCES Warehouses (id)                  ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (destination_warehouse_id) REFERENCES Warehouses (id)                  ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (uuid_delivery)            REFERENCES WarehousesOrders (uuid_delivery) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE UserWarehouse (
     id            serial       PRIMARY KEY,
     username      varchar(50)  NOT NULL  UNIQUE,
     warehouse_id  int          NULL,
-    FOREIGN KEY (warehouse_id) REFERENCES Warehouses (id) ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (warehouse_id) REFERENCES Warehouses (id) ON DELETE SET NULL ON UPDATE CASCADE
 );
