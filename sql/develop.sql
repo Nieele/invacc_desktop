@@ -89,14 +89,16 @@ CREATE TABLE IF NOT EXISTS Customers (
 );
 
 CREATE TABLE IF NOT EXISTS Rent (
-    id               serial     PRIMARY KEY,
-    item_id          int        NOT NULL,
-    customer_id      int        NOT NULL,
-    start_rent_time  timestamp  NOT NULL  DEFAULT NOW(),
-    end_rent_time    timestamp  NOT NULL,
-    overdue          boolean              DEFAULT false,
+    id               serial         PRIMARY KEY,
+    item_id          int            NOT NULL  UNIQUE,
+    customer_id      int            NOT NULL,
+    start_rent_time  timestamp      NOT NULL  DEFAULT NOW(),
+    end_rent_time    timestamp      NOT NULL,  
+    total_payments   decimal(10,2)  NOT NULL  DEFAULT 0,
+    overdue          boolean                  DEFAULT false,
     FOREIGN KEY (item_id)     REFERENCES Items (id)     ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (customer_id) REFERENCES Customers (id) ON DELETE RESTRICT ON UPDATE CASCADE
+    FOREIGN KEY (customer_id) REFERENCES Customers (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CHECK (start_rent_time < end_rent_time)
 );
 
 CREATE TABLE IF NOT EXISTS RentHistory (
