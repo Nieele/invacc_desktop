@@ -4,7 +4,7 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="PkU6kxI77-6cWANaAQxr-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="PkU6kxI77-6cWANaAQxr-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="120" y="480" width="570" height="680" as="geometry" />
         </mxCell>
         <mxCell id="E6KDkaJWajukVZ_zZWRm-2" value="Unknown" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -52,7 +52,7 @@
         <mxCell id="E6KDkaJWajukVZ_zZWRm-22" value="director" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="160" y="625" width="200" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="E6KDkaJWajukVZ_zZWRm-23" value="Edit: Warehouses" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="E6KDkaJWajukVZ_zZWRm-22" vertex="1">
+        <mxCell id="E6KDkaJWajukVZ_zZWRm-23" value="Edit: Warehouses, UserWarehouse" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="E6KDkaJWajukVZ_zZWRm-22" vertex="1">
           <mxGeometry y="30" width="200" height="30" as="geometry" />
         </mxCell>
         <mxCell id="E6KDkaJWajukVZ_zZWRm-24" value="select: *" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="E6KDkaJWajukVZ_zZWRm-22" vertex="1">

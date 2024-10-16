@@ -1,4 +1,3 @@
-CREATE TABLE IF NOT EXISTS Warehouses (
     id       serial        PRIMARY KEY,
     name     varchar(50)   NOT NULL  UNIQUE,
     phone    varchar(15)   NOT NULL  UNIQUE,
@@ -132,4 +131,11 @@ CREATE TABLE IF NOT EXISTS WarehousesOrdersHistory (
     FOREIGN KEY (item_id)                  REFERENCES Items (id)      ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (source_warehouse_id)      REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (destination_warehouse_id) REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE UserWarehouse (
+    id            serial       PRIMARY KEY,
+    username      varchar(50)  NOT NULL  UNIQUE,
+    warehouse_id  int          NULL,
+    FOREIGN KEY (warehouse_id) REFERENCES Warehouses (id) ON DELETE SET NULL ON UPDATE CASCADE,
 );
