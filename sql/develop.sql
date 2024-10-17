@@ -172,28 +172,35 @@ EXECUTE FUNCTION add_items_info();
 CREATE OR REPLACE FUNCTION add_items_service_history()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- add in the table ItemsServiceHistory
-    INSERT INTO ItemsServiceHistoryInfo (id, changed_by)
-    VALUES (NEW.id, current_user);
-
-    -- set old quality from items (to avoid insertion errors) in ItemsServiceHistory
-    UPDATE ItemsServiceHistory
-    SET old_quality = (
-                        SELECT quality 
+-- set old quality from items
+    NEW.old_quality = (SELECT quality 
                         FROM Items 
-                        WHERE id = NEW.item_id
-                      );
-
-    -- update quality in Items (set new_quality from ItemsServiceHistory) 
-    UPDATE Items
-    SET quality = NEW.new_quality
-    WHERE id = NEW.item_id;
-
+                        WHERE id = NEW.item_id);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_add_items_service_history
+BEFORE INSERT ON ItemsServiceHistory
+FOR EACH ROW
+EXECUTE FUNCTION add_items_service_history();
+
+
+-- update quality in Items (set new_quality from ItemsServiceHistory) 
+CREATE OR REPLACE FUNCTION update_quality_items()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- add in the table ItemsServiceHistory
+    INSERT INTO ItemsServiceHistoryInfo (id, changed_by)
+    VALUES (NEW.id, current_user);
+
+    UPDATE Items
+    SET quality = NEW.new_quality
+    WHERE id = NEW.item_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_quality_items
 AFTER INSERT ON ItemsServiceHistory
 FOR EACH ROW
 EXECUTE FUNCTION add_items_service_history();
@@ -250,6 +257,45 @@ AFTER INSERT ON WarehousesOrders
 FOR EACH ROW
 EXECUTE FUNCTION add_warehouses_orders_history();
 
+
+-- only source warehouse user can send the item and only destination warehouse user can receive the item 
+CREATE OR REPLACE FUNCTION prevent_update_status_warehouses_order()
+RETURNS TRIGGER AS $$
+BEGIN
+   -- status changed to shipped
+    IF NEW.status = 'shipped' THEN
+        IF (SELECT source_warehouse_id 
+            FROM WarehousesOrdersHistory 
+            WHERE uuid_delivery = NEW.uuid_delivery) != 
+           (SELECT warehouse_id 
+            FROM UserWarehouse 
+            WHERE username = current_user) THEN
+                RAISE EXCEPTION 'It is not possible to confirm the shipment from another warehouse.';
+        END IF;
+    END IF;
+    
+    -- status changed to received
+    IF NEW.status = 'received' THEN
+        IF (SELECT destination_warehouse_id 
+            FROM WarehousesOrdersHistory 
+            WHERE uuid_delivery = NEW.uuid_delivery) != 
+           (SELECT warehouse_id 
+            FROM UserWarehouse 
+            WHERE username = current_user) THEN
+                RAISE EXCEPTION 'It is not possible to confirm receipt from another warehouse.';
+        END IF;
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_prevent_update_status_warehouses_order
+BEFORE UPDATE OF status
+ON WarehousesOrders
+FOR EACH ROW
+WHEN (OLD.status != NEW.status)
+EXECUTE FUNCTION prevent_update_status_warehouses_order();
 
 -- changing the WarehousesOrderHistory when changing the status of the WarehousesOrder
 CREATE OR REPLACE FUNCTION update_warehouses_order_history()
@@ -338,7 +384,7 @@ BEGIN
     UPDATE Rent 
        SET total_payments = (
                                 SELECT price 
-                                  FROM Item
+                                  FROM Items
                                  WHERE id = NEW.item_id
                             ) * 
                                 CASE 
@@ -365,24 +411,24 @@ RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO RentHistory(item_id, warehouse_rent_id, customer_id, start_rent_time, end_rent_time, overdue_rent_days, total_payments)
     VALUES (
-            NEW.item_id,
-            (SELECT warehouse_id FROM Items WHERE id = NEW.item_id),
-            NEW.customer_id,
-            NEW.start_rent_time,
+            OLD.item_id,
+            (SELECT warehouse_id FROM Items WHERE id = OLD.item_id),
+            OLD.customer_id,
+            OLD.start_rent_time,
             NOW(),
             CASE 
-                WHEN NEW.overdue = true THEN
-                    DATE_PART('day', ((NOW() - start_rent_time) - (end_rent_time - start_rent_time))) + 1
+                WHEN OLD.overdue = true THEN
+                    DATE_PART('day', ((NOW() - OLD.start_rent_time) - (OLD.end_rent_time - OLD.start_rent_time))) + 1
                 ELSE 
                     0
             END,
-            NEW.total_payments
+            OLD.total_payments
         );
 
     UPDATE RentHistory
-    SET total_payments = total_payments + overdue_rent_days * (SELECT late_penalty FROM Item WHERE id = NEW.id);
+    SET total_payments = total_payments + overdue_rent_days * (SELECT late_penalty FROM Items WHERE id = OLD.id);
 
-    RETURN NEW;
+    RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -390,3 +436,15 @@ CREATE TRIGGER trg_add_rent_history
 BEFORE DELETE ON Rent
 FOR EACH ROW
 EXECUTE FUNCTION add_rent_history();
+
+
+-- add new users to the UserWarehouse
+CREATE OR REPLACE FUNCTION update_user_warehouse()
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO UserWarehouse (username, warehouse_id)
+    SELECT usename, NULL
+    FROM pg_user
+    WHERE usename NOT IN (SELECT uw.username FROM UserWarehouse uw);
+END;
+$$ LANGUAGE plpgsql;
