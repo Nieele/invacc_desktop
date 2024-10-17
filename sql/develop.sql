@@ -28,8 +28,8 @@ CREATE TABLE IF NOT EXISTS ItemsInfo (
 CREATE TABLE IF NOT EXISTS ItemsServiceHistory (
     id             serial  PRIMARY KEY,
     item_id        int     NOT NULL,
-    old_quality    int     NOT NULL  CHECK (old_quality >= 0 AND old_quality <= 100),
-    new_quality    int     NOT NULL  CHECK (new_quality >= 0 AND new_quality <= 100),
+    old_quality    int     NOT NULL  DEFAULT 0  CHECK (old_quality >= 0 AND old_quality <= 100),
+    new_quality    int     NOT NULL             CHECK (new_quality >= 0 AND new_quality <= 100),
     change_reason  text    NOT NULL,
     FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS ItemsServiceHistoryInfo (
     FOREIGN KEY (id) REFERENCES ItemsServiceHistory (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS ItemDecommissioning (
+CREATE TABLE IF NOT EXISTS ItemsDecommissioning (
     id       serial  PRIMARY KEY,
     item_id  int     NOT NULL  UNIQUE,
     reason   text    NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS Customers (
     id         serial        PRIMARY KEY,
     firstname  varchar(50)   NOT NULL,
     lastname   varchar(50)   NOT NULL,
-    phone      varchar(15)   NOT NULL,
+    phone      varchar(30)   NOT NULL,
     email      varchar(50)   NOT NULL  DEFAULT 'empty',
     address    varchar(100)  NOT NULL  DEFAULT 'empty',
     passport   varchar(30)   NOT NULL  DEFAULT 'empty'
@@ -104,13 +104,15 @@ CREATE TABLE IF NOT EXISTS Rent (
 CREATE TABLE IF NOT EXISTS RentHistory (
     id                 serial         PRIMARY KEY,
     item_id            int            NOT NULL,
+    warehouse_rent_id  int            NOT NULL,
     customer_id        int            NOT NULL,
     start_rent_time    timestamp      NOT NULL,
     end_rent_time      timestamp      NOT NULL,
     overdue_rent_days  int            NOT NULL,
     total_payments     decimal(10,2)  NOT NULL,
-    FOREIGN KEY (item_id)     REFERENCES Items (id)     ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (customer_id) REFERENCES Customers (id) ON DELETE RESTRICT ON UPDATE CASCADE
+    FOREIGN KEY (item_id)               REFERENCES Items (id)      ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (warehouse_rent_id)     REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (customer_id)           REFERENCES Customers (id)  ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TYPE delivery_status AS ENUM ('request', 'shipped', 'received');
