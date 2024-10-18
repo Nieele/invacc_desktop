@@ -450,7 +450,10 @@ BEGIN
     INSERT INTO UserWarehouse (username, warehouse_id)
     SELECT usename, NULL
     FROM pg_user
-    WHERE usename NOT IN (SELECT uw.username FROM UserWarehouse uw);
+    WHERE usename NOT IN (SELECT uw.username FROM UserWarehouse uw) AND usename NOT IN ('postgres', 'register');
+
+    DELETE FROM UserWarehouse
+    WHERE username NOT IN (SELECT usename FROM pg_user);
 END;
 $$ LANGUAGE plpgsql;
 
