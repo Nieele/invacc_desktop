@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS Customers (
     id         serial        PRIMARY KEY,
     firstname  varchar(50)   NOT NULL,
     lastname   varchar(50)   NOT NULL,
-    phone      varchar(30)   NOT NULL,
+    phone      varchar(30)   NOT NULL  UNIQUE,
     email      varchar(50)   NOT NULL  DEFAULT 'empty',
     address    varchar(100)  NOT NULL  DEFAULT 'empty',
     passport   varchar(30)   NOT NULL  DEFAULT 'empty'
