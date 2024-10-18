@@ -1,3 +1,5 @@
+BEGIN;
+
 CREATE TABLE IF NOT EXISTS Warehouses (
     id       serial        PRIMARY KEY,
     name     varchar(50)   NOT NULL  UNIQUE,
@@ -348,7 +350,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_prevent_decommissioning
-BEFORE INSERT ON ItemDecommissioning
+BEFORE INSERT ON ItemsDecommissioning
 FOR EACH ROW
 EXECUTE FUNCTION prevent_decommissioning();
 
@@ -617,10 +619,14 @@ INSERT INTO ItemsDecommissioning VALUES (1, 9, 'Сгорели блок пита
 INSERT INTO ItemsServiceHistory(item_id, new_quality, change_reason) VALUES (2, 60, 'Треснул корпус');
 
 -- INSERT WarehousesOrdersHistory
+ALTER SEQUENCE public.warehousesordershistory_id_seq RESTART WITH 5;
 INSERT INTO WarehousesOrdersHistory VALUES (1, 5,  3, 2, NOW() - INTERVAL '7 days',  NOW() - INTERVAL '3 days',  NULL);
 INSERT INTO WarehousesOrdersHistory VALUES (2, 10, 1, 4, NOW() - INTERVAL '30 days', NOW() - INTERVAL '26 days', NULL);
 INSERT INTO WarehousesOrdersHistory VALUES (3, 9,  1, 4, NOW() - INTERVAL '12 days', NOW() - INTERVAL '11 days', NULL);
 INSERT INTO WarehousesOrdersHistory VALUES (4, 13, 3, 5, NOW() - INTERVAL '15 days', NOW() - INTERVAL '6 days',  NULL);
 
 -- INSERT WarehousesOrders
+ALTER SEQUENCE public.warehousesorders_id_seq RESTART WITH 5;
 INSERT INTO WarehousesOrders(item_id, destination_warehouse_id) VALUES (7, 4);
+
+COMMIT;
