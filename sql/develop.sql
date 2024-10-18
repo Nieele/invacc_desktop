@@ -148,7 +148,6 @@ CREATE TABLE UserWarehouse (
     FOREIGN KEY (warehouse_id) REFERENCES Warehouses (id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
-
 -- Triggers
 
 -- Automatic creation of a record in the table ItemsInfo
@@ -382,17 +381,18 @@ CREATE OR REPLACE FUNCTION calculate_total_interim_payment_rent()
 RETURNS TRIGGER AS $$
 BEGIN
     UPDATE Rent 
-       SET total_payments = (
-                                SELECT price 
-                                  FROM Items
-                                 WHERE id = NEW.item_id
-                            ) * 
-                                CASE 
-                                    WHEN EXTRACT(HOUR FROM end_rent_time) >= 12 THEN 
-                                        DATE_PART('day', end_rent_time - start_rent_time) + 1
-                                    ELSE
-                                        DATE_PART('day', end_rent_time - start_rent_time)
-                                END
+    SET total_payments = (
+                            SELECT price FROM Items WHERE id = NEW.item_id
+                         ) * (
+                            CASE
+                                WHEN DATE_PART('day', NEW.end_rent_time - NEW.start_rent_time) = 0 THEN
+                                    1
+                                WHEN EXTRACT(HOUR FROM NEW.end_rent_time) >= 12 THEN 
+                                    DATE_PART('day', NEW.end_rent_time - NEW.start_rent_time) + 1
+                                ELSE 
+                                    DATE_PART('day', NEW.end_rent_time - NEW.start_rent_time)
+                            END
+                            )
      WHERE id = NEW.id;
 
     RETURN NEW;
@@ -408,7 +408,18 @@ EXECUTE FUNCTION calculate_total_interim_payment_rent();
 -- create a history record based on a record from rent after delete from rent
 CREATE OR REPLACE FUNCTION add_rent_history()
 RETURNS TRIGGER AS $$
+DECLARE
+    overdueRentDays int;
 BEGIN
+    SELECT
+        CASE
+            WHEN OLD.overdue = true THEN
+                DATE_PART('day', ((NOW() - OLD.start_rent_time) - (OLD.end_rent_time - OLD.start_rent_time))) + 1
+            ELSE 
+                0
+        END
+        INTO overdueRentDays;
+
     INSERT INTO RentHistory(item_id, warehouse_rent_id, customer_id, start_rent_time, end_rent_time, overdue_rent_days, total_payments)
     VALUES (
             OLD.item_id,
@@ -416,17 +427,9 @@ BEGIN
             OLD.customer_id,
             OLD.start_rent_time,
             NOW(),
-            CASE 
-                WHEN OLD.overdue = true THEN
-                    DATE_PART('day', ((NOW() - OLD.start_rent_time) - (OLD.end_rent_time - OLD.start_rent_time))) + 1
-                ELSE 
-                    0
-            END,
-            OLD.total_payments
+            overdueRentDays,
+            OLD.total_payments + (SELECT late_penalty FROM Items WHERE id = OLD.item_id) * overdueRentDays
         );
-
-    UPDATE RentHistory
-    SET total_payments = total_payments + overdue_rent_days * (SELECT late_penalty FROM Items WHERE id = OLD.id);
 
     RETURN OLD;
 END;
@@ -446,5 +449,19 @@ BEGIN
     SELECT usename, NULL
     FROM pg_user
     WHERE usename NOT IN (SELECT uw.username FROM UserWarehouse uw);
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION daily_update_overdue_rent()
+RETURNS VOID AS $$
+BEGIN
+    UPDATE Rent
+    SET overdue = true 
+    WHERE overdue = false
+    AND (
+        (EXTRACT(HOUR FROM end_rent_time) >= 12 AND NOW() > (DATE_TRUNC('day', end_rent_time + INTERVAL '1 day') + INTERVAL '12 hours'))
+        OR (EXTRACT(HOUR FROM end_rent_time) < 12 AND NOW() > end_rent_time)
+    );
 END;
 $$ LANGUAGE plpgsql;
