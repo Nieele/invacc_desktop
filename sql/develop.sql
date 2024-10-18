@@ -465,3 +465,53 @@ BEGIN
     );
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- Add schedule pgagent. execute update overdue in Rent everyday in 12:00
+CREATE EXTENSION IF NOT EXISTS pgagent;
+
+DO $$
+DECLARE
+    jid integer;
+    scid integer;
+BEGIN
+-- Creating a new job
+INSERT INTO pgagent.pga_job(
+    jobjclid, jobname, jobdesc, jobhostagent, jobenabled
+) VALUES (
+    1::integer, 'DailyCheckOverdueRent'::text, ''::text, ''::text, true
+) RETURNING jobid INTO jid;
+
+-- Steps
+-- Inserting a step (jobid: NULL)
+INSERT INTO pgagent.pga_jobstep (
+    jstjobid, jstname, jstenabled, jstkind,
+    jstconnstr, jstdbname, jstonerror,
+    jstcode, jstdesc
+) VALUES (
+    jid, 'CheckAndUpdate'::text, true, 's'::character(1),
+    ''::text, 'RentalDB'::name, 'f'::character(1),
+    'SELECT public.daily_update_overdue_rent();'::text, ''::text
+) ;
+
+-- Schedules
+-- Inserting a schedule
+INSERT INTO pgagent.pga_schedule(
+    jscjobid, jscname, jscdesc, jscenabled,
+    jscstart, jscend,    jscminutes, jschours, jscweekdays, jscmonthdays, jscmonths
+) VALUES (
+    jid, 'Daily 12:00'::text, ''::text, true,
+    NOW()::timestamp with time zone, (NOW() + INTERVAL '1 year')::timestamp with time zone,
+    -- Minutes
+    '{t,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f}'::bool[]::boolean[],
+    -- Hours
+    '{f,f,f,f,f,f,f,f,f,f,f,f,t,f,f,f,f,f,f,f,f,f,f,f}'::bool[]::boolean[],
+    -- Week days
+    '{f,f,f,f,f,f,f}'::bool[]::boolean[],
+    -- Month days
+    '{f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f}'::bool[]::boolean[],
+    -- Months
+    '{f,f,f,f,f,f,f,f,f,f,f,f}'::bool[]::boolean[]
+) RETURNING jscid INTO scid;
+END
+$$;
