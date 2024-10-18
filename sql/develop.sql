@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS ItemsCategories (
 CREATE TABLE IF NOT EXISTS Discounts (
     id          serial       PRIMARY KEY,
     name        varchar(50)  NOT NULL,
-    descpition  text         NULL,
+    description text         NULL,
     percent     int          NOT NULL                 CHECK (percent > 0 AND percent < 100),
     start_date  timestamp    NOT NULL  DEFAULT NOW()  CHECK (start_date <= NOW()),
     end_date    timestamp    NOT NULL                 CHECK (end_date > NOW())
@@ -525,6 +525,7 @@ INSERT INTO Warehouses VALUES (2, 'Флюмен',  '+79162103495', 'flumen@renta
 INSERT INTO Warehouses VALUES (3, 'Гелидус', '+79165499144', 'gelidus@rental.com', '980178, г. Москва, ул. Краснопрудная, дом 11');
 INSERT INTO Warehouses VALUES (4, 'Монтис',  '+79168251546', 'montis@rental.com',  '983182, г. Санкт-Петербург, пр-кт Испытателей, дом 31');
 INSERT INTO Warehouses VALUES (5, 'Сильва',  '+79165946514', 'silva@rental.com',   '420127, Респ. Татарстан, г. Казань, ул. Максимова, дом 2');
+SELECT setval('warehouses_id_seq', (SELECT MAX(id) FROM Warehouses));
 
 -- INSERT Items
 INSERT INTO Items VALUES (1,  1, 'плиткорез',                            'Для точной резки плитки и керамики.',                    91,  300,  400 );
@@ -543,6 +544,7 @@ INSERT INTO Items VALUES (13, 5, 'дрель-шуруповерт',             
 INSERT INTO Items VALUES (14, 3, 'плоскогубцы с изолированными ручками', 'Для работы с электрическими проводами и кабелями.',      35,  200,  300 );
 INSERT INTO Items VALUES (15, 3, 'бетононасос',                          'Для перекачивания бетона на строительных площадках.',    84,  4000, 5500);
 INSERT INTO Items VALUES (16, 3, 'вакуумный упаковщик',                  'Для упаковки продуктов в вакуумной упаковке.',           90,  2000, 2400);
+SELECT setval('items_id_seq', (SELECT MAX(id) FROM Items));
 
 -- INSERT Categories
 INSERT INTO Categories VALUES (1, 'Инструменты');
@@ -554,6 +556,7 @@ INSERT INTO Categories VALUES (6, 'Подъемное оборудование')
 INSERT INTO Categories VALUES (7, 'Автоматизация');
 INSERT INTO Categories VALUES (8, 'Пневматика');
 INSERT INTO Categories VALUES (9, 'Упаковка');
+SELECT setval('categories_id_seq', (SELECT MAX(id) FROM Categories));
 
 -- INSERT ItemsCategories
 INSERT INTO ItemsCategories VALUES (1, 1);
@@ -587,8 +590,9 @@ INSERT INTO ItemsCategories VALUES (16, 5);
 INSERT INTO ItemsCategories VALUES (16, 9);
 
 -- INSERT Discounts
-INSERT INTO Discounts VALUES (1, 'Недельная господдержка промышленного производства', 'По указу №5 президента РФ на промышленное оборудование возлагается скидка 10%', 10, NOW(), NOW() + INTERVAL '7 days');
-INSERT INTO Discounts VALUES (2, 'Пора накачать колеса!', 'Давно проверяли давление в шинах? Скидка 5% на аренду компрессора', 5, NOW() - INTERVAL '2 days', NOW() + INTERVAL '1 day');
+INSERT INTO Discounts VALUES (1, 'Недельная господдержка промышленного производства', 'По указу №5 президента РФ на промышленное оборудование возлагается скидка 10%', 10, NOW(),                     NOW() + INTERVAL '7 days');
+INSERT INTO Discounts VALUES (2, 'Пора накачать колеса!',                             'Давно проверяли давление в шинах? Скидка 5% на аренду компрессора',              5, NOW() - INTERVAL '2 days', NOW() + INTERVAL '1 day');
+SELECT setval('discounts_id_seq', (SELECT MAX(id) FROM Discounts));
 
 -- INSERT ItemsDiscounts
 INSERT INTO ItemsDiscounts
@@ -611,12 +615,15 @@ INSERT INTO Customers VALUES (6, 'Елизавета', 'Мишина',   '+7(936
 INSERT INTO Customers VALUES (7, 'Максим',    'Гребнев',  '+7(925)930-73-21', 'max47@rambler.ru',            '143402 обл. Московская, г. Красногорск, проезд Железнодорожный, дом 9',              '4522 205106');
 INSERT INTO Customers VALUES (8, 'Дмитрий',   'Коршиков', '+7(908)329-79-43', 'dmitriy.korshikov@gmail.com', '980243 г. Москва, ул. Перовская, дом 8 к. 1',                                        '4041 379819');
 INSERT INTO Customers VALUES (9, 'Григорий',  'Кубланов', '+7(908)302-45-12', 'grigoriy_kub@gmail.com',      '919935 обл. Московская, г. Балашиха, мкр. Железнодорожный, ул. Маяковского, дом 25', '4396 255125');
+SELECT setval('customers_id_seq', (SELECT MAX(id) FROM Customers));
 
 -- INSERT ItemsDecommissioning
 INSERT INTO ItemsDecommissioning VALUES (1, 9, 'Сгорели блок питания и плата управления. Восстановление не рентабельно.');
+SELECT setval('itemsdecommissioning_id_seq', (SELECT MAX(id) FROM ItemsDecommissioning));
 
 -- INSERT ItemsServiceHistory
 INSERT INTO ItemsServiceHistory(item_id, new_quality, change_reason) VALUES (2, 60, 'Треснул корпус');
+SELECT setval('itemsservicehistory_id_seq', (SELECT MAX(id) FROM ItemsServiceHistory));
 
 -- INSERT WarehousesOrdersHistory
 ALTER SEQUENCE public.warehousesordershistory_id_seq RESTART WITH 5;
@@ -624,6 +631,7 @@ INSERT INTO WarehousesOrdersHistory VALUES (1, 5,  3, 2, NOW() - INTERVAL '7 day
 INSERT INTO WarehousesOrdersHistory VALUES (2, 10, 1, 4, NOW() - INTERVAL '30 days', NOW() - INTERVAL '26 days', NULL);
 INSERT INTO WarehousesOrdersHistory VALUES (3, 9,  1, 4, NOW() - INTERVAL '12 days', NOW() - INTERVAL '11 days', NULL);
 INSERT INTO WarehousesOrdersHistory VALUES (4, 13, 3, 5, NOW() - INTERVAL '15 days', NOW() - INTERVAL '6 days',  NULL);
+SELECT setval('warehousesordershistory_id_seq', (SELECT MAX(id) FROM WarehousesOrdersHistory));
 
 -- INSERT WarehousesOrders
 ALTER SEQUENCE public.warehousesorders_id_seq RESTART WITH 5;
