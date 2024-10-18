@@ -587,7 +587,7 @@ GRANT SELECT, INSERT                 ON TABLE    ItemsInfo, ItemsServiceHistoryI
 GRANT USAGE, SELECT                  ON SEQUENCE itemsdecommissioning_id_seq, warehousesorders_id_seq, 
                                                  warehousesordershistory_id_seq, categories_id_seq, items_id_seq, 
                                                  itemsinfo_id_seq, itemsservicehistory_id_seq, itemsservicehistoryinfo_id_seq TO inventory_manager;
-GRANT SELECT                         ON TABLE    UserWarehouse, Warehouses                                                    TO inventory_manager;
+GRANT SELECT                         ON TABLE    UserWarehouse, Warehouses, RentHistory, Rent                                 TO inventory_manager;
 
 
 -- marketing_specialist
