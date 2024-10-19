@@ -416,26 +416,41 @@ EXECUTE FUNCTION calculate_total_interim_payment_rent();
 CREATE OR REPLACE FUNCTION add_rent_history()
 RETURNS TRIGGER AS $$
 DECLARE
-    overdueRentDays int;
+    warehouse_id_item int;
+    start_overdue_time timestamp;
+    overdue_rent_days_calc int := 0;
+    late_penalty_item decimal(10, 2);
 BEGIN
-    SELECT
-        CASE
-            WHEN OLD.overdue = true THEN
-                DATE_PART('day', ((NOW() - OLD.start_rent_time) - (OLD.end_rent_time - OLD.start_rent_time))) + 1
-            ELSE 
-                0
-        END
-        INTO overdueRentDays;
+    SELECT warehouse_id 
+    FROM Items 
+    WHERE id = OLD.item_id
+    INTO warehouse_id_item;
+
+    IF OLD.overdue = true THEN
+        start_overdue_time := CASE  
+            WHEN (OLD.end_rent_time < DATE_TRUNC('day', OLD.start_rent_time) + INTERVAL '2 days') OR (EXTRACT(HOUR FROM OLD.end_rent_time) >= 12) THEN
+                DATE_TRUNC('day', OLD.start_rent_time) + INTERVAL '2 days'
+            ELSE
+                DATE_TRUNC('day', OLD.end_rent_time) + INTERVAL '1 day'
+        END;
+
+        overdue_rent_days_calc := 1 + GREATEST(CEIL(EXTRACT(EPOCH FROM (NOW() - start_overdue_time)) / 86400));
+    END IF;
+
+    SELECT late_penalty 
+    FROM Items WHERE 
+    id = OLD.item_id
+    INTO late_penalty_item;
 
     INSERT INTO RentHistory(item_id, warehouse_rent_id, customer_id, start_rent_time, end_rent_time, overdue_rent_days, total_payments)
     VALUES (
             OLD.item_id,
-            (SELECT warehouse_id FROM Items WHERE id = OLD.item_id),
+            warehouse_id_item,
             OLD.customer_id,
             OLD.start_rent_time,
             NOW(),
-            overdueRentDays,
-            OLD.total_payments + (SELECT late_penalty FROM Items WHERE id = OLD.item_id) * overdueRentDays
+            overdue_rent_days_calc,
+            OLD.total_payments + late_penalty_item * overdue_rent_days_calc
         );
 
     RETURN OLD;
