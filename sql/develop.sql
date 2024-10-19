@@ -485,10 +485,15 @@ BEGIN
     SET overdue = true 
     WHERE overdue = false
     AND NOW() > (
-        CASE
-            WHEN EXTRACT(HOUR FROM end_rent_time) >= 12 
-                THEN DATE_TRUNC('day', end_rent_time) + INTERVAL '1 day 12 hours'
-            ELSE DATE_TRUNC('day', end_rent_time) + INTERVAL '12 hours'
+        CASE 
+            WHEN NOW() < DATE_TRUNC('day', start_rent_time) + INTERVAL '1 day 12 hours' THEN
+                DATE_TRUNC('day', start_rent_time) + INTERVAL '1 day 12 hours'
+            ELSE
+                CASE 
+                    WHEN EXTRACT(HOUR FROM end_rent_time) >= 12 
+                        THEN DATE_TRUNC('day', end_rent_time) + INTERVAL '1 day 12 hours'
+                    ELSE DATE_TRUNC('day', end_rent_time) + INTERVAL '12 hours'
+                END
         END
     );
 END;
