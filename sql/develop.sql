@@ -381,21 +381,26 @@ EXECUTE FUNCTION prevent_rent();
 -- calculate total_payment
 CREATE OR REPLACE FUNCTION calculate_total_interim_payment_rent()
 RETURNS TRIGGER AS $$
+DECLARE
+    total_days int;
+    item_price decimal(10,2);
 BEGIN
+    SELECT 
+        CASE
+            WHEN EXTRACT(DAY FROM NEW.end_rent_time - NEW.start_rent_time) = 0 THEN 1
+            ELSE EXTRACT(DAY FROM NEW.end_rent_time - NEW.start_rent_time) + 
+                CASE WHEN EXTRACT(HOUR FROM NEW.end_rent_time) >= 12 THEN 1 ELSE 0 END
+        END
+    INTO total_days;
+
+    SELECT price 
+    FROM Items 
+    WHERE id = NEW.item_id
+    INTO item_price;
+
     UPDATE Rent 
-    SET total_payments = (
-                            SELECT price FROM Items WHERE id = NEW.item_id
-                         ) * (
-                            CASE
-                                WHEN DATE_PART('day', NEW.end_rent_time - NEW.start_rent_time) = 0 THEN
-                                    1
-                                WHEN EXTRACT(HOUR FROM NEW.end_rent_time) >= 12 THEN 
-                                    DATE_PART('day', NEW.end_rent_time - NEW.start_rent_time) + 1
-                                ELSE 
-                                    DATE_PART('day', NEW.end_rent_time - NEW.start_rent_time)
-                            END
-                            )
-     WHERE id = NEW.id;
+    SET total_payments = item_price * total_days
+    WHERE id = NEW.id;
 
     RETURN NEW;
 END;
