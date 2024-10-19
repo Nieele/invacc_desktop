@@ -114,7 +114,8 @@ CREATE TABLE IF NOT EXISTS RentHistory (
     total_payments     decimal(10,2)  NOT NULL,
     FOREIGN KEY (item_id)               REFERENCES Items (id)      ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (warehouse_rent_id)     REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (customer_id)           REFERENCES Customers (id)  ON DELETE RESTRICT ON UPDATE CASCADE
+    FOREIGN KEY (customer_id)           REFERENCES Customers (id)  ON DELETE RESTRICT ON UPDATE CASCADE,
+    CHECK (start_rent_time < end_rent_time)
 );
 
 CREATE TYPE delivery_status AS ENUM ('request', 'shipped', 'received');
