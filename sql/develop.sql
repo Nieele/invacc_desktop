@@ -464,9 +464,12 @@ BEGIN
     UPDATE Rent
     SET overdue = true 
     WHERE overdue = false
-    AND (
-        (EXTRACT(HOUR FROM end_rent_time) >= 12 AND NOW() > (DATE_TRUNC('day', end_rent_time + INTERVAL '1 day') + INTERVAL '12 hours'))
-        OR (EXTRACT(HOUR FROM end_rent_time) < 12 AND NOW() > end_rent_time)
+    AND NOW() > (
+        CASE
+            WHEN EXTRACT(HOUR FROM end_rent_time) >= 12 
+                THEN DATE_TRUNC('day', end_rent_time) + INTERVAL '1 day 12 hours'
+            ELSE DATE_TRUNC('day', end_rent_time) + INTERVAL '12 hours'
+        END
     );
 END;
 $$ LANGUAGE plpgsql;
