@@ -366,7 +366,7 @@ BEGIN
     END IF;
 
     -- the item has been decommissioned
-    IF EXISTS (SELECT * FROM WarehousesOrders WHERE item_id = NEW.item_id) THEN
+    IF EXISTS (SELECT * FROM ItemsDecommissioning WHERE item_id = NEW.item_id) THEN
         RAISE EXCEPTION 'Cannot decommissioning item_id %, it is currently order.', NEW.item_id;
     END IF;
 
