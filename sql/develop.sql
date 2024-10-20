@@ -404,7 +404,6 @@ BEGIN
 
     FOR i IN 0..total_days - 1 LOOP
         current_day := NEW.start_rent_time::date + (i * INTERVAL '1 day');
-        RAISE NOTICE 'current_day = %', current_day;
         total_discount_percent := 0;
 
         SELECT COALESCE(SUM(Discounts.percent), 0)
@@ -413,7 +412,6 @@ BEGIN
         WHERE ItemsDiscounts.item_id = NEW.item_id AND
             current_day BETWEEN Discounts.start_date AND Discounts.end_date
         INTO total_discount_percent;
-        RAISE NOTICE 'total_discount_percent = %', total_discount_percent;
 
         IF total_discount_percent > 100 THEN
             total_discount_percent := 100;
