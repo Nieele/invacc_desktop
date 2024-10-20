@@ -68,8 +68,8 @@ CREATE TABLE IF NOT EXISTS Discounts (
     name        varchar(50)  NOT NULL,
     description text         NULL,
     percent     int          NOT NULL                 CHECK (percent > 0 AND percent < 100),
-    start_date  timestamp    NOT NULL  DEFAULT NOW()  CHECK (start_date <= NOW()),
-    end_date    timestamp    NOT NULL                 CHECK (end_date > NOW())
+    start_date  date         NOT NULL  DEFAULT NOW()  CHECK (start_date >= NOW()),
+    end_date    date         NOT NULL                 CHECK (end_date > NOW())
 );
 
 CREATE TABLE IF NOT EXISTS ItemsDiscounts (
@@ -385,6 +385,9 @@ RETURNS TRIGGER AS $$
 DECLARE
     total_days int;
     item_price decimal(10,2);
+    current_day date;
+    total_discount_percent int;
+    total_payments_tmp decimal(10,2) := 0;
 BEGIN
     SELECT 
         CASE
@@ -399,8 +402,28 @@ BEGIN
     WHERE id = NEW.item_id
     INTO item_price;
 
+    FOR i IN 0..total_days - 1 LOOP
+        current_day := NEW.start_rent_time::date + (i * INTERVAL '1 day');
+        RAISE NOTICE 'current_day = %', current_day;
+        total_discount_percent := 0;
+
+        SELECT COALESCE(SUM(Discounts.percent), 0)
+        FROM Discounts
+        JOIN ItemsDiscounts ON ItemsDiscounts.discount_id = Discounts.id
+        WHERE ItemsDiscounts.item_id = NEW.item_id AND
+            current_day BETWEEN Discounts.start_date AND Discounts.end_date
+        INTO total_discount_percent;
+        RAISE NOTICE 'total_discount_percent = %', total_discount_percent;
+
+        IF total_discount_percent > 100 THEN
+            total_discount_percent := 100;
+        END IF;
+
+        total_payments_tmp := total_payments_tmp + item_price * (1 - total_discount_percent::float/100);
+    END LOOP;
+
     UPDATE Rent 
-    SET total_payments = item_price * total_days
+    SET total_payments = total_payments_tmp
     WHERE id = NEW.id;
 
     RETURN NEW;
