@@ -72,8 +72,8 @@ INSERT INTO ItemsCategories VALUES (16, 5);
 INSERT INTO ItemsCategories VALUES (16, 9);
 
 -- INSERT Discounts
-INSERT INTO Discounts VALUES (1, 'Недельная господдержка промышленного производства', 'По указу №5 президента РФ на промышленное оборудование возлагается скидка 10%', 10, NOW(),                     NOW() + INTERVAL '7 days');
-INSERT INTO Discounts VALUES (2, 'Пора накачать колеса!',                             'Давно проверяли давление в шинах? Скидка 5% на аренду компрессора',              5, NOW() - INTERVAL '2 days', NOW() + INTERVAL '1 day');
+INSERT INTO Discounts VALUES (1, 'Недельная господдержка промышленного производства', 'По указу №5 президента РФ на промышленное оборудование возлагается скидка 10%', 10, NOW(), NOW() + INTERVAL '7 days');
+INSERT INTO Discounts VALUES (2, 'Пора накачать колеса!',                             'Давно проверяли давление в шинах? Скидка 5% на аренду компрессора',              5, NOW(), NOW() + INTERVAL '3 day');
 SELECT setval('discounts_id_seq', (SELECT MAX(id) FROM Discounts));
 
 -- INSERT ItemsDiscounts

@@ -68,8 +68,8 @@ CREATE TABLE IF NOT EXISTS Discounts (
     name        varchar(50)  NOT NULL,
     description text         NULL,
     percent     int          NOT NULL                 CHECK (percent > 0 AND percent < 100),
-    start_date  date         NOT NULL  DEFAULT NOW()  CHECK (start_date >= NOW()),
-    end_date    date         NOT NULL                 CHECK (end_date > NOW())
+    start_date  date         NOT NULL  DEFAULT NOW()  CHECK (start_date >= CURRENT_DATE),
+    end_date    date         NOT NULL                 CHECK (end_date > CURRENT_DATE)
 );
 
 CREATE TABLE IF NOT EXISTS ItemsDiscounts (
