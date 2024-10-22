@@ -101,17 +101,25 @@ namespace invacc
             {
                 var roles = cmd.ExecuteScalar() as string;
 
-                if (roles != null && roles.IndexOf("moderator", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    return "Moderator";
-                }
-                else if (roles != null && roles.IndexOf("worker", StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    return "Worker";
-                }
-                else
-                {
+                if (roles == null)
                     return "Unknown";
+
+                switch (roles.ToLower())
+                {
+                    case string r when r.Contains("admin"):
+                        return "Admin";
+                    case string r when r.Contains("moderator"):
+                        return "Moderator";
+                    case string r when r.Contains("director"):
+                        return "Director";
+                    case string r when r.Contains("marketing_specialist"):
+                        return "Marketing specialist";
+                    case string r when r.Contains("inventory_manager"):
+                        return "Inventory manager";
+                    case string r when r.Contains("worker"):
+                        return "Worker";
+                    default:
+                        return "Unknown";
                 }
             }
         }

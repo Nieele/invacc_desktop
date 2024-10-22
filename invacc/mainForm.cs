@@ -27,7 +27,36 @@ namespace invacc
         {
             roleButtons = new Dictionary<string, List<ButtonInfo>>
             {
+                ["Admin"] =
+                    [
+                        new ButtonInfo("Status", ShowStatus)
+                    ],
+
                 ["Moderator"] =
+                    [
+                        new ButtonInfo("Status", ShowStatus),
+                        new ButtonInfo("Moderation", ShowModeration)
+                    ],
+
+                ["Director"] =
+                    [
+                        new ButtonInfo("Status", ShowStatus),
+                        new ButtonInfo("Moderation", ShowModeration)
+                    ],
+
+                ["Marketing specialist"] =
+                    [
+                        new ButtonInfo("Status", ShowStatus),
+                        new ButtonInfo("Moderation", ShowModeration)
+                    ],
+
+                ["Inventory manager"] =
+                    [
+                        new ButtonInfo("Status", ShowStatus),
+                        new ButtonInfo("Moderation", ShowModeration)
+                    ],
+
+                ["Worker"] =
                     [
                         new ButtonInfo("Status", ShowStatus),
                         new ButtonInfo("Moderation", ShowModeration)
