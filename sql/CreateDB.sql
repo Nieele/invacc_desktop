@@ -13,35 +13,32 @@ CREATE TABLE IF NOT EXISTS Items (
     id            serial         PRIMARY KEY,
     warehouse_id  int            NOT NULL,
     name          varchar(50)    NOT NULL,
-    desription    text           NULL,
+    description   text           NULL,
     quality       int            NOT NULL  DEFAULT 100  CHECK (quality >= 0 AND quality <= 100),
     price         decimal(10,2)  NOT NULL               CHECK (price > 0),
     late_penalty  decimal(10,2)  NOT NULL               CHECK (late_penalty > 0),
-    FOREIGN KEY (warehouse_id) REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS ItemsInfo (
-    id          serial       PRIMARY KEY,
-    created_by  varchar(50)  NOT NULL,
-    created_at  timestamp    NOT NULL  DEFAULT NOW(),
-    FOREIGN KEY (id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
+    created_by    varchar(50)    NOT NULL  DEFAULT current_user,
+    created_at    timestamp      NOT NULL  DEFAULT current_timestamp,
+    FOREIGN KEY (warehouse_id) REFERENCES Warehouses (id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS ItemsServiceHistory (
-    id             serial  PRIMARY KEY,
-    item_id        int     NOT NULL,
-    old_quality    int     NOT NULL  DEFAULT 0  CHECK (old_quality >= 0 AND old_quality <= 100),
-    new_quality    int     NOT NULL             CHECK (new_quality >= 0 AND new_quality <= 100),
-    change_reason  text    NOT NULL,
+    id             serial       PRIMARY KEY,
+    item_id        int          NOT NULL,
+    old_quality    int          NOT NULL  DEFAULT 0  CHECK (old_quality >= 0 AND old_quality <= 100),
+    new_quality    int          NOT NULL             CHECK (new_quality >= 0 AND new_quality <= 100),
+    change_reason  text         NOT NULL,
+    changed_by     varchar(50)  NOT NULL  DEFAULT current_user,
+    changed_at     timestamp    NOT NULL  DEFAULT current_timestamp,
     FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS ItemsServiceHistoryInfo (
-    id          serial       PRIMARY KEY,
-    changed_by  varchar(50)  NOT NULL,
-    changed_at  timestamp    NOT NULL  DEFAULT NOW(),
-    FOREIGN KEY (id) REFERENCES ItemsServiceHistory (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+-- CREATE TABLE IF NOT EXISTS ItemsServiceHistoryInfo (
+--     id          serial       PRIMARY KEY,
+--     changed_by  varchar(50)  NOT NULL,
+--     changed_at  timestamp    NOT NULL  DEFAULT NOW(),
+--     FOREIGN KEY (id) REFERENCES ItemsServiceHistory (id) ON DELETE CASCADE ON UPDATE CASCADE
+-- );
 
 CREATE TABLE IF NOT EXISTS ItemsDecommissioning (
     id       serial  PRIMARY KEY,
@@ -68,8 +65,8 @@ CREATE TABLE IF NOT EXISTS Discounts (
     name        varchar(50)  NOT NULL,
     description text         NULL,
     percent     int          NOT NULL                 CHECK (percent > 0 AND percent < 100),
-    start_date  date         NOT NULL  DEFAULT NOW()  CHECK (start_date >= CURRENT_DATE),
-    end_date    date         NOT NULL                 CHECK (end_date > CURRENT_DATE)
+    start_date  date         NOT NULL  DEFAULT NOW()  CHECK (start_date >= NOW()),
+    end_date    date         NOT NULL                 CHECK (end_date > NOW())
 );
 
 CREATE TABLE IF NOT EXISTS ItemsDiscounts (
