@@ -38,11 +38,8 @@
             picAccount = new PictureBox();
             panelSide = new Panel();
             btnLogout = new Button();
-            btnPanelModeration = new Button();
             lblUserRole = new Label();
             lblUsername = new Label();
-            btnPanelInventory = new Button();
-            btnPanelRentalItems = new Button();
             panelDataInfo = new Panel();
             panelTitleBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picProgIcon).BeginInit();
@@ -146,11 +143,8 @@
             panelSide.BackColor = Color.FromArgb(52, 73, 94);
             panelSide.BorderStyle = BorderStyle.FixedSingle;
             panelSide.Controls.Add(btnLogout);
-            panelSide.Controls.Add(btnPanelModeration);
             panelSide.Controls.Add(lblUserRole);
             panelSide.Controls.Add(lblUsername);
-            panelSide.Controls.Add(btnPanelInventory);
-            panelSide.Controls.Add(btnPanelRentalItems);
             panelSide.Controls.Add(picAccount);
             panelSide.Dock = DockStyle.Left;
             panelSide.Location = new Point(0, 22);
@@ -175,22 +169,6 @@
             btnLogout.UseVisualStyleBackColor = false;
             btnLogout.Click += BtnLogout_Click;
             // 
-            // btnPanelModeration
-            // 
-            btnPanelModeration.BackColor = Color.FromArgb(102, 123, 134);
-            btnPanelModeration.BackgroundImageLayout = ImageLayout.None;
-            btnPanelModeration.FlatAppearance.BorderSize = 0;
-            btnPanelModeration.FlatStyle = FlatStyle.Flat;
-            btnPanelModeration.Font = new Font("UD Digi Kyokasho NP-B", 9F, FontStyle.Bold);
-            btnPanelModeration.ForeColor = Color.FromArgb(236, 240, 241);
-            btnPanelModeration.Location = new Point(0, 249);
-            btnPanelModeration.Name = "btnPanelModeration";
-            btnPanelModeration.Size = new Size(150, 36);
-            btnPanelModeration.TabIndex = 6;
-            btnPanelModeration.Text = "Moderation";
-            btnPanelModeration.UseVisualStyleBackColor = false;
-            btnPanelModeration.Click += BtnPanelModeration_Click;
-            // 
             // lblUserRole
             // 
             lblUserRole.Font = new Font("UD Digi Kyokasho NP-B", 9F, FontStyle.Bold, GraphicsUnit.Point, 128);
@@ -213,38 +191,6 @@
             lblUsername.TabIndex = 4;
             lblUsername.Text = "unknown";
             lblUsername.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // btnPanelInventory
-            // 
-            btnPanelInventory.BackColor = Color.FromArgb(102, 123, 134);
-            btnPanelInventory.BackgroundImageLayout = ImageLayout.None;
-            btnPanelInventory.FlatAppearance.BorderSize = 0;
-            btnPanelInventory.FlatStyle = FlatStyle.Flat;
-            btnPanelInventory.Font = new Font("UD Digi Kyokasho NP-B", 9F, FontStyle.Bold);
-            btnPanelInventory.ForeColor = Color.FromArgb(236, 240, 241);
-            btnPanelInventory.Location = new Point(0, 207);
-            btnPanelInventory.Name = "btnPanelInventory";
-            btnPanelInventory.Size = new Size(150, 36);
-            btnPanelInventory.TabIndex = 3;
-            btnPanelInventory.Text = "Inventory";
-            btnPanelInventory.UseVisualStyleBackColor = false;
-            btnPanelInventory.Click += BtnPanelInventory_Click;
-            // 
-            // btnPanelRentalItems
-            // 
-            btnPanelRentalItems.BackColor = Color.FromArgb(102, 123, 134);
-            btnPanelRentalItems.BackgroundImageLayout = ImageLayout.None;
-            btnPanelRentalItems.FlatAppearance.BorderSize = 0;
-            btnPanelRentalItems.FlatStyle = FlatStyle.Flat;
-            btnPanelRentalItems.Font = new Font("UD Digi Kyokasho NP-B", 9F, FontStyle.Bold);
-            btnPanelRentalItems.ForeColor = Color.FromArgb(236, 240, 241);
-            btnPanelRentalItems.Location = new Point(0, 165);
-            btnPanelRentalItems.Name = "btnPanelRentalItems";
-            btnPanelRentalItems.Size = new Size(150, 36);
-            btnPanelRentalItems.TabIndex = 2;
-            btnPanelRentalItems.Text = "Rented Items";
-            btnPanelRentalItems.UseVisualStyleBackColor = false;
-            btnPanelRentalItems.Click += BtnPanelRentalItems_Click;
             // 
             // panelDataInfo
             // 
@@ -288,12 +234,9 @@
         private PictureBox picAccount;
         private Panel panelSide;
         private Label lblNameProgInventory;
-        private Button btnPanelInventory;
-        private Button btnPanelRentalItems;
         private PictureBox picProgIcon;
         private Label lblUsername;
         private Label lblUserRole;
-        private Button btnPanelModeration;
         private Panel panelDataInfo;
         private Button btnLogout;
     }
