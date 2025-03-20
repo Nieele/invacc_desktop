@@ -30,12 +30,16 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var creds models.Credentials
-	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
+	err := json.NewDecoder(r.Body).Decode(&creds)
+	if err != nil {
 		http.Error(w, "incorrect format data", http.StatusBadRequest)
 		return
 	}
 
-	h.authService.Registration(creds)
+	err = h.authService.Registration(creds)
+	if err != nil {
+		http.Error(w, "user already exists", http.StatusConflict)
+	}
 }
 
 func (h *authHandler) Login(w http.ResponseWriter, r *http.Request) {
