@@ -24,7 +24,7 @@ type Item struct {
 }
 
 func (Item) TableName() string {
-	return "Items"
+	return "items"
 }
 
 // CustomersAuth in db
@@ -35,5 +35,5 @@ type CustomerAuth struct {
 }
 
 func (CustomerAuth) TableName() string {
-	return "CustomersAuth"
+	return "customersauth"
 }
