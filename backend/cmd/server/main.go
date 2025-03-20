@@ -8,7 +8,7 @@ import (
 func main() {
 	log.Println("run server")
 
-	cfg, err := config.Load()
+	cfg, err := config.LoadConfig()
 	if err != nil {
 		panic("config is not load")
 	}

@@ -3,9 +3,11 @@
 package config
 
 import (
+	"errors"
 	"flag"
 	"log"
 	"os"
+	"sync"
 	"time"
 
 	"gopkg.in/yaml.v3"
@@ -38,21 +40,39 @@ type JWT struct {
 	SecretKey string `yaml:"secretKey"`
 }
 
-func Load() (*Config, error) {
-	configPath := flag.String("config", "configs/config.yaml", "file is not exists")
-	flag.Parse()
+var (
+	cfg  *Config
+	once sync.Once
+)
 
-	data, err := os.ReadFile(*configPath)
-	if err != nil {
-		log.Fatalf("Error read config file: %v", err)
-		return nil, err
+func LoadConfig() (*Config, error) {
+	var err error
+	once.Do(func() {
+		configPath := flag.String("config", "configs/config.yaml", "path to config file")
+		flag.Parse()
+
+		data, err2 := os.ReadFile(*configPath)
+		if err2 != nil {
+			log.Fatalf("Error reading config file: %v", err2)
+			err = err2
+			return
+		}
+
+		var c Config
+		if err2 = yaml.Unmarshal(data, &c); err2 != nil {
+			log.Fatalf("Error parsing YAML: %v", err2)
+			err = err2
+			return
+		}
+
+		cfg = &c
+	})
+	return cfg, err
+}
+
+func GetConfig() (*Config, error) {
+	if cfg == nil {
+		return nil, errors.New("config is not loaded; call LoadConfig first")
 	}
-
-	var cfg Config
-	if err := yaml.Unmarshal(data, &cfg); err != nil {
-		log.Fatalf("Error parsing YAML: %v", err)
-		return nil, err
-	}
-
-	return &cfg, nil
+	return cfg, nil
 }
