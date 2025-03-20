@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"invacc-backend/internal/models"
 	"invacc-backend/internal/repository"
 
 	"gorm.io/gorm"
@@ -10,6 +11,7 @@ import (
 type ItemService interface {
 	GetItem(id int) ([]byte, error)
 	GetItemsList(page int) ([]byte, error)
+	GetItemModel(id int) (models.Item, error)
 }
 
 type itemService struct {
@@ -35,4 +37,8 @@ func (s *itemService) GetItemsList(page int) ([]byte, error) {
 		return nil, err
 	}
 	return json.Marshal(items)
+}
+
+func (s *itemService) GetItemModel(id int) (models.Item, error) {
+	return s.itemRepo.GetItem(id)
 }
