@@ -1,32 +1,21 @@
 package db
 
 import (
-	"database/sql"
-	"errors"
 	"sync"
 
-	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var (
-	db   *sql.DB
+	db   *gorm.DB
 	once sync.Once
 )
 
-func ConnectDB(connStr string) (*sql.DB, error) {
+func GetDB(connStr string) (*gorm.DB, error) {
 	var err error
 	once.Do(func() {
-		db, err = sql.Open("postgres", connStr)
-		if err != nil {
-			return
-		}
+		db, err = gorm.Open(postgres.Open(connStr), &gorm.Config{})
 	})
 	return db, err
-}
-
-func GetDB() (*sql.DB, error) {
-	if db == nil {
-		return nil, errors.New("there is no connection to the database")
-	}
-	return db, nil
 }
