@@ -12,6 +12,7 @@ type ItemService interface {
 	GetItem(id int) ([]byte, error)
 	GetItemsList(page int) ([]byte, error)
 	GetItemModel(id int) (models.Item, error)
+	GetItemModelList(page int) ([]models.Item, error)
 }
 
 type itemService struct {
@@ -41,4 +42,8 @@ func (s *itemService) GetItemsList(page int) ([]byte, error) {
 
 func (s *itemService) GetItemModel(id int) (models.Item, error) {
 	return s.itemRepo.GetItem(id)
+}
+
+func (s *itemService) GetItemModelList(page int) ([]models.Item, error) {
+	return s.itemRepo.GetItemsList(page)
 }
