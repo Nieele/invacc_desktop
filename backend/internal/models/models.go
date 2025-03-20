@@ -1,8 +1,6 @@
 package models
 
 import (
-	"time"
-
 	"gorm.io/datatypes"
 )
 
@@ -30,12 +28,4 @@ type CustomerAuth struct {
 	ID       uint   `gorm:"primaryKey" json:"id"`
 	Login    string `gorm:"type:varchar(50);not null;unique" json:"login"`
 	Password string `gorm:"type:varchar(60);not null" json:"password"`
-}
-
-// Sessions in db
-type Session struct {
-	ID        uint      `gorm:"primaryKey" json:"id"`
-	Token     string    `gorm:"type:varchar(600);not null" json:"token"`
-	Login     string    `gorm:"type:varchar(255);not null" json:"login"`
-	CreatedAt time.Time `gorm:"not null;column:created_at" json:"created_at"`
 }
