@@ -26,6 +26,7 @@ func NewRouter(dbConn *gorm.DB, cfg *config.Config) http.Handler {
 	r.Post("/register", AuthHandler.Register)
 	r.Post("/login", AuthHandler.Login)
 	r.Get("/item", ItemHandler.GetItemPage)
+	r.Get("/", ItemHandler.GetItemsListPage)
 
 	return r
 }
