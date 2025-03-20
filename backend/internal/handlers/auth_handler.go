@@ -35,7 +35,7 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.authService.Registration(creds.Login, creds.Password)
+	h.authService.Registration(creds)
 }
 
 func (h *authHandler) Login(w http.ResponseWriter, r *http.Request) {

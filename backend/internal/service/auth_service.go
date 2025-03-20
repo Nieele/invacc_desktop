@@ -12,12 +12,10 @@ import (
 	"gorm.io/gorm"
 )
 
-var ErrInvalidCredentials = errors.New("invalid credentials")
-
 type AuthService interface {
 	SignJwtToken(login string, expirationTime time.Time) (string, error)
 
-	Registration(login, password string) error
+	Registration(creds models.Credentials) error
 
 	Authorization(creds models.Credentials) (string, error)
 	Authentication(token string) error
@@ -45,13 +43,13 @@ func (s *authService) SignJwtToken(login string, expirationTime time.Time) (stri
 	return tokenString, err
 }
 
-func (s *authService) Registration(login, password string) error {
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+func (s *authService) Registration(creds models.Credentials) error {
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(creds.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
 
-	err = s.authRepo.InsertCustomer(login, string(hashPassword))
+	err = s.authRepo.InsertCustomer(creds.Login, string(hashPassword))
 	return err
 }
 
