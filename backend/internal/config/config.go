@@ -7,6 +7,7 @@ import (
 	"flag"
 	"log"
 	"os"
+	"strconv"
 	"sync"
 	"time"
 
@@ -75,4 +76,8 @@ func GetConfig() (*Config, error) {
 		return nil, errors.New("config is not loaded; call LoadConfig first")
 	}
 	return cfg, nil
+}
+
+func GetConnStringDB() string {
+	return "postgres://" + cfg.Database.Username + ":" + cfg.Database.Password + "@" + cfg.Database.Address + ":" + strconv.Itoa(cfg.Database.Port) + "/" + cfg.Database.DbName + "?sslmode=" + cfg.Database.Sslmode
 }
