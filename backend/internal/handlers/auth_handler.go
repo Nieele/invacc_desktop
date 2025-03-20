@@ -23,7 +23,7 @@ func NewAuthHandler(authService service.AuthService) AuthHandler {
 }
 
 func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
-	// repeat code? TODO
+	// TODO: repeat code? (Login)
 	if r.Method != http.MethodPost {
 		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)
 		return
@@ -36,9 +36,16 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO: add validation (github.com/go-playground/validator/v10)
+	if len(creds.Login) < 4 || len(creds.Password) < 4 {
+		http.Error(w, "login or password less than 4", http.StatusBadRequest)
+		return
+	}
+
 	err = h.authService.Registration(creds)
 	if err != nil {
 		http.Error(w, "user already exists", http.StatusConflict)
+		return
 	}
 }
 
