@@ -23,9 +23,17 @@ type Item struct {
 	Active          bool           `gorm:"not null;default:true" json:"active"`
 }
 
+func (Item) TableName() string {
+	return "Items"
+}
+
 // CustomersAuth in db
 type CustomerAuth struct {
 	ID       uint   `gorm:"primaryKey" json:"id"`
 	Login    string `gorm:"type:varchar(50);not null;unique" json:"login"`
 	Password string `gorm:"type:varchar(60);not null" json:"password"`
+}
+
+func (CustomerAuth) TableName() string {
+	return "CustomersAuth"
 }
