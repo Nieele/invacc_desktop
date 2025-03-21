@@ -42,7 +42,7 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.authService.Registration(creds)
+	err = h.authService.Register(creds)
 	if err != nil {
 		http.Error(w, "user already exists", http.StatusConflict)
 		return
@@ -61,7 +61,7 @@ func (h *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := h.authService.Authorization(creds)
+	token, err := h.authService.Login(creds)
 	if err != nil {
 		http.Error(w, "incorrect login/password", http.StatusUnauthorized)
 		return
