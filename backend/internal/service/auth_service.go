@@ -53,17 +53,20 @@ func (s *authService) Register(creds models.CustomerAuth) error {
 	return err
 }
 
-func (s *authService) Login(creds models.CustomerAuth) (string, error) {
-	storedHashPassword, err := s.authRepo.GetCustomerPassword(creds.Login)
+func (s *authService) Login(creds models.CustomerAuth) (jwt string, err error) {
+	storedAuth, err := s.authRepo.GetCustomerAuth(creds.Login)
 
 	if err != nil {
 		return "", err
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(storedHashPassword), []byte(creds.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(storedAuth.Password), []byte(creds.Password))
 	if err != nil {
 		return "", err
 	}
+
+	// clear password for security reasons
+	storedAuth.Password = ""
 
 	token, err := s.SignJwtToken(creds.Login, time.Now().Add(24*time.Hour))
 

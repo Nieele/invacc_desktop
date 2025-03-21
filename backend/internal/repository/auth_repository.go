@@ -7,7 +7,7 @@ import (
 )
 
 type AuthRepository interface {
-	GetCustomerPassword(login string) (string, error)
+	GetCustomerAuth(login string) (models.CustomerAuth, error)
 	InsertCustomer(login, password string) error
 }
 
@@ -19,13 +19,13 @@ func NewAuthRepository(db *gorm.DB) AuthRepository {
 	return &authRepo{db: db}
 }
 
-func (r *authRepo) GetCustomerPassword(login string) (string, error) {
-	var customer models.CustomerAuth
-	result := r.db.Where("login = ?", login).First(&customer)
+func (r *authRepo) GetCustomerAuth(login string) (models.CustomerAuth, error) {
+	var auth models.CustomerAuth
+	result := r.db.Where("login = ?", login).First(&auth)
 	if result.Error != nil {
-		return "", result.Error
+		return models.CustomerAuth{}, result.Error
 	}
-	return customer.Password, nil
+	return auth, nil
 }
 
 func (r *authRepo) InsertCustomer(login, password string) error {
