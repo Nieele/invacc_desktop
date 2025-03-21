@@ -7,7 +7,7 @@ import (
 )
 
 type CustomerRepository interface {
-	GetInfo(id int) (models.CustomerInfo, error)
+	GetInfo(id uint) (models.CustomerInfo, error)
 	UpdateInfo(info models.CustomerInfo) error
 }
 
@@ -19,7 +19,7 @@ func NewCustomerRepository(db *gorm.DB) CustomerRepository {
 	return &customerRepo{db: db}
 }
 
-func (r *customerRepo) GetInfo(id int) (models.CustomerInfo, error) {
+func (r *customerRepo) GetInfo(id uint) (models.CustomerInfo, error) {
 	var info models.CustomerInfo
 	result := r.db.Where("id = ?", id).First(&info)
 	if result.Error != nil {
