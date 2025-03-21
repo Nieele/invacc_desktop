@@ -12,6 +12,8 @@ import (
 type AuthHandler interface {
 	Register(w http.ResponseWriter, r *http.Request)
 	Login(w http.ResponseWriter, r *http.Request)
+	GetLoginPage(w http.ResponseWriter, r *http.Request)
+	GetRegisterPage(w http.ResponseWriter, r *http.Request)
 }
 
 type authHandler struct {
@@ -78,4 +80,22 @@ func (h *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"token": token})
+}
+
+func (h *authHandler) GetLoginPage(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	http.ServeFile(w, r, "templates/login.html")
+}
+
+func (h *authHandler) GetRegisterPage(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	http.ServeFile(w, r, "templates/register.html")
 }
