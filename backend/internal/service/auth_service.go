@@ -19,7 +19,7 @@ type AuthService interface {
 	Register(creds models.CustomerAuth) error
 	Login(creds models.CustomerAuth) (string, error)
 
-	Authentication(token string) error
+	Authentication(token string) (user_id uint, err error)
 }
 
 type authService struct {
@@ -74,14 +74,19 @@ func (s *authService) Login(creds models.CustomerAuth) (jwt string, err error) {
 	return token, err
 }
 
-func (s *authService) Authentication(jwtToken string) error {
+func (s *authService) Authentication(jwtToken string) (user_id uint, err error) {
 	claims := &jwt.RegisteredClaims{}
 	token, err := jwt.ParseWithClaims(jwtToken, claims, func(token *jwt.Token) (interface{}, error) {
 		return s.jwtSecretKey, nil
 	})
 	if err != nil || !token.Valid {
-		return errors.New("invalid token")
+		return 0, errors.New("invalid token")
 	}
 
-	return nil
+	id, err := strconv.ParseUint(claims.Subject, 10, 32)
+	if err != nil {
+		return 0, errors.New("invalid token subject")
+	}
+
+	return uint(id), nil
 }
