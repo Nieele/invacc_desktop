@@ -4,13 +4,6 @@ import (
 	"gorm.io/datatypes"
 )
 
-// not in db. for login
-type Credentials struct {
-	Id       uint   `json:"id"`
-	Login    string `json:"login"`
-	Password string `json:"password"`
-}
-
 // Items in db
 type Item struct {
 	ID              uint           `gorm:"primaryKey" json:"id"`
