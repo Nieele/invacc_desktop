@@ -41,8 +41,6 @@ type CustomerInfo struct {
 	Email     string `gorm:"column:email;type:varchar(50);not null;default:'empty'" json:"email"`
 	Address   string `gorm:"column:address;type:varchar(100);not null;default:'empty'" json:"address"`
 	Passport  string `gorm:"column:passport;type:varchar(30);not null;default:'empty'" json:"passport"`
-
-	Auth CustomerAuth `gorm:"foreignKey:ID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"auth"`
 }
 
 func (CustomerInfo) TableName() string {
