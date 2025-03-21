@@ -37,3 +37,20 @@ type CustomerAuth struct {
 func (CustomerAuth) TableName() string {
 	return "customersauth"
 }
+
+// CustomersInfo in db
+type CustomerInfo struct {
+	ID        uint   `gorm:"column:id;primaryKey;autoIncrement" json:"id"`
+	FirstName string `gorm:"column:firstname;type:varchar(50);not null" json:"firstname"`
+	LastName  string `gorm:"column:lastname;type:varchar(50);not null" json:"lastname"`
+	Phone     string `gorm:"column:phone;type:varchar(30);not null;unique" json:"phone"`
+	Email     string `gorm:"column:email;type:varchar(50);not null;default:'empty'" json:"email"`
+	Address   string `gorm:"column:address;type:varchar(100);not null;default:'empty'" json:"address"`
+	Passport  string `gorm:"column:passport;type:varchar(30);not null;default:'empty'" json:"passport"`
+
+	Auth CustomerAuth `gorm:"foreignKey:ID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"auth"`
+}
+
+func (CustomerInfo) TableName() string {
+	return "customersinfo"
+}
