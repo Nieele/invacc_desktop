@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Логин</title>
+  <style>
+    /* Основные стили для страницы логина */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      width: 300px;
+    }
+    .login-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1em;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 10px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .login-container button:hover {
+      background-color: #555;
+    }
+    .register-btn {
+      margin-top: 10px;
+      text-align: center;
+    }
+    .register-btn a {
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .register-btn a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Логин</h1>
+    <input type="text" id="login" placeholder="Логин" required>
+    <input type="password" id="password" placeholder="Пароль" required>
+    <button id="login-btn">Войти</button>
+    <div class="register-btn">
+      <p>Нет аккаунта? <a href="/register">Зарегистрироваться</a></p>
+    </div>
+  </div>
+  <script>
+    document.getElementById('login-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+
+      const login = document.getElementById('login').value;
+      const password = document.getElementById('password').value;
+
+      const data = { login: login, password: password };
+
+      fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Ошибка авторизации');
+        }
+        return response.json();
+      })
+      .then(result => {
+        // Если авторизация прошла успешно, переходим на главную страницу
+        window.location.href = '/';
+      })
+      .catch(error => {
+        alert('Ошибка: ' + error.message);
+      });
+    });
+  </script>
+</body>
+</html>
