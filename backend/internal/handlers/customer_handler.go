@@ -24,22 +24,13 @@ func (h *customerHandler) GetPesonalInfo(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	var request struct {
-		ID int `json:"id"`
-	}
-
-	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
 	cookie, err := r.Cookie("token")
 	if err != nil {
 		http.Error(w, "token not found in cookies", http.StatusUnauthorized)
 		return
 	}
 
-	personalInfo, err := h.customerService.GetPesonalInfo(request.ID, cookie.Value)
+	personalInfo, err := h.customerService.GetPesonalInfo(cookie.Value)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

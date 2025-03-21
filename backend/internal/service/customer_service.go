@@ -9,7 +9,7 @@ import (
 )
 
 type CustomerService interface {
-	GetPesonalInfo(id int, token string) (models.CustomerInfo, error)
+	GetPesonalInfo(token string) (models.CustomerInfo, error)
 	UpdatePersonalInfo(token string, info models.CustomerInfo) error
 }
 
@@ -23,11 +23,13 @@ func NewCustomerService(db *gorm.DB, authService AuthService) CustomerService {
 	return &customerService{customerRepo: repo, authService: authService}
 }
 
-func (s *customerService) GetPesonalInfo(id int, token string) (models.CustomerInfo, error) {
-	if err := s.authService.Authentication(token); err != nil {
+func (s *customerService) GetPesonalInfo(token string) (models.CustomerInfo, error) {
+	user_id, err := s.authService.Authentication(token)
+	if err != nil {
 		return models.CustomerInfo{}, errors.New("access denied")
 	}
-	info, err := s.customerRepo.GetInfo(id)
+
+	info, err := s.customerRepo.GetInfo(user_id)
 	if err != nil {
 		return models.CustomerInfo{}, err
 	}
@@ -36,7 +38,7 @@ func (s *customerService) GetPesonalInfo(id int, token string) (models.CustomerI
 }
 
 func (s *customerService) UpdatePersonalInfo(token string, info models.CustomerInfo) error {
-	if err := s.authService.Authentication(token); err != nil {
+	if _, err := s.authService.Authentication(token); err != nil {
 		return errors.New("access denied")
 	}
 
