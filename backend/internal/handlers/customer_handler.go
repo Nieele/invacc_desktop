@@ -17,6 +17,7 @@ type customerHandler struct {
 func NewCustomerHandler(customerService service.CustomerService) CustomerHandler {
 	return &customerHandler{customerService: customerService}
 }
+
 func (h *customerHandler) GetPesonalInfo(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)

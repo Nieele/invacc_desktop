@@ -29,7 +29,7 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var creds models.Credentials
+	var creds models.CustomerAuth
 	err := json.NewDecoder(r.Body).Decode(&creds)
 	if err != nil {
 		http.Error(w, "incorrect format data", http.StatusBadRequest)
@@ -55,7 +55,7 @@ func (h *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var creds models.Credentials
+	var creds models.CustomerAuth
 	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
 		http.Error(w, "incorrect format data", http.StatusBadRequest)
 		return

@@ -15,8 +15,8 @@ import (
 type AuthService interface {
 	SignJwtToken(login string, expirationTime time.Time) (string, error)
 
-	Register(creds models.Credentials) error
-	Login(creds models.Credentials) (string, error)
+	Register(creds models.CustomerAuth) error
+	Login(creds models.CustomerAuth) (string, error)
 
 	Authentication(token string) error
 }
@@ -43,7 +43,7 @@ func (s *authService) SignJwtToken(login string, expirationTime time.Time) (stri
 	return tokenString, err
 }
 
-func (s *authService) Register(creds models.Credentials) error {
+func (s *authService) Register(creds models.CustomerAuth) error {
 	hashPassword, err := bcrypt.GenerateFromPassword([]byte(creds.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
@@ -53,7 +53,7 @@ func (s *authService) Register(creds models.Credentials) error {
 	return err
 }
 
-func (s *authService) Login(creds models.Credentials) (string, error) {
+func (s *authService) Login(creds models.CustomerAuth) (string, error) {
 	storedHashPassword, err := s.authRepo.GetCustomerPassword(creds.Login)
 
 	if err != nil {
