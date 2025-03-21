@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"strconv"
 	"time"
 
 	"invacc-backend/internal/models"
@@ -13,7 +14,7 @@ import (
 )
 
 type AuthService interface {
-	SignJwtToken(login string, expirationTime time.Time) (string, error)
+	SignJwtToken(creds models.CustomerAuth, expirationTime time.Time) (string, error)
 
 	Register(creds models.CustomerAuth) error
 	Login(creds models.CustomerAuth) (string, error)
@@ -31,9 +32,9 @@ func NewAuthService(db *gorm.DB, jwtSecretKey []byte) AuthService {
 	return &authService{authRepo: repo, jwtSecretKey: jwtSecretKey}
 }
 
-func (s *authService) SignJwtToken(login string, expirationTime time.Time) (string, error) {
+func (s *authService) SignJwtToken(creds models.CustomerAuth, expirationTime time.Time) (string, error) {
 	claims := jwt.RegisteredClaims{
-		Subject:   login,
+		Subject:   strconv.FormatUint(uint64(creds.ID), 10),
 		ExpiresAt: jwt.NewNumericDate(expirationTime),
 		IssuedAt:  jwt.NewNumericDate(time.Now()),
 	}
@@ -68,7 +69,7 @@ func (s *authService) Login(creds models.CustomerAuth) (jwt string, err error) {
 	// clear password for security reasons
 	storedAuth.Password = ""
 
-	token, err := s.SignJwtToken(creds.Login, time.Now().Add(24*time.Hour))
+	token, err := s.SignJwtToken(storedAuth, time.Now().Add(24*time.Hour))
 
 	return token, err
 }
