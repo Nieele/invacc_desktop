@@ -6,6 +6,7 @@ import (
 
 // not in db. for login
 type Credentials struct {
+	Id       uint   `json:"id"`
 	Login    string `json:"login"`
 	Password string `json:"password"`
 }
