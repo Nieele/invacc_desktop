@@ -92,7 +92,6 @@
         if (!response.ok) {
           throw new Error('Ошибка регистрации');
         }
-        return response.json();
       })
       .then(result => {
         // Если регистрация прошла успешно, переходим на страницу логина
