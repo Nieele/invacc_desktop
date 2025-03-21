@@ -26,7 +26,7 @@ func (h *customerHandler) GetPesonalInfo(w http.ResponseWriter, r *http.Request)
 
 	cookie, err := r.Cookie("token")
 	if err != nil {
-		http.Error(w, "token not found in cookies", http.StatusUnauthorized)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
