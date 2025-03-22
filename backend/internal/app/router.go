@@ -33,7 +33,7 @@ func NewRouter(dbConn *gorm.DB, cfg *config.Config) http.Handler {
 	// Register routes
 	r.Post("/register", AuthHandler.Register)
 	r.Post("/login", AuthHandler.Login)
-	r.Post("logout", AuthHandler.Logout)
+	r.Post("/logout", AuthHandler.Logout)
 	r.Get("/items", ItemHandler.GetItems)
 	r.Group(func(r chi.Router) {
 		r.Use(custommw.JWTAuthMiddleware(AuthService))
