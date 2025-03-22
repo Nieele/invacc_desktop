@@ -41,7 +41,7 @@ func (h *itemHandler) GetItemPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	item, err := h.itemService.GetItemModel(id)
+	item, err := h.itemService.GetItemModel(uint(id))
 	if err != nil {
 		http.Error(w, "item not found", http.StatusNotFound)
 		return
@@ -75,7 +75,7 @@ func (h *itemHandler) GetItemsListPage(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	items, err := h.itemService.GetItemModelList(page)
+	items, err := h.itemService.GetItemModelList(uint(page))
 	if err != nil {
 		http.Error(w, "error fetching items", http.StatusInternalServerError)
 		return
