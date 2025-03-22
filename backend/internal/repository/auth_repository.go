@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"invacc-backend/internal/models"
 
 	"gorm.io/gorm"
@@ -21,9 +22,10 @@ func NewAuthRepository(db *gorm.DB) AuthRepository {
 
 func (r *authRepo) GetCustomerAuth(login string) (models.CustomerAuth, error) {
 	var auth models.CustomerAuth
+
 	result := r.db.Where("login = ?", login).First(&auth)
 	if result.Error != nil {
-		return models.CustomerAuth{}, result.Error
+		return models.CustomerAuth{}, fmt.Errorf("couldn't get customer info by login %s: %w", login, result.Error)
 	}
 	return auth, nil
 }
@@ -33,5 +35,10 @@ func (r *authRepo) InsertCustomer(login, password string) error {
 		Login:    login,
 		Password: password,
 	}
-	return r.db.Create(&customer).Error
+
+	result := r.db.Create(&customer)
+	if result.Error != nil {
+		return fmt.Errorf("couldn't insert customer with login %s: %w", login, result.Error)
+	}
+	return nil
 }
