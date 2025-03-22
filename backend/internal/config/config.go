@@ -38,7 +38,7 @@ type HTTPServer struct {
 }
 
 type Auth struct {
-	JWTSecretKey []byte        `yaml:"jwt_secret"`
+	JWTSecretKey string        `yaml:"jwt_secret"`
 	TokenExpiry  time.Duration `yaml:"token_expiry"`
 }
 

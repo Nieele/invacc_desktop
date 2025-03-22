@@ -53,7 +53,7 @@ func (s *authService) signJwtToken(userID uint, expirationTime time.Time) (strin
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenStr, err := token.SignedString(s.config.JWTSecretKey)
+	tokenStr, err := token.SignedString([]byte(s.config.JWTSecretKey))
 	if err != nil {
 		return "", fmt.Errorf("couldn't sign token user_id %d: %w", userID, err)
 	}
