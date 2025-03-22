@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"invacc-backend/internal/middleware"
 	"invacc-backend/internal/service"
 )
 
@@ -24,13 +25,13 @@ func (h *customerHandler) GetPesonalInfo(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	cookie, err := r.Cookie("token")
-	if err != nil {
+	userID, ok := r.Context().Value(middleware.UserCtxKey).(uint)
+	if !ok {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
-	personalInfo, err := h.customerService.GetPesonalInfo(cookie.Value)
+	personalInfo, err := h.customerService.GetPesonalInfo(userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

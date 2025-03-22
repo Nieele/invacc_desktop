@@ -5,6 +5,7 @@ import (
 
 	"invacc-backend/internal/config"
 	"invacc-backend/internal/handlers"
+	custommw "invacc-backend/internal/middleware"
 	"invacc-backend/internal/service"
 
 	"github.com/go-chi/chi/v5"
@@ -15,13 +16,14 @@ import (
 func NewRouter(dbConn *gorm.DB, cfg *config.Config) http.Handler {
 	r := chi.NewRouter()
 
+	// Use chi middleware
 	r.Use(middleware.Logger)
 	r.Use(middleware.Heartbeat("/ping"))
 
 	// Initialize services
 	AuthService := service.NewAuthService(dbConn, cfg.Auth)
 	ItemService := service.NewItemService(dbConn)
-	CostumerService := service.NewCustomerService(dbConn, AuthService)
+	CostumerService := service.NewCustomerService(dbConn)
 
 	// Initialize handlers
 	AuthHandler := handlers.NewAuthHandler(AuthService)
@@ -35,7 +37,10 @@ func NewRouter(dbConn *gorm.DB, cfg *config.Config) http.Handler {
 	r.Get("/login", AuthHandler.GetLoginPage)
 	r.Get("/item", ItemHandler.GetItemPage)
 	r.Get("/", ItemHandler.GetItemsListPage)
-	r.Get("/account", CostumerHandler.GetPesonalInfo)
+	r.Group(func(r chi.Router) {
+		r.Use(custommw.JWTAuthMiddleware(AuthService))
+		r.Get("/account", CostumerHandler.GetPesonalInfo)
+	})
 
 	return r
 }

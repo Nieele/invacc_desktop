@@ -103,7 +103,7 @@ func (s *authService) Login(creds models.CustomerAuth) (string, error) {
 func (s *authService) Authentication(jwtToken string) (uint, error) {
 	claims := &AuthClaimsJWT{}
 	token, err := jwt.ParseWithClaims(jwtToken, claims, func(token *jwt.Token) (interface{}, error) {
-		return s.config.JWTSecretKey, nil
+		return []byte(s.config.JWTSecretKey), nil
 	})
 
 	if err != nil || !token.Valid {

@@ -13,35 +13,24 @@ var (
 )
 
 type CustomerService interface {
-	GetPesonalInfo(token string) (models.CustomerInfo, error)
+	GetPesonalInfo(userID uint) (models.CustomerInfo, error)
 	UpdatePersonalInfo(token string, info models.CustomerInfo) error
 }
 
 type customerService struct {
 	customerRepo repository.CustomerRepository
-	authService  AuthService
 }
 
-func NewCustomerService(db *gorm.DB, authService AuthService) CustomerService {
+func NewCustomerService(db *gorm.DB) CustomerService {
 	return &customerService{
 		customerRepo: repository.NewCustomerRepository(db),
-		authService:  authService,
 	}
 }
 
-func (s *customerService) GetPesonalInfo(token string) (models.CustomerInfo, error) {
-	userID, err := s.authService.Authentication(token)
-	if err != nil {
-		return models.CustomerInfo{}, ErrAccessDenied
-	}
-
+func (s *customerService) GetPesonalInfo(userID uint) (models.CustomerInfo, error) {
 	return s.customerRepo.GetInfo(userID)
 }
 
 func (s *customerService) UpdatePersonalInfo(token string, info models.CustomerInfo) error {
-	if _, err := s.authService.Authentication(token); err != nil {
-		return ErrAccessDenied
-	}
-
 	return s.customerRepo.UpdateInfo(info)
 }
