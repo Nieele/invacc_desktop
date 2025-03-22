@@ -8,11 +8,15 @@ import (
 	"invacc-backend/internal/service"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"gorm.io/gorm"
 )
 
 func NewRouter(dbConn *gorm.DB, cfg *config.Config) http.Handler {
 	r := chi.NewRouter()
+
+	r.Use(middleware.Logger)
+	r.Use(middleware.Heartbeat("/ping"))
 
 	// Initialize services
 	AuthService := service.NewAuthService(dbConn, cfg.Auth)
