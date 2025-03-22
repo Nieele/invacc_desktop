@@ -15,7 +15,7 @@ func NewRouter(dbConn *gorm.DB, cfg *config.Config) http.Handler {
 	r := chi.NewRouter()
 
 	// Initialize services
-	AuthService := service.NewAuthService(dbConn, []byte(cfg.JWT.SecretKey))
+	AuthService := service.NewAuthService(dbConn, cfg.Auth)
 	ItemService := service.NewItemService(dbConn)
 	CostumerService := service.NewCustomerService(dbConn, AuthService)
 

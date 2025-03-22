@@ -11,5 +11,6 @@ http_server:
   port:  # port server
   timeout: # default 4s
   idle_timeout: #default 30s
-jwt:
-  secretKey: # private key
+auth:
+  jwt_secret:
+  token_expiry:

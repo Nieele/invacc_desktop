@@ -18,7 +18,7 @@ type Config struct {
 	Env        string `yaml:"env"`
 	Database   `yaml:"database"`
 	HTTPServer `yaml:"http_server"`
-	JWT        `yaml:"jwt"`
+	Auth       `yaml:"auth"`
 }
 
 type Database struct {
@@ -37,8 +37,9 @@ type HTTPServer struct {
 	IdleTimeout time.Duration `yaml:"idle_timeout"`
 }
 
-type JWT struct {
-	SecretKey string `yaml:"secretKey"`
+type Auth struct {
+	JWTSecretKey []byte        `yaml:"jwt_secret"`
+	TokenExpiry  time.Duration `yaml:"token_expiry"`
 }
 
 var (
