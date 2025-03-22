@@ -8,6 +8,10 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	ErrAccessDenied = errors.New("access denied")
+)
+
 type CustomerService interface {
 	GetPesonalInfo(token string) (models.CustomerInfo, error)
 	UpdatePersonalInfo(token string, info models.CustomerInfo) error
@@ -19,32 +23,25 @@ type customerService struct {
 }
 
 func NewCustomerService(db *gorm.DB, authService AuthService) CustomerService {
-	repo := repository.NewCustomerRepository(db)
-	return &customerService{customerRepo: repo, authService: authService}
+	return &customerService{
+		customerRepo: repository.NewCustomerRepository(db),
+		authService:  authService,
+	}
 }
 
 func (s *customerService) GetPesonalInfo(token string) (models.CustomerInfo, error) {
-	user_id, err := s.authService.Authentication(token)
+	userID, err := s.authService.Authentication(token)
 	if err != nil {
-		return models.CustomerInfo{}, errors.New("access denied")
+		return models.CustomerInfo{}, ErrAccessDenied
 	}
 
-	info, err := s.customerRepo.GetInfo(user_id)
-	if err != nil {
-		return models.CustomerInfo{}, err
-	}
-
-	return info, nil
+	return s.customerRepo.GetInfo(userID)
 }
 
 func (s *customerService) UpdatePersonalInfo(token string, info models.CustomerInfo) error {
 	if _, err := s.authService.Authentication(token); err != nil {
-		return errors.New("access denied")
+		return ErrAccessDenied
 	}
 
-	if err := s.customerRepo.UpdateInfo(info); err != nil {
-		return err
-	}
-
-	return nil
+	return s.customerRepo.UpdateInfo(info)
 }
