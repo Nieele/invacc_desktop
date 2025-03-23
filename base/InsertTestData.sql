@@ -10,22 +10,22 @@ INSERT INTO Warehouses VALUES (5, 'Сильва',  '+79165946514', 'silva@rental
 SELECT setval('warehouses_id_seq', (SELECT MAX(id) FROM Warehouses));
 
 -- INSERT Items
-INSERT INTO Items VALUES (1,  1, 'плиткорез',                            'Для точной резки плитки и керамики.',                    91,  300,  400 );
-INSERT INTO Items VALUES (2,  1, 'пневматический гайковерт',             'Для быстрого и эффективного закручивания гаек.',         62,  900,  1300);
-INSERT INTO Items VALUES (3,  1, 'лазерный уровень',                     'Для точной установки и выравнивания объектов.',          100, 400,  600 );
-INSERT INTO Items VALUES (4,  2, 'тележка с ручным подъемником',         'Для легкого подъема и перемещения грузов.',              85,  1200, 1500);
-INSERT INTO Items VALUES (5,  2, 'складской робот',                      'Автоматизированное устройство для перемещения товаров.', 64,  4000, 5500);
-INSERT INTO Items VALUES (6,  3, 'кран-балка',                           'Для перемещения тяжелых предметов в пределах склада.',   54,  4000, 5500);
-INSERT INTO Items VALUES (7,  2, 'конвейер',                             'Используется для перемещения товаров на складе.',        80,  1500, 2000);
-INSERT INTO Items VALUES (8,  1, 'электрический погрузчик',              'Используется для перемещения тяжелых грузов.',           56,  2000, 2500);
-INSERT INTO Items VALUES (9,  4, 'сварочный аппарат',                    'Для сварки металлов и других материалов.',               0,   700,  1000);
-INSERT INTO Items VALUES (10, 4, 'компрессор',                           'Для подачи сжатого воздуха.',                            10,  700,  1000);
-INSERT INTO Items VALUES (11, 5, 'фрезерный станок',                     'Для точной фрезеровки различных материалов.',            77,  2500, 3000);
-INSERT INTO Items VALUES (12, 1, 'газовый резак',                        'Для резки металлов и других твердых материалов.',        95,  600,  800 );
-INSERT INTO Items VALUES (13, 5, 'дрель-шуруповерт',                     'Для сверления и закручивания шурупов.',                  68,  700,  900 );
-INSERT INTO Items VALUES (14, 3, 'плоскогубцы с изолированными ручками', 'Для работы с электрическими проводами и кабелями.',      35,  200,  300 );
-INSERT INTO Items VALUES (15, 3, 'бетононасос',                          'Для перекачивания бетона на строительных площадках.',    84,  4000, 5500);
-INSERT INTO Items VALUES (16, 3, 'вакуумный упаковщик',                  'Для упаковки продуктов в вакуумной упаковке.',           90,  2000, 2400);
+INSERT INTO Items VALUES (1,  1, 'плиткорез',                            'Для точной резки плитки и керамики.',                    NULL, 91,  300,  400 , FALSE, 'plitkorez.webp');
+INSERT INTO Items VALUES (2,  1, 'пневматический гайковерт',             'Для быстрого и эффективного закручивания гаек.',         NULL, 62,  900,  1300, FALSE, 'pnevmaticheskij_gajkovert.webp');
+INSERT INTO Items VALUES (3,  1, 'лазерный уровень',                     'Для точной установки и выравнивания объектов.',          NULL, 100, 400,  600 , FALSE, 'lazernyj_uroven.webp');
+INSERT INTO Items VALUES (4,  2, 'тележка с ручным подъемником',         'Для легкого подъема и перемещения грузов.',              NULL, 85,  1200, 1500, FALSE, 'telezhka_s_ruchnym_podemnikom.webp');
+INSERT INTO Items VALUES (5,  2, 'складской робот',                      'Автоматизированное устройство для перемещения товаров.', NULL, 64,  4000, 5500, FALSE, 'skladskoj_robot.webp');
+INSERT INTO Items VALUES (6,  3, 'кран-балка',                           'Для перемещения тяжелых предметов в пределах склада.',   NULL, 54,  4000, 5500, FALSE, 'kran-balka.webp');
+INSERT INTO Items VALUES (7,  2, 'конвейер',                             'Используется для перемещения товаров на складе.',        NULL, 80,  1500, 2000, FALSE, 'konvejer.webp');
+INSERT INTO Items VALUES (8,  1, 'электрический погрузчик',              'Используется для перемещения тяжелых грузов.',           NULL, 56,  2000, 2500, FALSE, 'elektricheskij_pogruzchik.webp');
+INSERT INTO Items VALUES (9,  4, 'сварочный аппарат',                    'Для сварки металлов и других материалов.',               NULL, 0,   700,  1000, FALSE, 'svarochnyj_apparat.webp');
+INSERT INTO Items VALUES (10, 4, 'компрессор',                           'Для подачи сжатого воздуха.',                            NULL, 10,  700,  1000, FALSE, 'kompressor.webp');
+INSERT INTO Items VALUES (11, 5, 'фрезерный станок',                     'Для точной фрезеровки различных материалов.',            NULL, 77,  2500, 3000, FALSE, 'frezernyj_stanok.webp');
+INSERT INTO Items VALUES (12, 1, 'газовый резак',                        'Для резки металлов и других твердых материалов.',        NULL, 95,  600,  800,  FALSE, 'gazovyj_rezak.webp');
+INSERT INTO Items VALUES (13, 5, 'дрель-шуруповерт',                     'Для сверления и закручивания шурупов.',                  NULL, 68,  700,  900,  FALSE, 'drel-shurupovert.webp');
+INSERT INTO Items VALUES (14, 3, 'плоскогубцы с изолированными ручками', 'Для работы с электрическими проводами и кабелями.',      NULL, 35,  200,  300,  FALSE, 'ploskogubcy_s_izolirovannymi_ruchkami.webp');
+INSERT INTO Items VALUES (15, 3, 'бетононасос',                          'Для перекачивания бетона на строительных площадках.',    NULL, 84,  4000, 5500, FALSE, 'betononasos.webp');
+INSERT INTO Items VALUES (16, 3, 'вакуумный упаковщик',                  'Для упаковки продуктов в вакуумной упаковке.',           NULL, 90,  2000, 2400, FALSE, 'vakuumnyj_upakovschik.webp');
 SELECT setval('items_id_seq', (SELECT MAX(id) FROM Items));
 
 -- INSERT Categories
@@ -76,7 +76,7 @@ INSERT INTO Discounts VALUES (1, 'Недельная господдержка п
 INSERT INTO Discounts VALUES (2, 'Пора накачать колеса!',                             'Давно проверяли давление в шинах? Скидка 5% на аренду компрессора',              5, NOW(), NOW() + INTERVAL '3 day');
 SELECT setval('discounts_id_seq', (SELECT MAX(id) FROM Discounts));
 
--- INSERT ItemsDiscounts
+-- INSERT ItemsDiscounts - скидка на котегорию "Промышленная машина"
 INSERT INTO ItemsDiscounts
     SELECT i.id, 1
     FROM Items AS i 
@@ -85,19 +85,32 @@ INSERT INTO ItemsDiscounts
     JOIN Categories AS c
         ON ic.category_id = c.id
     WHERE c.category_name = 'Промышленная машина';
+-- Скидка на компрессор
 INSERT INTO ItemsCategories VALUES (10, 2);
 
--- INSERT Customers
-INSERT INTO Customers VALUES (1, 'Арсений',   'Корнилов', '+7(909)445-14-88', 'arseniy6950@mail.ru',         '980484 г. Москва, ш. Дмитровское, дом 131 к. 2',                                     '4128 355647');
-INSERT INTO Customers VALUES (2, 'Лариса',    'Горелова', '+7(924)855-68-37', 'larisa58@mail.ru',            '918820 г. Москва, ул. Тимирязевская, дом 38/25',                                     '4794 949570');
-INSERT INTO Customers VALUES (3, 'Иван',      'Аксаков',  '+7(962)409-79-76', 'ivan03071980@mail.ru',        '109147 г. Москва, ул. Марксистская, дом 9',                                          '4459 152953');
-INSERT INTO Customers VALUES (4, 'Павел',     'Исаев',    '+7(909)189-17-81', 'pavel62@yandex.ru',           '119021 г. Москва, пр-кт Комсомольский, дом 3',                                       '4338 106639');
-INSERT INTO Customers VALUES (5, 'Роман',     'Ельченко', '+7(971)778-40-29', 'roman4159@yandex.ru',         '141011 обл. Московская, г. Мытищи, ул. 4-я Парковая, дом 16',                        '4396 605504');
-INSERT INTO Customers VALUES (6, 'Елизавета', 'Мишина',   '+7(936)970-45-53', 'elizaveta3412@yandex.ru',     '919216 обл Московская, г Долгопрудный, ш Старое Дмитровское, дом 15',                '4072 639447');
-INSERT INTO Customers VALUES (7, 'Максим',    'Гребнев',  '+7(925)930-73-21', 'max47@rambler.ru',            '143402 обл. Московская, г. Красногорск, проезд Железнодорожный, дом 9',              '4522 205106');
-INSERT INTO Customers VALUES (8, 'Дмитрий',   'Коршиков', '+7(908)329-79-43', 'dmitriy.korshikov@gmail.com', '980243 г. Москва, ул. Перовская, дом 8 к. 1',                                        '4041 379819');
-INSERT INTO Customers VALUES (9, 'Григорий',  'Кубланов', '+7(908)302-45-12', 'grigoriy_kub@gmail.com',      '919935 обл. Московская, г. Балашиха, мкр. Железнодорожный, ул. Маяковского, дом 25', '4396 255125');
-SELECT setval('customers_id_seq', (SELECT MAX(id) FROM Customers));
+-- INSERT CustomersAuth
+INSERT INTO CustomersAuth VALUES (1, 'user1', '$2a$10$5HuBPDLMfeeTLRpLGE45T.E4P3Hsf/klVh49QE4aXg.uOkZovCyQe');
+INSERT INTO CustomersAuth VALUES (2, 'user2', '$2a$10$ggSprWpngDlu67b3vJ1MgOS5RN/o4tmvHNBjXbPgQHTHr5FWHOvu6');
+INSERT INTO CustomersAuth VALUES (3, 'user3', '$2a$10$SN0Yp3oLp69h9i1WlAhUbuA47ULaAnkq5YGs4FdgLivP6ix3i6Cem');
+INSERT INTO CustomersAuth VALUES (4, 'user4', '$2a$10$ouT74F/az1issWaGZYz6nOhpcTX7ktrRciXQ1FpVYQciVcKX7H3KG');
+INSERT INTO CustomersAuth VALUES (5, 'user5', '$2a$10$W/aQACmhkhGCUFVdBCiF4OuLWTORxubiDKMUZU8i9.WKGOZ7fcTuC');
+INSERT INTO CustomersAuth VALUES (6, 'user6', '$2a$10$rx5Offi3VObA2LUgUR2yzu4HO2Txv3R3EVvI.ln2Qy81IR1ZTv.nm');
+INSERT INTO CustomersAuth VALUES (7, 'user7', '$2a$10$L0aqk0w675Rt2f8EdNq5g.pFccEMcN0aJ8ExnXl89fJ1cXwLkKW1K');
+INSERT INTO CustomersAuth VALUES (8, 'user8', '$2a$10$6EplL.Zn.EgEOjmOa5wp4.2JvHHhWE.yGrdB21Pce0QW6jcaFe9AC');
+INSERT INTO CustomersAuth VALUES (9, 'user9', '$2a$10$LQxqrfHQ3zEeSC2ZWPjare9f4a4I7gsYXHjssn17eBRb5iYZFiADq');
+SELECT setval('customersauth_id_seq', (SELECT MAX(id) FROM CustomersAuth));
+
+-- INSERT CustomersInfo
+UPDATE CustomersInfo SET firstname = 'Арсений',  lastname = 'Корнилов', phone = '+7(909)445-14-88', phone_verified = TRUE,  email = 'arseniy6950@mail.ru',         email_verified = TRUE,  passport = '4128 355647', passport_verified = TRUE  WHERE id = 1;
+UPDATE CustomersInfo SET firstname = 'Лариса',   lastname = 'Горелова', phone = '+7(924)855-68-37', phone_verified = TRUE,  email = 'larisa58@mail.ru',            email_verified = FALSE, passport = '4794 949570', passport_verified = FALSE WHERE id = 2;
+UPDATE CustomersInfo SET firstname = 'Иван',     lastname = 'Аксаков',  phone = '+7(962)409-79-76', phone_verified = TRUE,  email = 'ivan03071980@mail.ru',        email_verified = FALSE, passport = '4459 152953', passport_verified = TRUE  WHERE id = 3;
+UPDATE CustomersInfo SET firstname = 'Павел',    lastname = 'Исаев',    phone = '+7(909)189-17-81', phone_verified = FALSE, email = 'pavel62@yandex.ru',           email_verified = FALSE, passport = '4338 106639', passport_verified = FALSE WHERE id = 4;
+UPDATE CustomersInfo SET firstname = 'Роман',    lastname = 'Ельченко', phone = NULL,               phone_verified = FALSE, email = NULL,                          email_verified = FALSE, passport = NULL,          passport_verified = FALSE WHERE id = 5;
+UPDATE CustomersInfo SET firstname = NULL,       lastname = NULL,       phone = NULL,               phone_verified = FALSE, email = NULL,                          email_verified = FALSE, passport = NULL,          passport_verified = FALSE WHERE id = 6;
+UPDATE CustomersInfo SET firstname = 'Максим',   lastname = 'Гребнев',  phone = '+7(925)930-73-21', phone_verified = TRUE,  email = 'max47@rambler.ru',            email_verified = TRUE,  passport = '4522 205106', passport_verified = TRUE  WHERE id = 7;
+UPDATE CustomersInfo SET firstname = 'Дмитрий',  lastname = 'Коршиков', phone = '+7(908)329-79-43', phone_verified = TRUE,  email = 'dmitriy.korshikov@gmail.com', email_verified = TRUE,  passport = NULL,          passport_verified = FALSE WHERE id = 8;
+UPDATE CustomersInfo SET firstname = 'Григорий', lastname = 'Кубланов', phone = '+7(908)302-45-12', phone_verified = TRUE,  email = NULL,                          email_verified = FALSE, passport = '4396 255125', passport_verified = TRUE  WHERE id = 9;
+SELECT setval('customersinfo_id_seq', (SELECT MAX(id) FROM CustomersInfo));
 
 -- INSERT ItemsDecommissioning
 INSERT INTO ItemsDecommissioning VALUES (1, 9, 'Сгорели блок питания и плата управления. Восстановление не рентабельно.');
@@ -106,17 +119,5 @@ SELECT setval('itemsdecommissioning_id_seq', (SELECT MAX(id) FROM ItemsDecommiss
 -- INSERT ItemsServiceHistory
 INSERT INTO ItemsServiceHistory(item_id, new_quality, change_reason) VALUES (2, 60, 'Треснул корпус');
 SELECT setval('itemsservicehistory_id_seq', (SELECT MAX(id) FROM ItemsServiceHistory));
-
--- INSERT WarehousesOrdersHistory
-ALTER SEQUENCE public.warehousesordershistory_id_seq RESTART WITH 5;
-INSERT INTO WarehousesOrdersHistory VALUES (1, 5,  3, 2, NOW() - INTERVAL '7 days',  NOW() - INTERVAL '3 days',  NULL);
-INSERT INTO WarehousesOrdersHistory VALUES (2, 10, 1, 4, NOW() - INTERVAL '30 days', NOW() - INTERVAL '26 days', NULL);
-INSERT INTO WarehousesOrdersHistory VALUES (3, 9,  1, 4, NOW() - INTERVAL '12 days', NOW() - INTERVAL '11 days', NULL);
-INSERT INTO WarehousesOrdersHistory VALUES (4, 13, 3, 5, NOW() - INTERVAL '15 days', NOW() - INTERVAL '6 days',  NULL);
-SELECT setval('warehousesordershistory_id_seq', (SELECT MAX(id) FROM WarehousesOrdersHistory));
-
--- INSERT WarehousesOrders
-ALTER SEQUENCE public.warehousesorders_id_seq RESTART WITH 5;
-INSERT INTO WarehousesOrders(item_id, destination_warehouse_id) VALUES (7, 4);
 
 COMMIT;

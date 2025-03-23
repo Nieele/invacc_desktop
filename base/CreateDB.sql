@@ -19,7 +19,7 @@ INSERT INTO Employees_roles(role_id, role)
             (4, 'inventory_manager'),
             (5, 'marketing_specialist'),
             (6, 'moderator'),
-            (6, 'director');
+            (7, 'director');
 
 ---------------------------------------------------------------------
 -- Таблица сотрудников
@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS Items (
     price            decimal(10,2)  NOT NULL               CHECK (price > 0),
     late_penalty     decimal(10,2)  NOT NULL               CHECK (late_penalty > 0),
     active           boolean        NOT NULL  DEFAULT TRUE,
+    img_url          text           NULL,
     CONSTRAINT fk_items_warehouses FOREIGN KEY (warehouse_id) REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -82,11 +83,11 @@ CREATE TABLE IF NOT EXISTS DeliveryStatus (
 -- Используется в функции prevent_add_order, prevent_update_status_warehouses_order
 INSERT INTO DeliveryStatus (id, status_code, description)
 VALUES 
-    (1, 'in stock', 'Прибыл на склад'),
-    (2, 'request', 'Запрос на доставку'),
+    (1, 'in stock',  'Прибыл на склад'),
+    (2, 'request',   'Запрос на доставку'),
     (3, 'cancelled', 'Отменен'),
-    (4, 'shipped', 'Отправлено'),
-    (5, 'received', 'Получено'),
+    (4, 'shipped',   'Отправлено'),
+    (5, 'received',  'Получено'),
     (6, 'returning', 'Возврат на склад')
 ON CONFLICT (status_code) DO NOTHING;
 
@@ -193,13 +194,15 @@ CREATE TABLE IF NOT EXISTS CustomersAuth (
 -- Таблица клиентов
 ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS CustomersInfo (
-    id         serial        PRIMARY KEY,
-    firstname  varchar(50)   NOT NULL,
-    lastname   varchar(50)   NOT NULL,
-    phone      varchar(30)   NOT NULL  UNIQUE,
-    email      varchar(50)   NOT NULL  DEFAULT 'empty',
-    address    varchar(100)  NOT NULL  DEFAULT 'empty',
-    passport   varchar(30)   NOT NULL  DEFAULT 'empty',
+    id                  serial        PRIMARY KEY,
+    firstname           varchar(50)   NULL,
+    lastname            varchar(50)   NULL,
+    phone               varchar(30)   NULL,
+    phone_verified      boolean       NOT NULL  DEFAULT false,
+    email               varchar(50)   NULL,
+    email_verified      boolean       NOT NULL  DEFAULT false,
+    passport            varchar(30)   NULL,
+    passport_verified   boolean       NOT NULL  DEFAULT false,
     CONSTRAINT fk_customersinfo_customersauth FOREIGN KEY (id) REFERENCES CustomersAuth (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -249,6 +252,20 @@ CREATE TABLE IF NOT EXISTS RentHistory (
 -- Триггеры и функции для бизнес-логики
 ---------------------------------------------------------------------
 
+-- Добавление информации о пользователе при создании аккаунта
+CREATE OR REPLACE FUNCTION add_customer_info()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO CustomersInfo (id)
+    VALUES (NEW.id);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_add_customer_info
+AFTER INSERT ON CustomersAuth
+FOR EACH ROW
+EXECUTE FUNCTION add_customer_info();
 
 -- Триггер для заполнения поля old_quality
 CREATE OR REPLACE FUNCTION set_actual_old_quality()
@@ -791,9 +808,34 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- привязка тригера к аудиту
+-- Логгирование для Инвентаря (Items)
 CREATE TRIGGER audit_test_trigger
 AFTER INSERT OR UPDATE OR DELETE ON Items
+FOR EACH ROW EXECUTE FUNCTION audit_log();
+
+-- Логгирование для внутренних перевозок (WarehousesOrders)
+CREATE TRIGGER audit_test_trigger
+AFTER INSERT OR UPDATE OR DELETE ON WarehousesOrders
+FOR EACH ROW EXECUTE FUNCTION audit_log();
+
+-- Логгирование для скидок (Discounts)
+CREATE TRIGGER audit_test_trigger
+AFTER INSERT OR UPDATE OR DELETE ON Discounts
+FOR EACH ROW EXECUTE FUNCTION audit_log();
+
+-- Логгирование для связи товаров и скидок (ItemsDiscounts)
+CREATE TRIGGER audit_test_trigger
+AFTER INSERT OR UPDATE OR DELETE ON ItemsDiscounts
+FOR EACH ROW EXECUTE FUNCTION audit_log();
+
+-- Логгирование для истории изменений качества товара (ItemsServiceHistory)
+CREATE TRIGGER audit_test_trigger
+AFTER INSERT OR UPDATE OR DELETE ON ItemsServiceHistory
+FOR EACH ROW EXECUTE FUNCTION audit_log();
+
+-- Логгирование для списания товаров (ItemsDecommissioning)
+CREATE TRIGGER audit_test_trigger
+AFTER INSERT OR UPDATE OR DELETE ON ItemsDecommissioning
 FOR EACH ROW EXECUTE FUNCTION audit_log();
 
 ---------------------------------------------------------------------
