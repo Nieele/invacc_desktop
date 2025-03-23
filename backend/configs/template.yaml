@@ -1,0 +1,16 @@
+env: "local"
+database: # postgresql://<username>:<password>@<host>:<port>/<dbname>?sslmode=<sslmode>
+  username:
+  password:
+  address:
+  port:
+  dbName:
+  sslmode:
+http_server: 
+  address: # ip server
+  port:  # port server
+  timeout: # default 4s
+  idle_timeout: #default 30s
+auth:
+  jwt_secret:
+  token_expiry:

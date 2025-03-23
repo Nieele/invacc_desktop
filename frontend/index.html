@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Строй Ломай - Главная</title>
+  <link rel="stylesheet" href="style/styles.css">
+  <!-- Подключение Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Обёртка для обеспечения footer всегда внизу -->
+  <div class="wrapper">
+    <header>
+      <div class="header-container">
+        <div class="brand">
+          <a href="index.html"><h1>Строй Ломай</h1></a>
+        </div>
+        <nav class="nav-menu">
+          <a href="index.html" class="nav-link">Главная</a>
+          <a href="about.html" class="nav-link">О нас</a>
+          <a href="cart.html" class="nav-link">Корзина</a>
+          <a href="#" class="nav-link" id="account-link">Аккаунт</a>
+        </nav>
+      </div>
+    </header>
+    <main class="content">
+      <section class="products-section">
+        <div class="products-container" id="products-container">
+          <!-- Товары загружаются динамически -->
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2025 Строй Ломай. Все права защищены.</p>
+    </footer>
+  </div>
+  <script src="script/scripts.js"></script>
+</body>
+</html>
