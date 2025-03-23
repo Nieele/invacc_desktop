@@ -260,6 +260,7 @@ BEGIN
     VALUES (NEW.id);
     RETURN NEW;
 END;
+$$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_add_customer_info
 AFTER INSERT ON CustomersAuth
