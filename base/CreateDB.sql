@@ -806,9 +806,34 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- привязка тригера к аудиту
+-- Логгирование для Инвентаря (Items)
 CREATE TRIGGER audit_test_trigger
 AFTER INSERT OR UPDATE OR DELETE ON Items
+FOR EACH ROW EXECUTE FUNCTION audit_log();
+
+-- Логгирование для внутренних перевозок (WarehousesOrders)
+CREATE TRIGGER audit_test_trigger
+AFTER INSERT OR UPDATE OR DELETE ON WarehousesOrders
+FOR EACH ROW EXECUTE FUNCTION audit_log();
+
+-- Логгирование для скидок (Discounts)
+CREATE TRIGGER audit_test_trigger
+AFTER INSERT OR UPDATE OR DELETE ON Discounts
+FOR EACH ROW EXECUTE FUNCTION audit_log();
+
+-- Логгирование для связи товаров и скидок (ItemsDiscounts)
+CREATE TRIGGER audit_test_trigger
+AFTER INSERT OR UPDATE OR DELETE ON ItemsDiscounts
+FOR EACH ROW EXECUTE FUNCTION audit_log();
+
+-- Логгирование для истории изменений качества товара (ItemsServiceHistory)
+CREATE TRIGGER audit_test_trigger
+AFTER INSERT OR UPDATE OR DELETE ON ItemsServiceHistory
+FOR EACH ROW EXECUTE FUNCTION audit_log();
+
+-- Логгирование для списания товаров (ItemsDecommissioning)
+CREATE TRIGGER audit_test_trigger
+AFTER INSERT OR UPDATE OR DELETE ON ItemsDecommissioning
 FOR EACH ROW EXECUTE FUNCTION audit_log();
 
 ---------------------------------------------------------------------
