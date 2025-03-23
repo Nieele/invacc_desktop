@@ -251,6 +251,20 @@ CREATE TABLE IF NOT EXISTS RentHistory (
 -- Триггеры и функции для бизнес-логики
 ---------------------------------------------------------------------
 
+-- Добавление информации о пользователе при создании аккаунта
+CREATE OR REPLACE FUNCTION add_customer_info()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO CustomersInfo (id)
+    VALUES (NEW.id);
+    RETURN NEW;
+END;
+
+CREATE TRIGGER trg_add_customer_info
+AFTER INSERT ON CustomersAuth
+FOR EACH ROW
+EXECUTE FUNCTION add_customer_info();
+
 -- Триггер для заполнения поля old_quality
 CREATE OR REPLACE FUNCTION set_actual_old_quality()
 RETURNS TRIGGER AS $$
