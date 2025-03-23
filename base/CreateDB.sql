@@ -193,13 +193,15 @@ CREATE TABLE IF NOT EXISTS CustomersAuth (
 -- Таблица клиентов
 ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS CustomersInfo (
-    id         serial        PRIMARY KEY,
-    firstname  varchar(50)   NOT NULL,
-    lastname   varchar(50)   NOT NULL,
-    phone      varchar(30)   NOT NULL  UNIQUE,
-    email      varchar(50)   NOT NULL  DEFAULT 'empty',
-    address    varchar(100)  NOT NULL  DEFAULT 'empty',
-    passport   varchar(30)   NOT NULL  DEFAULT 'empty',
+    id                  serial        PRIMARY KEY,
+    firstname           varchar(50)   NULL,
+    lastname            varchar(50)   NULL,
+    phone               varchar(30)   NULL,
+    phone_verified      boolean       NOT NULL  DEFAULT false,
+    email               varchar(50)   NULL,
+    email_verified      boolean       NOT NULL  DEFAULT false,
+    passport            varchar(30)   NULL,
+    passport_verified   boolean       NOT NULL  DEFAULT false,
     CONSTRAINT fk_customersinfo_customersauth FOREIGN KEY (id) REFERENCES CustomersAuth (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -248,7 +250,6 @@ CREATE TABLE IF NOT EXISTS RentHistory (
 ---------------------------------------------------------------------
 -- Триггеры и функции для бизнес-логики
 ---------------------------------------------------------------------
-
 
 -- Триггер для заполнения поля old_quality
 CREATE OR REPLACE FUNCTION set_actual_old_quality()
