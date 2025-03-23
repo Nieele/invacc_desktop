@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Строй Ломай - Детали товара</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="brand">
+        <h1>Строй Ломай</h1>
+      </div>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Главная</a>
+        <a href="about.html" class="nav-link">О нас</a>
+        <a href="/cart" class="nav-link">Корзина</a>
+        <a href="account.html" class="nav-link" id="account-link">Аккаунт</a>
+      </nav>
+    </div>
+  </header>
+  <main class="content" id="item-content">
+    <h1>Детали товара</h1>
+    <div id="item-details">
+      Загрузка информации о товаре...
+    </div>
+  </main>
+  <script>
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    const itemId = getQueryParam('id');
+    if (!itemId) {
+      document.getElementById('item-details').textContent = 'ID товара не указан.';
+    } else {
+      fetch('/api/v1/items?id=' + itemId)
+        .then(response => response.json())
+        .then(data => {
+          const product = data;
+          const detailsDiv = document.getElementById('item-details');
+          detailsDiv.innerHTML = `
+            <h2>${product.name}</h2>
+            <p>${product.description}</p>
+            <p>Цена: ${product.price}</p>
+            <p>Склад: ${product.warehouse_id}</p>
+            <p>Активность: ${product.active ? 'Да' : 'Нет'}</p>
+            <p>Качество: ${product.quality}</p>
+            <p>Штраф за опоздание: ${product.late_penalty}</p>
+            <p>img_url: ${product.img_url}</p>
+          `;
+        })
+        .catch(error => {
+          document.getElementById('item-details').textContent = 'Ошибка при загрузке информации о товаре.';
+          console.error('Ошибка:', error);
+        });
+    }
+  </script>
+</body>
+</html>
