@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Строй Ломай - Детали товара</title>
+  <title>Строй Ломай - Регистрация</title>
   <link rel="stylesheet" href="style/styles.css">
   <!-- Подключение Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,10 +23,24 @@
       </nav>
     </div>
   </header>
-  <main class="content" id="item-content">
-    <h1>Детали товара</h1>
-    <div id="item-details">
-      Загрузка информации о товаре...
+  <main class="content">
+    <div class="register-container">
+      <h2>Регистрация</h2>
+      <form id="register-form">
+        <div class="form-group">
+          <label for="login">Логин:</label>
+          <input type="text" id="login" name="login" placeholder="Введите логин" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Пароль:</label>
+          <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+        </div>
+        <button type="submit" class="btn">Зарегистрироваться</button>
+      </form>
+      <div class="message" id="register-message"></div>
+      <p class="switch">
+        Уже есть аккаунт? <a href="login.html">Войти</a>
+      </p>
     </div>
   </main>
   <script src="script/scripts.js"></script>

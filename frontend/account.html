@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Строй Ломай - Детали товара</title>
+  <title>Строй Ломай - Аккаунт</title>
   <link rel="stylesheet" href="style/styles.css">
   <!-- Подключение Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,16 +19,27 @@
         <a href="index.html" class="nav-link">Главная</a>
         <a href="about.html" class="nav-link">О нас</a>
         <a href="cart.html" class="nav-link">Корзина</a>
-        <a href="account.html" class="nav-link" id="account-link">Аккаунт</a>
+        <a href="account.html" class="nav-link active" id="account-link">Аккаунт</a>
       </nav>
     </div>
   </header>
-  <main class="content" id="item-content">
-    <h1>Детали товара</h1>
-    <div id="item-details">
-      Загрузка информации о товаре...
+  <!-- Hero-секция для личного кабинета -->
+  <section class="hero-small">
+    <div class="hero-overlay">
+      <h2>Личный кабинет</h2>
+    </div>
+  </section>
+  <main class="content">
+    <div class="account-container">
+      <div id="user-info" class="account-info">
+        Загрузка информации...
+      </div>
+      <button id="logout-btn" class="btn logout-btn">Выйти</button>
     </div>
   </main>
+  <footer>
+    <p>&copy; 2025 Строй Ломай. Все права защищены.</p>
+  </footer>
   <script src="script/scripts.js"></script>
 </body>
 </html>
