@@ -19,7 +19,7 @@ INSERT INTO Employees_roles(role_id, role)
             (4, 'inventory_manager'),
             (5, 'marketing_specialist'),
             (6, 'moderator'),
-            (6, 'director');
+            (7, 'director');
 
 ---------------------------------------------------------------------
 -- Таблица сотрудников
@@ -82,11 +82,11 @@ CREATE TABLE IF NOT EXISTS DeliveryStatus (
 -- Используется в функции prevent_add_order, prevent_update_status_warehouses_order
 INSERT INTO DeliveryStatus (id, status_code, description)
 VALUES 
-    (1, 'in stock', 'Прибыл на склад'),
-    (2, 'request', 'Запрос на доставку'),
+    (1, 'in stock',  'Прибыл на склад'),
+    (2, 'request',   'Запрос на доставку'),
     (3, 'cancelled', 'Отменен'),
-    (4, 'shipped', 'Отправлено'),
-    (5, 'received', 'Получено'),
+    (4, 'shipped',   'Отправлено'),
+    (5, 'received',  'Получено'),
     (6, 'returning', 'Возврат на склад')
 ON CONFLICT (status_code) DO NOTHING;
 
