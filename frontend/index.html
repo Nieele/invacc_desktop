@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Строй Ломай - Главная</title>
+  <link rel="stylesheet" href="style/styles.css">
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="brand">
+        <h1 href="index.html">Строй Ломай</h1>
+      </div>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Главная</a>
+        <a href="about.html" class="nav-link">О нас</a>
+        <a href="cart.html" class="nav-link">Корзина</a>
+        <a href="#" class="nav-link" id="account-link">Аккаунт</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="products-container" id="products-container">
+      <!-- Товары загружаются динамически -->
+    </div>
+  </main>
+
+  <script>
+    // Обрезаем текст, если он превышает заданную длину
+    function truncateText(text, maxLength) {
+      return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    }
+
+    // Создание карточки товара
+    function createProductCard(product) {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      // При клике переходим на страницу товара с id
+      card.addEventListener('click', () => {
+        window.location.href = 'item.html?id=' + product.id;
+      });
+
+      const title = document.createElement('div');
+      title.className = 'product-title';
+      title.textContent = product.name;
+      card.appendChild(title);
+
+      const description = document.createElement('div');
+      description.className = 'product-description';
+      description.textContent = truncateText(product.description, 100);
+      card.appendChild(description);
+
+      const info = document.createElement('div');
+      info.className = 'product-info';
+      info.innerHTML =
+        '<div>Цена: ' + product.price + '</div>' +
+        '<div>Склад: ' + product.warehouse_id + '</div>' +
+        '<div>Активность: ' + (product.active ? 'Да' : 'Нет') + '</div>';
+      card.appendChild(info);
+
+      return card;
+    }
+
+    // Загрузка товаров с API
+    fetch('/api/v1/items?page=1')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('products-container');
+        data.items.slice(0, data.count).forEach(product => {
+          const card = createProductCard(product);
+          container.appendChild(card);
+        });
+      })
+      .catch(error => console.error('Ошибка при загрузке товаров:', error));
+
+    // Проверка JWT токена при клике на "Аккаунт"
+    document.getElementById('account-link').addEventListener('click', function(event) {
+      event.preventDefault();
+      const tokenCookie = document.cookie.split('; ').find(row => row.startsWith('jwt='));
+      if (!tokenCookie) {
+        window.location.href = 'login.html';
+        return;
+      }
+      const jwt = tokenCookie.split('=')[1];
+      fetch('/api/v1/account', {
+        headers: {
+          'Authorization': 'Bearer ' + jwt
+        }
+      })
+      .then(response => {
+        if (response.status === 401) {
+          return response.text().then(text => {
+            if (text.includes('token missing') || text.includes('invalid token')) {
+              window.location.href = 'login.html';
+            }
+          });
+        } else if (response.ok) {
+          window.location.href = 'account.html';
+        }
+      })
+      .catch(error => {
+        console.error('Ошибка проверки токена:', error);
+        window.location.href = 'login.html';
+      });
+    });
+  </script>
+</body>
+</html>
