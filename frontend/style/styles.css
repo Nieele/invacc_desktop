@@ -1,110 +1,121 @@
-/* Reset */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-  }
-  
-  /* Global Styles */
-  html, body {
+}
+
+html, body {
     height: 100%;
-  }
-  body {
+}
+
+body {
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(135deg, #f0f4ff, #d9e4ff);
     color: #333;
     margin: 0;
-  }
-  .wrapper {
+}
+
+.wrapper {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-  }
-  
-  /* Header */
-  header {
+}
+
+header {
     background-color: #2c3e50;
     padding: 15px 30px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 40px;
-  }
-  .header-container {
+}
+
+.header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  .brand h1 {
+}
+
+.brand h1 {
     color: #ecf0f1;
     font-size: 28px;
     transition: transform 0.3s ease, color 0.3s ease;
-  }
-  .brand h1:hover {
+}
+
+.brand h1:hover {
     color: #bdc3c7;
     transform: scale(1.05);
-  }
-  .nav-menu {
+}
+
+.nav-menu {
     display: flex;
     gap: 20px;
-  }
-  .nav-link {
+}
+
+.nav-link {
     color: #ecf0f1;
     text-decoration: none;
     padding: 8px 12px;
     font-size: 18px;
     border-radius: 4px;
     transition: background-color 0.3s ease;
-  }
-  .nav-link:hover,
-  .nav-link.active {
+}
+
+.nav-link:hover,
+.nav-link.active {
     background-color: #34495e;
-  }
-  
-  /* Main Content */
-  main.content {
+}
+
+main.content {
     padding: 40px 20px;
-    flex: 1; /* для обеспечения "липкого" footer */
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 70vh;
-  }
-  
-  /* Forms (Login & Register) */
-  .login-container, .register-container {
+}
+
+.login-container,
+.register-container {
     background-color: #fff;
     padding: 30px 40px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 400px;
-  }
-  .login-container h2, .register-container h2 {
+}
+
+.login-container h2, 
+.register-container h2 {
     text-align: center;
     margin-bottom: 20px;
     color: #2c3e50;
-  }
-  .form-group {
+}
+
+.form-group {
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
-  }
-  .form-group label {
+}
+
+.form-group label {
     margin-bottom: 8px;
     font-weight: 500;
-  }
-  .form-group input {
+}
+
+.form-group input {
     padding: 12px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
     transition: border-color 0.3s ease;
-  }
-  .form-group input:focus {
+}
+
+.form-group input:focus {
     outline: none;
     border-color: #3498db;
     box-shadow: 0 0 5px rgba(52,152,219,0.5);
-  }
-  .btn {
+}
+
+.btn {
     width: 100%;
     padding: 12px;
     font-size: 18px;
@@ -114,46 +125,53 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-  .btn:hover {
+}
+
+.btn:hover {
     background-color: #2980b9;
     transform: translateY(-2px);
-  }
-  .message {
+}
+
+.message {
     margin-top: 15px;
     text-align: center;
     font-weight: bold;
-  }
-  .switch {
+}
+
+.switch {
     text-align: center;
     margin-top: 20px;
     font-size: 16px;
-  }
-  .switch a {
+}
+
+.switch a {
     color: #3498db;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s ease;
-  }
-  .switch a:hover {
+}
+
+.switch a:hover {
     color: #2980b9;
-  }
-  
-  /* Product Cards (Index) */
-  .products-section {
+}
+
+.products-section {
     max-width: 1200px;
     margin: 0 auto;
-  }
-  .products-page {
+}
+
+.products-page {
     display: block;
-  }
-  .products-container {
+}
+
+.products-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
-  }
-  .product-card {
+}
+
+.product-card {
     background-color: #fff;
     border: 1px solid #ddd;
     padding: 20px;
@@ -163,94 +181,103 @@
     justify-content: space-between;
     cursor: pointer;
     transition: box-shadow 0.3s ease, transform 0.3s ease;
-  }
-  .product-card:hover {
+}
+
+.product-card:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     transform: translateY(-5px);
-  }
-  .product-title {
+}
+
+.product-title {
     font-size: 20px;
     font-weight: 700;
     margin-bottom: 10px;
-  }
-  .product-description {
+}
+
+.product-description {
     font-size: 16px;
     flex-grow: 1;
     margin-bottom: 10px;
-  }
-  .product-info {
+}
+
+.product-info {
     font-size: 16px;
-  }
-  
-  /* About Page Hero */
-  .about-hero {
+}
+
+.about-hero {
     background: linear-gradient(135deg, #3498db, #2980b9);
     height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  .about-hero .hero-overlay {
+}
+
+.about-hero .hero-overlay {
     text-align: center;
     color: #fff;
     padding: 20px;
-  }
-  .about-hero h2 {
+}
+
+.about-hero h2 {
     font-size: 36px;
     margin-bottom: 10px;
-  }
-  .about-hero p {
+}
+
+.about-hero p {
     font-size: 20px;
-  }
-  
-  /* About Content Cards */
-  .about-content {
+}
+
+.about-content {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 30px;
     margin-top: 40px;
-  }
-  .about-card {
+}
+
+.about-card {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     flex: 1 1 300px;
-  }
-  .about-card h3 {
+}
+
+.about-card h3 {
     color: #2c3e50;
     margin-bottom: 15px;
     font-size: 24px;
-  }
-  .about-card p,
-  .about-card ul {
+}
+
+.about-card p,
+.about-card ul {
     font-size: 16px;
     line-height: 1.6;
-  }
-  .about-card ul {
+}
+
+.about-card ul {
     list-style: disc inside;
-  }
-  
-  /* Hero для аккаунта (маленький) */
-  .hero-small {
+}
+
+.hero-small {
     background: linear-gradient(135deg, #7f8c8d, #95a5a6);
     height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  .hero-small .hero-overlay {
+}
+
+.hero-small .hero-overlay {
     padding: 30px;
     text-align: center;
     color: #fff;
-  }
-  .hero-small h2 {
+}
+
+.hero-small h2 {
     font-size: 32px;
-  }
-  
-  /* Account Page */
-  .account-container {
+}
+
+.account-container {
     background: #fff;
     padding: 30px;
     border-radius: 8px;
@@ -258,42 +285,92 @@
     max-width: 600px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     text-align: left;
-  }
-  .account-info p {
+}
+
+.account-info p {
     margin-bottom: 10px;
     font-size: 16px;
-  }
-  .account-info strong {
+}
+
+.account-info strong {
     color: #2c3e50;
-  }
-  .btn.logout-btn {
+}
+
+.btn.logout-btn {
     background-color: #e74c3c;
-  }
-  .btn.logout-btn:hover {
+}
+
+.btn.logout-btn:hover {
     background-color: #c0392b;
-  }
-  
-  /* Footer */
-  footer {
+}
+
+footer {
     background: #2c3e50;
     color: #ecf0f1;
     text-align: center;
     padding: 15px 30px;
     margin-top: 40px;
-  }
-  
-  /* Responsive */
-  @media (max-width: 480px) {
-    .login-container, .register-container {
+}
+
+@media (max-width: 480px) {
+    .login-container,
+    .register-container {
       padding: 20px;
     }
     .nav-menu {
       gap: 10px;
     }
-  }
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     .about-content {
       flex-direction: column;
     }
+}
+
+/* Дополнительные стили для страницы товара (item.html) */
+.item-container {
+  background-color: #ffffff;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.item-container h1 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-size: 28px;
+  text-align: center;
+}
+
+.item-details h2 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.item-details p {
+  font-size: 16px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.item-details img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 20px auto;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .item-container {
+    padding: 20px;
   }
-  
+  .item-container h1 {
+    font-size: 24px;
+  }
+}
