@@ -22,6 +22,10 @@ INSERT INTO Employees_roles(role_id, role)
             (6, 'moderator'),
             (7, 'director');
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3d65eca (refactor(sql): add comments)
 -- TODO: Внести поправки - должна быть возможность создавать пустого пользователя с ролью (unknown)
 CREATE TABLE IF NOT EXISTS Employees (
     id              serial          PRIMARY KEY,
@@ -87,6 +91,10 @@ VALUES
     (6, 'returning', 'Возврат на склад')
 ON CONFLICT (status_code) DO NOTHING;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3d65eca (refactor(sql): add comments)
 
 CREATE TABLE IF NOT EXISTS WarehousesOrders (
     id                       serial     PRIMARY KEY,
@@ -118,6 +126,10 @@ CREATE TABLE IF NOT EXISTS ItemsServiceHistory (
     CONSTRAINT fk_itemsservice_items FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3d65eca (refactor(sql): add comments)
 CREATE TABLE IF NOT EXISTS ItemsDecommissioning (
     id       serial  PRIMARY KEY,
     item_id  int     NOT NULL  UNIQUE,
@@ -135,6 +147,7 @@ CREATE TABLE IF NOT EXISTS Categories (
     id             serial       PRIMARY KEY,
     category_name  varchar(50)  NOT NULL  UNIQUE
 );
+
 
 CREATE TABLE IF NOT EXISTS ItemsCategories (
     item_id      int,
