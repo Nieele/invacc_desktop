@@ -7,12 +7,12 @@ import (
 )
 
 type RentRepository interface {
-	getCart(CustomerID uint) ([]models.Cart, error)
-	addToCart(CustomerID uint, itemID uint) error
-	removeFromCart(CustomerID uint, itemID uint) error
+	GetCart(CustomerID uint) ([]models.Cart, error)
+	AddToCart(CustomerID uint, itemID uint) error
+	RemoveFromCart(CustomerID uint, itemID uint) error
 
-	rent(CustomerID uint, itemsID []uint) error
-	cancelRent(CustomerID uint, itemsID []uint) error
+	Rent(CustomerID uint, itemsID []uint) error
+	CancelRent(CustomerID uint, itemsID []uint) error
 }
 
 type rentRepo struct {
@@ -23,7 +23,7 @@ func NewRentRepository(db *gorm.DB) RentRepository {
 	return &rentRepo{db: db}
 }
 
-func (r *rentRepo) getCart(CustomerID uint) ([]models.Cart, error) {
+func (r *rentRepo) GetCart(CustomerID uint) ([]models.Cart, error) {
 	var cart []models.Cart
 	result := r.db.Model(&models.Cart{}).
 		Where("user_id = ?", CustomerID).
@@ -36,7 +36,7 @@ func (r *rentRepo) getCart(CustomerID uint) ([]models.Cart, error) {
 	return cart, nil
 }
 
-func (r *rentRepo) addToCart(CustomerID uint, itemID uint) error {
+func (r *rentRepo) AddToCart(CustomerID uint, itemID uint) error {
 	cart := models.Cart{
 		CustomerID: CustomerID,
 		ItemID:     itemID,
@@ -50,7 +50,7 @@ func (r *rentRepo) addToCart(CustomerID uint, itemID uint) error {
 	return nil
 }
 
-func (r *rentRepo) removeFromCart(CustomerID uint, itemID uint) error {
+func (r *rentRepo) RemoveFromCart(CustomerID uint, itemID uint) error {
 	result := r.db.Where("user_id = ? AND item_id = ?", CustomerID, itemID).
 		Delete(&models.Cart{})
 
@@ -61,7 +61,7 @@ func (r *rentRepo) removeFromCart(CustomerID uint, itemID uint) error {
 	return nil
 }
 
-func (r *rentRepo) rent(CustomerID uint, itemsID []uint) error {
+func (r *rentRepo) Rent(CustomerID uint, itemsID []uint) error {
 	tx := r.db.Begin()
 
 	for _, itemID := range itemsID {
@@ -83,7 +83,7 @@ func (r *rentRepo) rent(CustomerID uint, itemsID []uint) error {
 	return nil
 }
 
-func (r *rentRepo) cancelRent(CustomerID uint, itemsID []uint) error {
+func (r *rentRepo) CancelRent(CustomerID uint, itemsID []uint) error {
 	tx := r.db.Begin()
 
 	for _, itemID := range itemsID {
