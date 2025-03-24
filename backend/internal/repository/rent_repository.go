@@ -26,7 +26,7 @@ func NewRentRepository(db *gorm.DB) RentRepository {
 func (r *rentRepo) GetCart(CustomerID uint) ([]models.Cart, error) {
 	var cart []models.Cart
 	result := r.db.Model(&models.Cart{}).
-		Where("user_id = ?", CustomerID).
+		Where("customer_id = ?", CustomerID).
 		Find(&cart)
 
 	if result.Error != nil {
@@ -51,7 +51,7 @@ func (r *rentRepo) AddToCart(CustomerID uint, itemID uint) error {
 }
 
 func (r *rentRepo) RemoveFromCart(CustomerID uint, itemID uint) error {
-	result := r.db.Where("user_id = ? AND item_id = ?", CustomerID, itemID).
+	result := r.db.Where("customer_id = ? AND item_id = ?", CustomerID, itemID).
 		Delete(&models.Cart{})
 
 	if result.Error != nil {
