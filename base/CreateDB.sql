@@ -207,6 +207,20 @@ CREATE TABLE IF NOT EXISTS CustomersInfo (
 );
 
 ---------------------------------------------------------------------
+-- Таблица корзины
+---------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS Cart (
+    id          serial PRIMARY KEY,
+    customer_id int NOT NULL,
+    item_id     int NOT NULL,
+    CONSTRAINT fk_cart_customers FOREIGN KEY (customer_id) REFERENCES CustomersInfo (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_cart_items     FOREIGN KEY (item_id)     REFERENCES Items (id)         ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE INDEX idx_cart_customer ON Cart(customer_id);
+
+---------------------------------------------------------------------
 -- Таблица аренды товаров
 ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS Rent (

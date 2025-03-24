@@ -365,6 +365,20 @@
           "id": 8,
           "size": "",
           "values": []
+        },
+        {
+          "name": "img_url",
+          "type": "TEXT",
+          "default": "'not_found.webp'",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": false,
+          "increment": false,
+          "comment": "",
+          "id": 9,
+          "size": "",
+          "values": []
         }
       ],
       "comment": "",
@@ -1499,6 +1513,67 @@
       "indices": [],
       "color": "#175e7a",
       "key": 1742053954301
+    },
+    {
+      "id": 17,
+      "name": "Cart",
+      "x": 496.55404384729195,
+      "y": 521.8790398230349,
+      "fields": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "default": "",
+          "check": "",
+          "primary": true,
+          "unique": true,
+          "notNull": true,
+          "increment": true,
+          "comment": "",
+          "id": 0
+        },
+        {
+          "name": "customer_id",
+          "type": "INTEGER",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "",
+          "id": 1,
+          "size": "",
+          "values": []
+        },
+        {
+          "name": "item_id",
+          "type": "INTEGER",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "",
+          "id": 2,
+          "size": "",
+          "values": []
+        }
+      ],
+      "comment": "",
+      "indices": [
+        {
+          "id": 0,
+          "name": "idx_cart_customer",
+          "unique": false,
+          "fields": [
+            "customer_id"
+          ]
+        }
+      ],
+      "color": "#ff4f81",
+      "key": 1742802417898
     }
   ],
   "relationships": [
@@ -1710,6 +1785,28 @@
       "deleteConstraint": "No action",
       "name": "fk_itemsservice_items",
       "id": 18
+    },
+    {
+      "startTableId": 17,
+      "startFieldId": 1,
+      "endTableId": 9,
+      "endFieldId": 0,
+      "cardinality": "one_to_one",
+      "updateConstraint": "No action",
+      "deleteConstraint": "No action",
+      "name": "fk_cart_customers",
+      "id": 19
+    },
+    {
+      "startTableId": 17,
+      "startFieldId": 2,
+      "endTableId": 3,
+      "endFieldId": 0,
+      "cardinality": "one_to_one",
+      "updateConstraint": "No action",
+      "deleteConstraint": "No action",
+      "name": "fk_cart_items",
+      "id": 20
     }
   ],
   "notes": [
@@ -1720,7 +1817,7 @@
       "title": "Статусы",
       "content": "1) in stock - на \n           складе\n2) request - запрос \n           на отправку\n3) cancelled - \n           отменено\n4) shipped - \n           отправлно\n5) received - \n           получено\n6) returning - \n           возвращение",
       "color": "#fcf7ac",
-      "height": 330
+      "height": 352
     }
   ],
   "subjectAreas": [],
