@@ -24,7 +24,7 @@ func NewRentHandler(rentService service.RentService) RentHandler {
 	return &rentHandler{rentService: rentService}
 }
 
-// GET /rent/cart
+// GET /cart
 func (h *rentHandler) GetCart(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)
@@ -139,7 +139,7 @@ func (h *rentHandler) Rent(w http.ResponseWriter, r *http.Request) {
 
 // DELETE /rent/cancel {"items_id": [101, 102]}
 func (h *rentHandler) CancelRent(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
+	if r.Method != http.MethodDelete {
 		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)
 		return
 	}
