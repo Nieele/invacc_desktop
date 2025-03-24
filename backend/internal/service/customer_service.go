@@ -13,7 +13,7 @@ var (
 )
 
 type CustomerService interface {
-	GetPesonalInfo(userID uint) (models.CustomerInfo, error)
+	GetPesonalInfo(userID uint) (models.CustomersInfoWithLogin, error)
 	UpdatePersonalInfo(token string, info models.CustomerInfo) error
 }
 
@@ -27,7 +27,7 @@ func NewCustomerService(db *gorm.DB) CustomerService {
 	}
 }
 
-func (s *customerService) GetPesonalInfo(userID uint) (models.CustomerInfo, error) {
+func (s *customerService) GetPesonalInfo(userID uint) (models.CustomersInfoWithLogin, error) {
 	return s.customerRepo.GetInfo(userID)
 }
 
