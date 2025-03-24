@@ -59,3 +59,13 @@ type CustomersInfoWithLogin struct {
 	CustomerInfo
 	Login string `json:"login"`
 }
+
+type Cart struct {
+	ID         uint `gorm:"primaryKey" json:"id"`
+	CustomerID uint `gorm:"not null;column:customer_id" json:"customer_id"`
+	ItemID     uint `gorm:"not null;column:item_id" json:"item_id"`
+}
+
+func (Cart) TableName() string {
+	return "cart"
+}
