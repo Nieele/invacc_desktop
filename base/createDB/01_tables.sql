@@ -1,8 +1,12 @@
+---------------------------------------------------------------------
+-- Tables
+---------------------------------------------------------------------
+
 BEGIN;
 
----------------------------------------------------------------------
--- Таблица должностей сотрудников
----------------------------------------------------------------------
+--------------------------------------------------
+-- Internal employee roles
+--------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS Employees_roles (
     role_id     serial      PRIMARY KEY,
@@ -18,9 +22,7 @@ INSERT INTO Employees_roles(role_id, role)
             (6, 'moderator'),
             (7, 'director');
 
----------------------------------------------------------------------
--- Таблица сотрудников
----------------------------------------------------------------------
+
 -- TODO: Внести поправки - должна быть возможность создавать пустого пользователя с ролью (unknown)
 CREATE TABLE IF NOT EXISTS Employees (
     id              serial          PRIMARY KEY,
@@ -32,9 +34,12 @@ CREATE TABLE IF NOT EXISTS Employees (
     CONSTRAINT fk_Employees_role FOREIGN KEY (role_id) REFERENCES Employees_roles (role_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
----------------------------------------------------------------------
--- Таблица складов
----------------------------------------------------------------------
+
+--------------------------------------------------
+-- Storage tables
+--------------------------------------------------
+
+
 CREATE TABLE IF NOT EXISTS Warehouses (
     id       serial        PRIMARY KEY,
     name     varchar(50)   NOT NULL  UNIQUE,
@@ -43,13 +48,9 @@ CREATE TABLE IF NOT EXISTS Warehouses (
     address  varchar(100)  NOT NULL  UNIQUE,
     active   boolean       NOT NULL  DEFAULT true
 );
-
--- Индекс для быстрого поиска активных складов
 CREATE INDEX idx_warehouses_active ON Warehouses(active);
 
----------------------------------------------------------------------
--- Таблица товаров
----------------------------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS Items (
     id               serial         PRIMARY KEY,
     warehouse_id     int            NOT NULL,
@@ -63,13 +64,14 @@ CREATE TABLE IF NOT EXISTS Items (
     img_url          text           NULL,
     CONSTRAINT fk_items_warehouses FOREIGN KEY (warehouse_id) REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
-
--- Индекс для быстрого поиска товаров по складу
 CREATE INDEX idx_items_warehouse ON Items(warehouse_id);
 
----------------------------------------------------------------------
--- Тип перечисления для статусов доставки (используется для перевозок оборудования между складами)
----------------------------------------------------------------------
+
+--------------------------------------------------
+-- Delivery tables
+--------------------------------------------------
+
+
 CREATE TABLE IF NOT EXISTS DeliveryStatus (
     id serial PRIMARY KEY,
     status_code text NOT NULL UNIQUE,
@@ -86,9 +88,7 @@ VALUES
     (6, 'returning', 'Возврат на склад')
 ON CONFLICT (status_code) DO NOTHING;
 
----------------------------------------------------------------------
--- Таблица заказов на перевозку оборудования между складами (WarehousesOrders)
----------------------------------------------------------------------
+
 
 CREATE TABLE IF NOT EXISTS WarehousesOrders (
     id                       serial     PRIMARY KEY,
@@ -97,18 +97,20 @@ CREATE TABLE IF NOT EXISTS WarehousesOrders (
     destination_warehouse_id int        NOT NULL,
     sending_time             timestamp  NULL,
     receiving_time           timestamp  NULL,
-    delivery_status_id       int        NOT NULL DEFAULT 2, -- 2 соответствует 'request'
+    delivery_status_id       int        NOT NULL DEFAULT 2, -- 2 corresponds to 'request'
     CONSTRAINT fk_wo_items          FOREIGN KEY (item_id)                   REFERENCES Items (id)           ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_wo_source         FOREIGN KEY (source_warehouse_id)       REFERENCES Warehouses (id)      ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_wo_destination    FOREIGN KEY (destination_warehouse_id)  REFERENCES Warehouses (id)      ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_wo_status         FOREIGN KEY (delivery_status_id)        REFERENCES DeliveryStatus (id)  ON DELETE RESTRICT ON UPDATE CASCADE
 );
-
 CREATE INDEX idx_wo_ ON WarehousesOrders(delivery_status_id);
 
----------------------------------------------------------------------
--- Таблица истории изменений качества товара
----------------------------------------------------------------------
+
+--------------------------------------------------
+-- Item maintenance tables
+--------------------------------------------------
+
+
 CREATE TABLE IF NOT EXISTS ItemsServiceHistory (
     id             serial  PRIMARY KEY,
     item_id        int     NOT NULL,
@@ -118,9 +120,7 @@ CREATE TABLE IF NOT EXISTS ItemsServiceHistory (
     CONSTRAINT fk_itemsservice_items FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
----------------------------------------------------------------------
--- Таблица списания товаров
----------------------------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS ItemsDecommissioning (
     id       serial  PRIMARY KEY,
     item_id  int     NOT NULL  UNIQUE,
@@ -128,13 +128,17 @@ CREATE TABLE IF NOT EXISTS ItemsDecommissioning (
     CONSTRAINT fk_itemsdecommissioning_items FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
----------------------------------------------------------------------
--- Таблицы для категорий товаров
----------------------------------------------------------------------
+
+--------------------------------------------------
+-- Categories tables
+--------------------------------------------------
+
+
 CREATE TABLE IF NOT EXISTS Categories (
     id             serial       PRIMARY KEY,
     category_name  varchar(50)  NOT NULL  UNIQUE
 );
+
 
 CREATE TABLE IF NOT EXISTS ItemsCategories (
     item_id      int,
@@ -144,9 +148,12 @@ CREATE TABLE IF NOT EXISTS ItemsCategories (
     CONSTRAINT fk_itemscategories_categories FOREIGN KEY (category_id) REFERENCES Categories (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
----------------------------------------------------------------------
--- Таблица скидок (Discounts)
----------------------------------------------------------------------
+
+--------------------------------------------------
+-- Discounts tables
+--------------------------------------------------
+
+
 CREATE TABLE IF NOT EXISTS Discounts (
     id          serial       PRIMARY KEY,
     name        varchar(50)  NOT NULL,
@@ -155,13 +162,9 @@ CREATE TABLE IF NOT EXISTS Discounts (
     start_date  date         NOT NULL  DEFAULT CURRENT_DATE  CHECK (start_date >= CURRENT_DATE),
     end_date    date         NOT NULL                 CHECK (end_date > CURRENT_DATE)
 );
-
--- Индекс по датам действия скидок для ускорения выборок
 CREATE INDEX idx_discounts_dates ON Discounts(start_date, end_date);
 
----------------------------------------------------------------------
--- Таблица связи товаров и скидок
----------------------------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS ItemsDiscounts (
     item_id      int,
     discount_id  int,
@@ -170,24 +173,20 @@ CREATE TABLE IF NOT EXISTS ItemsDiscounts (
     CONSTRAINT fk_itemsdiscounts_discounts  FOREIGN KEY (discount_id)   REFERENCES Discounts (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
----------------------------------------------------------------------
--- Таблица аутентификации пользователей
----------------------------------------------------------------------
+
+--------------------------------------------------
+-- Customers tables
+--------------------------------------------------
+
+
 CREATE TABLE IF NOT EXISTS CustomersAuth (
     id          serial          PRIMARY KEY,
     login       varchar(50)     NOT NULL UNIQUE,
     password    varchar(60)     NOT NULL -- bcrypt hash
 );
 
----------------------------------------------------------------------
--- Таблица сессий аутентификаций
----------------------------------------------------------------------
+-- TODO: table session with jwt token, ip, device
 
--- TODO: table with jwt token, ip, device
-
----------------------------------------------------------------------
--- Таблица клиентов
----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS CustomersInfo (
     id                  serial        PRIMARY KEY,
     firstname           varchar(50)   NULL,
@@ -201,9 +200,6 @@ CREATE TABLE IF NOT EXISTS CustomersInfo (
     CONSTRAINT fk_customersinfo_customersauth FOREIGN KEY (id) REFERENCES CustomersAuth (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
----------------------------------------------------------------------
--- Таблица корзины
----------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS Cart (
     id          serial PRIMARY KEY,
@@ -213,18 +209,20 @@ CREATE TABLE IF NOT EXISTS Cart (
     CONSTRAINT fk_cart_items     FOREIGN KEY (item_id)     REFERENCES Items (id)         ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE(customer_id, item_id)
 );
-
 CREATE INDEX idx_cart_customer ON Cart(customer_id);
 
----------------------------------------------------------------------
--- Таблица аренды товаров
----------------------------------------------------------------------
+
+--------------------------------------------------
+-- Rent tables
+--------------------------------------------------
+
+
 CREATE TABLE IF NOT EXISTS Rent (
     id                  serial          PRIMARY KEY,
     item_id             int             NOT NULL  UNIQUE,
     customer_id         int             NOT NULL,
     address             varchar(255)    NOT NULL,
-    delivery_status_id  int             NOT NULL  DEFAULT 2, -- 2 соответствует 'request'
+    delivery_status_id  int             NOT NULL  DEFAULT 2, -- 2 corresponds to 'request'
     number_of_days      int             NOT NULL,
     start_rent_time     timestamp       NULL,
     end_rent_time       timestamp       NULL,  
@@ -235,13 +233,9 @@ CREATE TABLE IF NOT EXISTS Rent (
     CONSTRAINT fk_rent_deliverystatus   FOREIGN KEY (delivery_status_id)    REFERENCES DeliveryStatus (id)  ON DELETE RESTRICT ON UPDATE CASCADE,
     CHECK (start_rent_time < end_rent_time)
 );
-
--- Индекс по статусу заказа
 CREATE INDEX idx_rent_delivery ON Rent(delivery_status_id);
 
----------------------------------------------------------------------
--- Таблица истории аренды
----------------------------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS RentHistory (
     id                 serial         PRIMARY KEY,
     item_id            int            NOT NULL,

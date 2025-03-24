@@ -1,8 +1,12 @@
 ---------------------------------------------------------------------
--- Monthly Rent Analytics Materialized View
+-- Views
 ---------------------------------------------------------------------
 
 BEGIN;
+
+--------------------------------------------------
+-- Monthly Rent Analytics Materialized View
+--------------------------------------------------
 
 CREATE MATERIALIZED VIEW monthly_rent_summary 
 WITH (fillfactor = 90)  -- Optimize storage and updates
