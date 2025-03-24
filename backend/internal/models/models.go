@@ -22,6 +22,11 @@ func (Item) TableName() string {
 	return "items"
 }
 
+type ItemWithWarehouseName struct {
+	Item
+	WarehouseName string `json:"warehouse_name"`
+}
+
 // CustomersAuth in db
 type CustomerAuth struct {
 	ID       uint   `gorm:"primaryKey" json:"id"`
