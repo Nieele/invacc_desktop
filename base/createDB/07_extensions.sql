@@ -1,1 +1,3 @@
---TODO Add functions pgAgent
+-- TODO Add functions pgAgent
+-- 1) update monthly_rent_summary (view)
+-- 2) update overdue rents

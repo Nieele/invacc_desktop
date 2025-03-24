@@ -6,7 +6,7 @@ BEGIN;
 
 -- Core audit table
 CREATE TABLE IF NOT EXISTS logged_actions (
-    id              bigserial   PRIMARY KEY,  -- Changed to bigserial for larger range
+    id              bigserial   PRIMARY KEY,
     table_schema    text        NOT NULL,
     table_name      text        NOT NULL,
     operation       text        NOT NULL CHECK (operation IN ('INSERT', 'UPDATE', 'DELETE')),
