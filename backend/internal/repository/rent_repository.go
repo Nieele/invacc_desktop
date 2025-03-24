@@ -105,6 +105,10 @@ func (r *rentRepo) CancelRent(CustomerID uint, rentsID []uint) error {
 			tx.Rollback()
 			return result.Error
 		}
+<<<<<<< HEAD
+=======
+
+>>>>>>> c971bba (feat(backend/rent_repository): add rent and cancel rent)
 	}
 
 	tx.Commit()
