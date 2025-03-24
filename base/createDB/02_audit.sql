@@ -53,11 +53,11 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Apply audit triggers to tables
-SELECT create_audit_trigger('Items');
-SELECT create_audit_trigger('WarehousesOrders');
-SELECT create_audit_trigger('Discounts');
-SELECT create_audit_trigger('ItemsDiscounts');
-SELECT create_audit_trigger('ItemsServiceHistory');
-SELECT create_audit_trigger('ItemsDecommissioning');
+SELECT create_audit_trigger('items');
+SELECT create_audit_trigger('warehousesorders');
+SELECT create_audit_trigger('discounts');
+SELECT create_audit_trigger('itemsdiscounts');
+SELECT create_audit_trigger('itemsservicehistory');
+SELECT create_audit_trigger('itemsdecommissioning');
 
 COMMIT;
