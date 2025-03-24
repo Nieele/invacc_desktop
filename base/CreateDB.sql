@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS Rent (
     item_id             int             NOT NULL  UNIQUE,
     customer_id         int             NOT NULL,
     address             varchar(255)    NOT NULL,
-    delivery_status_id  int             NOT NULL,
+    delivery_status_id  int             NOT NULL  DEFAULT 2, -- 2 соответствует 'request'
     start_rent_time     timestamp       NOT NULL  DEFAULT NOW(),
     end_rent_time       timestamp       NOT NULL,  
     total_payments      decimal(10,2)   NOT NULL  DEFAULT 0,
@@ -557,6 +557,7 @@ CREATE OR REPLACE FUNCTION prevent_rent()
 RETURNS TRIGGER AS $$
 DECLARE
     delivery_status_in_stock int := 1;
+    delivery_status_request  int := 2;
     delivery_status_cancel   int := 3;
     delivery_status_received int := 5;
 BEGIN
@@ -579,6 +580,8 @@ BEGIN
     IF EXISTS (SELECT * FROM ItemsDecommissioning WHERE item_id = NEW.item_id) THEN
         RAISE EXCEPTION 'Cannot rent item_id %, it is decommissioned.', NEW.item_id;
     END IF;
+
+    NEW.delivery_status_id := delivery_status_request;
 
     RETURN NEW;
 END;
