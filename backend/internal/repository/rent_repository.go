@@ -10,6 +10,9 @@ type RentRepository interface {
 	getCart(CustomerID uint) ([]models.Cart, error)
 	addToCart(CustomerID uint, itemID uint) error
 	removeFromCart(CustomerID uint, itemID uint) error
+
+	rent(CustomerID uint, itemsID []uint) error
+	cancelRent(CustomerID uint, itemsID []uint) error
 }
 
 type rentRepo struct {
@@ -54,6 +57,46 @@ func (r *rentRepo) removeFromCart(CustomerID uint, itemID uint) error {
 	if result.Error != nil {
 		return result.Error
 	}
+
+	return nil
+}
+
+func (r *rentRepo) rent(CustomerID uint, itemsID []uint) error {
+	tx := r.db.Begin()
+
+	for _, itemID := range itemsID {
+		rent := models.Rent{
+			CustomerID: CustomerID,
+			ItemID:     itemID,
+		}
+		result := tx.Create(&rent)
+
+		if result.Error != nil {
+			tx.Rollback()
+			return result.Error
+		}
+
+	}
+
+	tx.Commit()
+
+	return nil
+}
+
+func (r *rentRepo) cancelRent(CustomerID uint, itemsID []uint) error {
+	tx := r.db.Begin()
+
+	for _, itemID := range itemsID {
+		result := tx.Delete(&models.Rent{}, "customer_id = ? AND item_id = ?", CustomerID, itemID)
+
+		if result.Error != nil {
+			tx.Rollback()
+			return result.Error
+		}
+
+	}
+
+	tx.Commit()
 
 	return nil
 }
