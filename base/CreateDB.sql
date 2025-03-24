@@ -230,9 +230,10 @@ CREATE TABLE IF NOT EXISTS Rent (
     customer_id         int             NOT NULL,
     address             varchar(255)    NOT NULL,
     delivery_status_id  int             NOT NULL  DEFAULT 2, -- 2 соответствует 'request'
-    start_rent_time     timestamp       NOT NULL  DEFAULT NOW(),
-    end_rent_time       timestamp       NOT NULL,  
-    total_payments      decimal(10,2)   NOT NULL  DEFAULT 0,
+    number_of_days      int             NOT NULL,
+    start_rent_time     timestamp       NULL,
+    end_rent_time       timestamp       NULL,  
+    total_payments      decimal(10,2)   NULL,
     overdue             boolean         NOT NULL  DEFAULT false,
     CONSTRAINT fk_rent_items            FOREIGN KEY (item_id)               REFERENCES Items (id)           ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_rent_customers        FOREIGN KEY (customer_id)           REFERENCES CustomersInfo (id)   ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -311,7 +312,6 @@ CREATE TRIGGER trg_update_quality_items
 AFTER INSERT ON ItemsServiceHistory
 FOR EACH ROW
 EXECUTE FUNCTION update_quality_items();
-
 
 -- Проверка перед созданием заказа перевозки между складами
 CREATE OR REPLACE FUNCTION prevent_add_order()
@@ -598,45 +598,25 @@ RETURNS TRIGGER AS $$
 DECLARE
     total_days int;
     item_price decimal(10,2);
-    current_day date;
-    total_discount_percent int;
     total_payments_tmp decimal(10,2) := 0;
 BEGIN
-    -- Всего аредованных дней
-    SELECT 
-        CASE
-            WHEN EXTRACT(DAY FROM NEW.end_rent_time - NEW.start_rent_time) = 0 THEN 1
-            ELSE EXTRACT(DAY FROM NEW.end_rent_time - NEW.start_rent_time) + 
-                CASE WHEN EXTRACT(HOUR FROM NEW.end_rent_time) >= 12 THEN 1 ELSE 0 END
-        END
-    INTO total_days;
+    -- количество полных дней аренды
+    total_days := get_total_rental_days(NEW.start_rent_time, NEW.end_rent_time);
 
-    -- Цена на товар
-    SELECT price 
+    -- Получаем цену товара
+    SELECT price INTO item_price 
     FROM Items 
-    WHERE id = NEW.item_id
-    INTO item_price;
+    WHERE id = NEW.item_id;
 
-    -- Применение скидок и просчет всей стоимости аренды
-    FOR i IN 0..total_days - 1 LOOP
-        current_day := (NEW.start_rent_time::date + i);
-        total_discount_percent := 0;
+    -- Вычисляем общую сумму аренды с учётом скидок
+    total_payments_tmp := calculate_discounted_payment(
+        NEW.item_id,
+        item_price,
+        NEW.start_rent_time::date,
+        total_days
+    );
 
-        SELECT COALESCE(SUM(Discounts.percent), 0)
-        FROM Discounts
-        JOIN ItemsDiscounts ON ItemsDiscounts.discount_id = Discounts.id
-        WHERE ItemsDiscounts.item_id = NEW.item_id AND
-            current_day BETWEEN Discounts.start_date AND Discounts.end_date
-        INTO total_discount_percent;
-
-        IF total_discount_percent > 100 THEN
-            total_discount_percent := 100;
-        END IF;
-
-        total_payments_tmp := total_payments_tmp + item_price * (1 - total_discount_percent::float/100);
-    END LOOP;
-
-    -- Внесение общей стоимости аренды
+    -- Update rent payment
     UPDATE Rent 
     SET total_payments = total_payments_tmp
     WHERE id = NEW.id;
@@ -645,10 +625,95 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trg_calculate_total_interim_payment_rent
-AFTER INSERT ON Rent
+-- Функция для вычисления общего количества дней аренды
+-- Первый день аренды с 00:00 до 12:00 следующего дня считается за 1 день, далее каждый день обновляется в 12:00
+CREATE OR REPLACE FUNCTION get_total_rental_days(start_time timestamp, end_time timestamp)
+RETURNS int AS $$
+DECLARE
+    day_diff int;
+    end_hour int;
+BEGIN
+    day_diff := EXTRACT(DAY FROM end_time - start_time);
+    end_hour := EXTRACT(HOUR FROM end_time);
+    
+    RETURN CASE
+        WHEN day_diff = 0 THEN 1
+        ELSE day_diff + CASE WHEN end_hour >= 12 THEN 1 ELSE 0 END
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Расчет полной стоимости аренды с учетом скидок
+CREATE OR REPLACE FUNCTION calculate_discounted_payment(item_id int, item_price decimal, start_date date, days int)
+RETURNS decimal AS $$
+BEGIN
+    RETURN (
+        WITH daily_discounts AS (
+            SELECT d.start_date, d.end_date, SUM(d.percent) as total_percent
+            FROM Discounts d
+            JOIN ItemsDiscounts itds ON itds.discount_id = d.id
+            WHERE itds.item_id = item_id
+            GROUP BY d.start_date, d.end_date
+        )
+        SELECT SUM(
+            item_price * (1 - LEAST(COALESCE(dd.total_percent, 0), 100) / 100.0)
+        )
+        FROM generate_series(start_date, start_date + (days - 1), '1 day') AS rental_day
+        LEFT JOIN daily_discounts dd ON rental_day BETWEEN dd.start_date AND dd.end_date
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION process_update_devilery_status_rent()
+RETURNS TRIGGER AS $$
+DECLARE
+    delivery_status_in_stock    int := 1;
+    delivery_status_request     int := 2;
+    delivery_status_cancel      int := 3;
+    delivery_status_received    int := 5;
+    delivery_status_returning   int := 6;
+BEGIN
+    -- Нельзя отменить заказ, если он уже в аренде
+    IF (NEW.delivery_status_id = delivery_status_cancel AND 
+        OLD.delivery_status_id != delivery_status_request) THEN
+        RAISE EXCEPTION 'Cannot cancel rent item_id %, it is already rented', NEW.item_id;
+    END IF;
+
+    -- Если статус аренды изменился на отменен, то удаляем (перемещаем в историю)
+    IF NEW.delivery_status_id = delivery_status_cancel THEN
+        DELETE FROM Rent
+        WHERE id = NEW.id;
+    END IF;
+
+    -- Если статус аренды изменился на получено, то устанавливаем время начала аренды
+    IF NEW.delivery_status_id = delivery_status_received THEN
+        UPDATE Rent
+        SET start_rent_time = NOW(),
+            end_rent_time = NOW() + INTERVAL '1 day' * NEW.number_of_days + INTERVAL '12 hours'
+        WHERE id = NEW.id;
+    END IF;
+
+    -- Если статус аренды изменился на возвращается, то устанавливаем время окончания аренды
+    -- Затем рассчитываем конечную стоимость аренды
+    IF NEW.delivery_status_id = delivery_status_returning AND NEW.overdue = FALSE THEN
+        PERFORM calculate_total_interim_payment_rent();
+    END IF;
+
+    -- Если товар прибыл на склад, то отправляем в историю
+    IF NEW.delivery_status_id = delivery_status_in_stock THEN
+        DELETE FROM Rent
+        WHERE id = NEW.id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_process_update_devilery_status_rent
+AFTER UPDATE OF delivery_status_id ON Rent
 FOR EACH ROW
-EXECUTE FUNCTION calculate_total_interim_payment_rent();
+WHEN (OLD.delivery_status_id != NEW.delivery_status_id)
+EXECUTE FUNCTION process_update_devilery_status_rent();
 
 -- Создание записи в истории аренды при удалении аренды
 CREATE OR REPLACE FUNCTION add_rent_history()
