@@ -8,12 +8,12 @@ import (
 )
 
 type RentService interface {
-	getCart(CustomerID uint) ([]models.Cart, error)
-	addToCart(CustomerID uint, itemID uint) error
-	removeFromCart(CustomerID uint, itemID uint) error
+	GetCart(CustomerID uint) ([]models.Cart, error)
+	AddToCart(CustomerID uint, itemID uint) error
+	RemoveFromCart(CustomerID uint, itemID uint) error
 
-	rent(CustomerID uint, itemsID []uint) error
-	cancelRent(CustomerID uint, itemsID []uint) error
+	Rent(CustomerID uint, itemsID []uint) error
+	CancelRent(CustomerID uint, itemsID []uint) error
 }
 
 type rentService struct {
@@ -25,22 +25,22 @@ func NewRentService(db *gorm.DB) RentService {
 	return &rentService{rentRepo: repo}
 }
 
-func (s *rentService) getCart(CustomerID uint) ([]models.Cart, error) {
+func (s *rentService) GetCart(CustomerID uint) ([]models.Cart, error) {
 	return s.rentRepo.GetCart(CustomerID)
 }
 
-func (s *rentService) addToCart(CustomerID uint, itemID uint) error {
+func (s *rentService) AddToCart(CustomerID uint, itemID uint) error {
 	return s.rentRepo.AddToCart(CustomerID, itemID)
 }
 
-func (s *rentService) removeFromCart(CustomerID uint, itemID uint) error {
+func (s *rentService) RemoveFromCart(CustomerID uint, itemID uint) error {
 	return s.rentRepo.RemoveFromCart(CustomerID, itemID)
 }
 
-func (s *rentService) rent(CustomerID uint, itemsID []uint) error {
+func (s *rentService) Rent(CustomerID uint, itemsID []uint) error {
 	return s.rentRepo.Rent(CustomerID, itemsID)
 }
 
-func (s *rentService) cancelRent(CustomerID uint, itemsID []uint) error {
+func (s *rentService) CancelRent(CustomerID uint, itemsID []uint) error {
 	return s.rentRepo.CancelRent(CustomerID, itemsID)
 }
