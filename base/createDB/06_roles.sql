@@ -1,4 +1,12 @@
+---------------------------------------------------------------------
+-- Roles
+---------------------------------------------------------------------
+
 BEGIN;
+
+--------------------------------------------------
+-- Create roles
+--------------------------------------------------
 
 -- Function to create role if not exists
 CREATE OR REPLACE FUNCTION create_role_if_not_exists(role_name TEXT) RETURNS VOID AS
@@ -21,6 +29,12 @@ SELECT create_role_if_not_exists('marketing_specialist');
 SELECT create_role_if_not_exists('director');
 SELECT create_role_if_not_exists('moderator');
 SELECT create_role_if_not_exists('admin');
+
+
+--------------------------------------------------
+-- Role configurations
+--------------------------------------------------
+
 
 -- Base role configurations
 ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS PASSWORD 'root';
