@@ -215,7 +215,8 @@ CREATE TABLE IF NOT EXISTS Cart (
     customer_id int NOT NULL,
     item_id     int NOT NULL,
     CONSTRAINT fk_cart_customers FOREIGN KEY (customer_id) REFERENCES CustomersInfo (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_cart_items     FOREIGN KEY (item_id)     REFERENCES Items (id)         ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_cart_items     FOREIGN KEY (item_id)     REFERENCES Items (id)         ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE(customer_id, item_id)
 );
 
 CREATE INDEX idx_cart_customer ON Cart(customer_id);
