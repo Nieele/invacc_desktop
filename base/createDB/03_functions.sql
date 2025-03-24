@@ -86,10 +86,10 @@ CREATE OR REPLACE FUNCTION prevent_update_status_warehouses_order()
 RETURNS TRIGGER AS $$
 DECLARE
     user_warehouse           int;
-    role_admin               CONSTANTint := 1;
-    delivery_status_cancel   CONSTANTint := 3;
-    delivery_status_shipped  CONSTANTint := 4;
-    delivery_status_received CONSTANTint := 5;
+    role_admin               CONSTANT int := 1;
+    delivery_status_cancel   CONSTANT int := 3;
+    delivery_status_shipped  CONSTANT int := 4;
+    delivery_status_received CONSTANT int := 5;
 BEGIN
     -- Get employee's warehouse
     SELECT warehouse_id INTO user_warehouse
