@@ -54,3 +54,8 @@ type CustomerInfo struct {
 func (CustomerInfo) TableName() string {
 	return "customersinfo"
 }
+
+type CustomersInfoWithLogin struct {
+	CustomerInfo
+	Login string `json:"login"`
+}
