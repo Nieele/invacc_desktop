@@ -136,7 +136,6 @@ CREATE TABLE IF NOT EXISTS Categories (
     category_name  varchar(50)  NOT NULL  UNIQUE
 );
 
-
 CREATE TABLE IF NOT EXISTS ItemsCategories (
     item_id      int,
     category_id  int,
