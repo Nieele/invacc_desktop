@@ -8,8 +8,8 @@ import (
 )
 
 type ItemService interface {
-	GetItemModel(id uint) (models.Item, error)
-	GetItemModelList(page uint) ([]models.Item, error)
+	GetItemModel(id uint) (models.ItemWithWarehouseName, error)
+	GetItemModelList(page uint) ([]models.ItemWithWarehouseName, error)
 }
 
 type itemService struct {
@@ -21,10 +21,10 @@ func NewItemService(db *gorm.DB) ItemService {
 	return &itemService{itemRepo: repo}
 }
 
-func (s *itemService) GetItemModel(id uint) (models.Item, error) {
+func (s *itemService) GetItemModel(id uint) (models.ItemWithWarehouseName, error) {
 	return s.itemRepo.GetItem(id)
 }
 
-func (s *itemService) GetItemModelList(page uint) ([]models.Item, error) {
+func (s *itemService) GetItemModelList(page uint) ([]models.ItemWithWarehouseName, error) {
 	return s.itemRepo.GetItemsList(page)
 }

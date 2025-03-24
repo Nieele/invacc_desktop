@@ -68,8 +68,8 @@ func (h *itemHandler) handleGetItemsByPage(w http.ResponseWriter, pageParam stri
 	}
 
 	response := struct {
-		Count int           `json:"count"`
-		Items []models.Item `json:"items"`
+		Count int                            `json:"count"`
+		Items []models.ItemWithWarehouseName `json:"items"`
 	}{
 		Count: len(items),
 		Items: items,
