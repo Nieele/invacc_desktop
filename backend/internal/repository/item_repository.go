@@ -42,7 +42,7 @@ func (r *itemRepo) GetItemsList(page uint) ([]models.ItemWithWarehouseName, erro
 	result := r.db.Model(&models.Item{}).
 		Select("items.*, warehouses.name as warehouse_name").
 		Joins("JOIN warehouses ON items.warehouse_id = warehouses.id").
-		Order("items.id").
+		Order("items.active DESC").
 		Offset(int(offset)).
 		Limit(limit).
 		Find(&items)
