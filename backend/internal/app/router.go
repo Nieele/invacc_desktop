@@ -43,6 +43,7 @@ func NewRouter(dbConn *gorm.DB, cfg *config.Config) http.Handler {
 		r.Get("/cart", RentHandler.GetCart)
 		r.Post("/cart", RentHandler.AddToCart)
 		r.Delete("/cart", RentHandler.RemoveFromCart)
+		r.Get("/rent", RentHandler.GetRents)
 		r.Post("/rent", RentHandler.Rent)
 		r.Delete("/rent", RentHandler.CancelRent)
 	})
