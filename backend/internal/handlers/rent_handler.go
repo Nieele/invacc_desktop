@@ -13,6 +13,7 @@ type RentHandler interface {
 	AddToCart(w http.ResponseWriter, r *http.Request)
 	RemoveFromCart(w http.ResponseWriter, r *http.Request)
 
+	GetRents(w http.ResponseWriter, r *http.Request)
 	Rent(w http.ResponseWriter, r *http.Request)
 	CancelRent(w http.ResponseWriter, r *http.Request)
 }
@@ -128,7 +129,30 @@ func (h *rentHandler) RemoveFromCart(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "item removed from cart"})
 }
 
-// POST /rent/confirm {"items_id": [101, 102, 103]}
+// GET /rent
+func (h *rentHandler) GetRents(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	userID, ok := r.Context().Value(middleware.UserCtxKey).(uint)
+	if !ok {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	rents, err := h.rentService.GetRents(userID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(rents)
+}
+
+// POST /rent {"item_id": [], "address": "", "number_of_days": }
 func (h *rentHandler) Rent(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)
@@ -167,7 +191,7 @@ func (h *rentHandler) Rent(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "rent confirmed"})
 }
 
-// DELETE /rent/cancel {"items_id": [101, 102]}
+// DELETE /rent {"items_id": [101, 102]}
 func (h *rentHandler) CancelRent(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)
