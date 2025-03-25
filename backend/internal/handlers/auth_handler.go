@@ -31,8 +31,10 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var creds models.CustomerAuth
-	err := json.NewDecoder(r.Body).Decode(&creds)
-	if err != nil {
+	decoder := json.NewDecoder(r.Body)
+	decoder.DisallowUnknownFields()
+
+	if err := decoder.Decode(&creds); err != nil {
 		http.Error(w, "incorrect format data", http.StatusBadRequest)
 		return
 	}
@@ -43,8 +45,7 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.authService.Register(creds)
-	if err != nil {
+	if err := h.authService.Register(creds); err != nil {
 		http.Error(w, "user already exists", http.StatusConflict)
 		return
 	}
@@ -57,7 +58,10 @@ func (h *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var creds models.CustomerAuth
-	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
+	decoder := json.NewDecoder(r.Body)
+	decoder.DisallowUnknownFields()
+
+	if err := decoder.Decode(&creds); err != nil {
 		http.Error(w, "incorrect format data", http.StatusBadRequest)
 		return
 	}
