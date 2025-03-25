@@ -358,8 +358,8 @@ DECLARE
 BEGIN
     -- Raise reverse status change, but accept returning -> in_stock
     IF NEW.delivery_status_id < OLD.delivery_status_id THEN
-        IF NOT (NEW.delivery_status_id = delivery_status_in_stock AND
-                OLD.delivery_status_id = delivery_status_returning) THEN
+        IF NOT (NEW.delivery_status_id = delivery_status_in_stock
+            AND OLD.delivery_status_id = delivery_status_returning) THEN
                     RAISE EXCEPTION 'Cannot change reverse status'
         END IF;
     END IF;
@@ -374,6 +374,7 @@ BEGIN
         -- Move cancelled rentals to history
         DELETE FROM Rent
         WHERE id = NEW.id;
+        RETURN NEW;
     END IF;
 
     -- Set rental start time and end time when item is received
@@ -412,7 +413,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Insert rental record into history
+-- Insert rental record into history before delete
 CREATE OR REPLACE FUNCTION add_rent_history()
 RETURNS TRIGGER AS $$
 DECLARE
