@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"invacc-backend/internal/middleware"
+	"invacc-backend/internal/models"
 	"invacc-backend/internal/service"
 	"net/http"
 )
@@ -73,7 +74,12 @@ func (h *rentHandler) AddToCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.rentService.AddToCart(userID, payload.ItemID); err != nil {
+	cart := models.Cart{
+		CustomerID: userID,
+		ItemID:     payload.ItemID,
+	}
+
+	if err := h.rentService.AddToCart(cart); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -108,7 +114,12 @@ func (h *rentHandler) RemoveFromCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.rentService.RemoveFromCart(userID, payload.ItemID); err != nil {
+	cart := models.Cart{
+		CustomerID: userID,
+		ItemID:     payload.ItemID,
+	}
+
+	if err := h.rentService.RemoveFromCart(cart); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
