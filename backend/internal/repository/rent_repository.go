@@ -8,8 +8,8 @@ import (
 
 type RentRepository interface {
 	GetCart(CustomerID uint) ([]models.Cart, error)
-	AddToCart(CustomerID uint, itemID uint) error
-	RemoveFromCart(CustomerID uint, itemID uint) error
+	AddToCart(cart models.Cart) error
+	RemoveFromCart(cart models.Cart) error
 
 	Rent(CustomerID uint, itemsID []uint) error
 	CancelRent(CustomerID uint, itemsID []uint) error
@@ -36,11 +36,7 @@ func (r *rentRepo) GetCart(CustomerID uint) ([]models.Cart, error) {
 	return cart, nil
 }
 
-func (r *rentRepo) AddToCart(CustomerID uint, itemID uint) error {
-	cart := models.Cart{
-		CustomerID: CustomerID,
-		ItemID:     itemID,
-	}
+func (r *rentRepo) AddToCart(cart models.Cart) error {
 	result := r.db.Create(&cart)
 
 	if result.Error != nil {
@@ -50,8 +46,8 @@ func (r *rentRepo) AddToCart(CustomerID uint, itemID uint) error {
 	return nil
 }
 
-func (r *rentRepo) RemoveFromCart(CustomerID uint, itemID uint) error {
-	result := r.db.Where("customer_id = ? AND item_id = ?", CustomerID, itemID).
+func (r *rentRepo) RemoveFromCart(cart models.Cart) error {
+	result := r.db.Where("customer_id = ? AND item_id = ?", cart.CustomerID, cart.ItemID).
 		Delete(&models.Cart{})
 
 	if result.Error != nil {
