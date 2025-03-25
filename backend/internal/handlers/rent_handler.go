@@ -141,20 +141,24 @@ func (h *rentHandler) Rent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: make model
-	var payload struct {
-		ItemsID []uint `json:"items_id"`
-	}
+	mrent_nonID := models.MultiRentWithoutCustomerID{}
 
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
 
-	if err := decoder.Decode(&payload); err != nil {
+	if err := decoder.Decode(&mrent_nonID); err != nil {
 		http.Error(w, "incorrect format data", http.StatusBadRequest)
 		return
 	}
 
-	if err := h.rentService.Rent(userID, payload.ItemsID); err != nil {
+	mrent := models.MultiRent{
+		CustomerID:   userID,
+		ItemsID:      mrent_nonID.ItemsID,
+		Address:      mrent_nonID.Address,
+		NumberOfDays: mrent_nonID.NumberOfDays,
+	}
+
+	if err := h.rentService.Rent(mrent); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
