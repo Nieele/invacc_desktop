@@ -113,7 +113,7 @@ function getQueryParam(param) {
   function loadProducts() {
     const productsContainer = document.getElementById('products-container');
     if (productsContainer) {
-      fetch('/api/v1/items?page=1')
+      fetch('https://stroylomay.shop/api/v1/items?page=1')
       .then(response => response.json())
       .then(data => {
         data.items.slice(0, data.count).forEach(product => {
