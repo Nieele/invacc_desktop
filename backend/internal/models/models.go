@@ -78,9 +78,10 @@ type Rent struct {
 	CustomerID       uint      `gorm:"not null;column:customer_id" json:"customer_id"`
 	Address          string    `gorm:"type:varchar(255);not null" json:"address"`
 	DeliveryStatusID uint      `gorm:"not null;column:delivery_status_id" json:"delivery_status_id"`
-	StartRentTime    time.Time `gorm:"not null;default:now()" json:"start_rent_time"`
-	EndRentTime      time.Time `gorm:"not null" json:"end_rent_time"`
-	TotalPayments    float64   `gorm:"type:decimal(10,2);not null;default:0" json:"total_payments"`
+	NumberOfDays     uint      `gorm:"not null" json:"number_of_days"`
+	StartRentTime    time.Time `gorm:"null;default:now()" json:"start_rent_time"`
+	EndRentTime      time.Time `gorm:"null" json:"end_rent_time"`
+	TotalPayments    float64   `gorm:"type:decimal(10,2);null;default:0" json:"total_payments"`
 	Overdue          bool      `gorm:"not null;default:false" json:"overdue"`
 }
 
