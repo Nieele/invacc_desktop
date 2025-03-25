@@ -360,7 +360,7 @@ BEGIN
     IF NEW.delivery_status_id < OLD.delivery_status_id THEN
         IF NOT (NEW.delivery_status_id = delivery_status_in_stock
             AND OLD.delivery_status_id = delivery_status_returning) THEN
-                    RAISE EXCEPTION 'Cannot change reverse status'
+                    RAISE EXCEPTION 'Cannot change reverse status';
         END IF;
     END IF;
 
