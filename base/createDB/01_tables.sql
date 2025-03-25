@@ -243,7 +243,7 @@ CREATE TABLE IF NOT EXISTS RentHistory (
     start_rent_time    timestamp      NULL,
     end_rent_time      timestamp      NULL,
     overdue_rent_days  int            NOT NULL,
-    total_payments     decimal(10,2)  NOT NULL,
+    total_payments     decimal(10,2)  NULL,
     CONSTRAINT fk_renthistory_items         FOREIGN KEY (item_id)           REFERENCES Items (id)       ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_renthistory_warehouses    FOREIGN KEY (warehouse_rent_id) REFERENCES Warehouses (id)  ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_renthistory_customers     FOREIGN KEY (customer_id)       REFERENCES CustomersInfo (id) ON DELETE RESTRICT ON UPDATE CASCADE,
