@@ -95,11 +95,7 @@ func (r *rentRepo) Rent(mrent models.MultiRent) error {
 	return nil
 }
 
-<<<<<<< HEAD
 func (r *rentRepo) CancelRent(CustomerID uint, rentsID []uint) error {
-=======
-func (r *rentRepo) CancelRent(CustomerID uint, itemsID []uint) error {
->>>>>>> c4f51a2 (refactor(backend/rent_repository): rename func to uppercase)
 	tx := r.db.Begin()
 
 	for _, rentID := range rentsID {
@@ -109,10 +105,6 @@ func (r *rentRepo) CancelRent(CustomerID uint, itemsID []uint) error {
 			tx.Rollback()
 			return result.Error
 		}
-<<<<<<< HEAD
-=======
-
->>>>>>> c971bba (feat(backend/rent_repository): add rent and cancel rent)
 	}
 
 	tx.Commit()
