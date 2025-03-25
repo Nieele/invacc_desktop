@@ -60,10 +60,15 @@ func (h *rentHandler) AddToCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO: make model
 	var payload struct {
 		ItemID uint `json:"item_id"`
 	}
-	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+
+	decoder := json.NewDecoder(r.Body)
+	decoder.DisallowUnknownFields()
+
+	if err := decoder.Decode(&payload); err != nil {
 		http.Error(w, "incorrect format data", http.StatusBadRequest)
 		return
 	}
@@ -90,10 +95,15 @@ func (h *rentHandler) RemoveFromCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO: make model
 	var payload struct {
 		ItemID uint `json:"item_id"`
 	}
-	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+
+	decoder := json.NewDecoder(r.Body)
+	decoder.DisallowUnknownFields()
+
+	if err := decoder.Decode(&payload); err != nil {
 		http.Error(w, "incorrect format data", http.StatusBadRequest)
 		return
 	}
@@ -120,10 +130,15 @@ func (h *rentHandler) Rent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO: make model
 	var payload struct {
 		ItemsID []uint `json:"items_id"`
 	}
-	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+
+	decoder := json.NewDecoder(r.Body)
+	decoder.DisallowUnknownFields()
+
+	if err := decoder.Decode(&payload); err != nil {
 		http.Error(w, "incorrect format data", http.StatusBadRequest)
 		return
 	}
@@ -150,10 +165,15 @@ func (h *rentHandler) CancelRent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO: make model
 	var payload struct {
 		ItemsID []uint `json:"items_id"`
 	}
-	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+
+	decoder := json.NewDecoder(r.Body)
+	decoder.DisallowUnknownFields()
+
+	if err := decoder.Decode(&payload); err != nil {
 		http.Error(w, "incorrect format data", http.StatusBadRequest)
 		return
 	}
