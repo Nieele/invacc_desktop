@@ -372,6 +372,11 @@ BEGIN
         END IF;
     END IF;
 
+    -- Raise skipping status
+    IF NEW.delivery_status_id > OLD.delivery_status_id + 1 THEN
+        RAISE EXCEPTION 'Cannot skip status';
+    END IF;
+
     -- Handle cancellation
     IF NEW.delivery_status_id = delivery_status_cancel THEN 
         -- Prevent cancellation of active rentals
