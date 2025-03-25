@@ -191,7 +191,7 @@ func (h *rentHandler) Rent(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "rent confirmed"})
 }
 
-// DELETE /rent {"items_id": [101, 102]}
+// DELETE /rent {"rents_id": 1}
 func (h *rentHandler) CancelRent(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)
@@ -206,7 +206,7 @@ func (h *rentHandler) CancelRent(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: make model
 	var payload struct {
-		ItemsID []uint `json:"items_id"`
+		RentsID []uint `json:"rents_id"`
 	}
 
 	decoder := json.NewDecoder(r.Body)
@@ -217,7 +217,7 @@ func (h *rentHandler) CancelRent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.rentService.CancelRent(userID, payload.ItemsID); err != nil {
+	if err := h.rentService.CancelRent(userID, payload.RentsID); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
