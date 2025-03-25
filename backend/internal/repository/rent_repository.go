@@ -11,6 +11,7 @@ type RentRepository interface {
 	AddToCart(cart models.Cart) error
 	RemoveFromCart(cart models.Cart) error
 
+	GetRents(CustomerID uint) ([]models.Rent, error)
 	Rent(mrent models.MultiRent) error
 	CancelRent(CustomerID uint, itemsID []uint) error
 }
@@ -55,6 +56,19 @@ func (r *rentRepo) RemoveFromCart(cart models.Cart) error {
 	}
 
 	return nil
+}
+
+func (r *rentRepo) GetRents(CustomerID uint) ([]models.Rent, error) {
+	var rents []models.Rent
+	result := r.db.Model(&models.Rent{}).
+		Where("customer_id = ?", CustomerID).
+		Find(&rents)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return rents, nil
 }
 
 func (r *rentRepo) Rent(mrent models.MultiRent) error {
