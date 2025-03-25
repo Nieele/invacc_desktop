@@ -88,3 +88,11 @@ type Rent struct {
 func (Rent) TableName() string {
 	return "rent"
 }
+
+// not in db
+type MultiRent struct {
+	CustomerID   uint   `json:"customer_id"`
+	ItemID       []uint `json:"item_id"`
+	Address      string `json:"address"`
+	NumberOfDays uint   `json:"number_of_days"`
+}
