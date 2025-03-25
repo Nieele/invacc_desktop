@@ -293,7 +293,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Calculate total rental cost including discounts
-CREATE OR REPLACE FUNCTION calculate_discounted_payment(item_id int, item_price decimal, start_date date, days int)
+CREATE OR REPLACE FUNCTION calculate_discounted_payment(p_item_id int, p_item_price decimal, p_start_date date, p_days int)
 RETURNS decimal AS $$
 BEGIN
     RETURN (
@@ -301,13 +301,13 @@ BEGIN
             SELECT d.start_date, d.end_date, SUM(d.percent) as total_percent
             FROM Discounts d
             JOIN ItemsDiscounts itds ON itds.discount_id = d.id
-            WHERE itds.item_id = item_id
+            WHERE itds.item_id = p_item_id
             GROUP BY d.start_date, d.end_date
         )
         SELECT SUM(
-            item_price * (1 - LEAST(COALESCE(dd.total_percent, 0), 100) / 100.0)
+            p_item_price * (1 - LEAST(COALESCE(dd.total_percent, 0), 100) / 100.0)
         )
-        FROM generate_series(start_date, start_date + (days - 1), '1 day') AS rental_day
+        FROM generate_series(p_start_date, p_start_date + (p_days - 1), '1 day') AS rental_day
         LEFT JOIN daily_discounts dd ON rental_day BETWEEN dd.start_date AND dd.end_date
     );
 END;
@@ -356,6 +356,14 @@ DECLARE
     delivery_status_returning CONSTANT int := 6;
     new_total_payment         decimal(10, 2);
 BEGIN
+    -- Raise reverse status change, but accept returning -> in_stock
+    IF NEW.delivery_status_id < OLD.delivery_status_id THEN
+        IF NOT (NEW.delivery_status_id = delivery_status_in_stock AND
+                OLD.delivery_status_id = delivery_status_returning) THEN
+                    RAISE EXCEPTION 'Cannot change reverse status'
+        END IF;
+    END IF;
+
     -- Handle cancellation
     IF NEW.delivery_status_id = delivery_status_cancel THEN 
         -- Prevent cancellation of active rentals
@@ -372,7 +380,7 @@ BEGIN
     IF NEW.delivery_status_id = delivery_status_received THEN
         UPDATE Rent
         SET start_rent_time = CURRENT_TIMESTAMP,
-            end_rent_time   = CURRENT_TIMESTAMP + 
+            end_rent_time   = CURRENT_DATE + 
                               (INTERVAL '1 day' * NEW.number_of_days) + 
                                INTERVAL '12 hours'
         WHERE id = NEW.id;
@@ -380,14 +388,17 @@ BEGIN
 
     -- Calculate final rental cost when item is being returned (if not overdue)
     IF NEW.delivery_status_id = delivery_status_returning AND NEW.overdue = FALSE THEN
-        new_total_payment := calculate_total_interim_payment_rent(
+        new_total_payment = calculate_total_interim_payment_rent(
             NEW.item_id,
             NEW.start_rent_time,
-            CURRENT_TIMESTAMP
+            CURRENT_TIMESTAMP::timestamp
         );
 
+        -- TODO: optimize
         UPDATE Rent
-        SET total_payments = new_total_payment
+        SET total_payments = new_total_payment,
+            end_rent_time = CURRENT_TIMESTAMP::timestamp,
+            number_of_days = get_total_rental_days(NEW.start_rent_time, CURRENT_TIMESTAMP::timestamp)
         WHERE id = NEW.id;
     END IF;
 
@@ -410,6 +421,7 @@ DECLARE
     start_overdue_time      timestamp;
     overdue_days            int := 0;
     late_penalty_amount     decimal(10, 2);
+    end_rent_time_insert    timestamp;
 BEGIN
     -- Get warehouse ID for the rented item
     SELECT warehouse_id INTO warehouse_id_item 
@@ -435,6 +447,11 @@ BEGIN
     FROM Items 
     WHERE id = OLD.item_id;
 
+    end_rent_time_insert := CASE
+        WHEN OLD.delivery_status_id = delivery_status_cancel THEN NULL
+        ELSE NOW()
+    END;
+
     -- Insert rental record into history
     INSERT INTO RentHistory (
         item_id,
@@ -453,9 +470,9 @@ BEGIN
         OLD.address,
         OLD.delivery_status_id,
         OLD.start_rent_time,
-        NOW(),
+        end_rent_time_insert,
         overdue_days,
-        OLD.total_payments + (late_penalty_amount * overdue_days)
+        COALESCE(OLD.total_payments + (late_penalty_amount * overdue_days), 0)
     );
 
     RETURN OLD;
