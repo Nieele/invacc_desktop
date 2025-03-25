@@ -92,7 +92,14 @@ func (Rent) TableName() string {
 // not in db
 type MultiRent struct {
 	CustomerID   uint   `json:"customer_id"`
-	ItemID       []uint `json:"item_id"`
+	ItemsID      []uint `json:"item_id"`
+	Address      string `json:"address"`
+	NumberOfDays uint   `json:"number_of_days"`
+}
+
+// not in db
+type MultiRentWithoutCustomerID struct {
+	ItemsID      []uint `json:"item_id"`
 	Address      string `json:"address"`
 	NumberOfDays uint   `json:"number_of_days"`
 }
