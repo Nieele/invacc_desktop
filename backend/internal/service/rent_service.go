@@ -13,10 +13,14 @@ type RentService interface {
 	RemoveFromCart(cart models.Cart) error
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	GetRents(CustomerID uint) ([]models.Rent, error)
 	Rent(mrent models.MultiRent) error
 	CancelRent(CustomerID uint, rentsID []uint) error
 =======
+=======
+	GetRents(CustomerID uint) ([]models.Rent, error)
+>>>>>>> 76ddb59 (feat(backend/rent): add get rents)
 	Rent(mrent models.MultiRent) error
 	CancelRent(CustomerID uint, itemsID []uint) error
 >>>>>>> ab346e0 (feat(backend/rent): add new struct message between layers)
@@ -43,13 +47,12 @@ func (s *rentService) RemoveFromCart(cart models.Cart) error {
 	return s.rentRepo.RemoveFromCart(cart)
 }
 
-<<<<<<< HEAD
 func (s *rentService) GetRents(CustomerID uint) ([]models.Rent, error) {
 	return s.rentRepo.GetRents(CustomerID)
-=======
+}
+
 func (s *rentService) Rent(mrent models.MultiRent) error {
 	return s.rentRepo.Rent(mrent)
->>>>>>> ab346e0 (feat(backend/rent): add new struct message between layers)
 }
 
 func (s *rentService) Rent(mrent models.MultiRent) error {
