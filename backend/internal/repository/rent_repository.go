@@ -11,7 +11,7 @@ type RentRepository interface {
 	AddToCart(cart models.Cart) error
 	RemoveFromCart(cart models.Cart) error
 
-	Rent(CustomerID uint, itemsID []uint) error
+	Rent(mrent models.MultiRent) error
 	CancelRent(CustomerID uint, itemsID []uint) error
 }
 
@@ -57,13 +57,15 @@ func (r *rentRepo) RemoveFromCart(cart models.Cart) error {
 	return nil
 }
 
-func (r *rentRepo) Rent(CustomerID uint, itemsID []uint) error {
+func (r *rentRepo) Rent(mrent models.MultiRent) error {
 	tx := r.db.Begin()
 
-	for _, itemID := range itemsID {
+	for _, itemID := range mrent.ItemsID {
 		rent := models.Rent{
-			CustomerID: CustomerID,
-			ItemID:     itemID,
+			CustomerID:   mrent.CustomerID,
+			ItemID:       itemID,
+			Address:      mrent.Address,
+			NumberOfDays: mrent.NumberOfDays,
 		}
 		result := tx.Create(&rent)
 

@@ -12,7 +12,7 @@ type RentService interface {
 	AddToCart(cart models.Cart) error
 	RemoveFromCart(cart models.Cart) error
 
-	Rent(CustomerID uint, itemsID []uint) error
+	Rent(mrent models.MultiRent) error
 	CancelRent(CustomerID uint, itemsID []uint) error
 }
 
@@ -37,8 +37,8 @@ func (s *rentService) RemoveFromCart(cart models.Cart) error {
 	return s.rentRepo.RemoveFromCart(cart)
 }
 
-func (s *rentService) Rent(CustomerID uint, itemsID []uint) error {
-	return s.rentRepo.Rent(CustomerID, itemsID)
+func (s *rentService) Rent(mrent models.MultiRent) error {
+	return s.rentRepo.Rent(mrent)
 }
 
 func (s *rentService) CancelRent(CustomerID uint, itemsID []uint) error {
