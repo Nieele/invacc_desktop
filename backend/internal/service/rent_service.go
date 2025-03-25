@@ -14,7 +14,7 @@ type RentService interface {
 
 	GetRents(CustomerID uint) ([]models.Rent, error)
 	Rent(mrent models.MultiRent) error
-	CancelRent(CustomerID uint, itemsID []uint) error
+	CancelRent(CustomerID uint, rentsID []uint) error
 }
 
 type rentService struct {
@@ -46,6 +46,6 @@ func (s *rentService) Rent(mrent models.MultiRent) error {
 	return s.rentRepo.Rent(mrent)
 }
 
-func (s *rentService) CancelRent(CustomerID uint, itemsID []uint) error {
-	return s.rentRepo.CancelRent(CustomerID, itemsID)
+func (s *rentService) CancelRent(CustomerID uint, rentsID []uint) error {
+	return s.rentRepo.CancelRent(CustomerID, rentsID)
 }
