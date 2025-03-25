@@ -191,11 +191,7 @@ func (h *rentHandler) Rent(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "rent confirmed"})
 }
 
-<<<<<<< HEAD
 // DELETE /rent {"rents_id": 1}
-=======
-// DELETE /rent {"items_id": [101, 102]}
->>>>>>> sql
 func (h *rentHandler) CancelRent(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)

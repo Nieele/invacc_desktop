@@ -22,10 +22,7 @@ INSERT INTO Employees_roles(role_id, role)
             (6, 'moderator'),
             (7, 'director');
 
-<<<<<<< HEAD
-=======
 
->>>>>>> sql
 -- TODO: Внести поправки - должна быть возможность создавать пустого пользователя с ролью (unknown)
 CREATE TABLE IF NOT EXISTS Employees (
     id              serial          PRIMARY KEY,
@@ -92,10 +89,6 @@ VALUES
 ON CONFLICT (status_code) DO NOTHING;
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> sql
 CREATE TABLE IF NOT EXISTS WarehousesOrders (
     id                       serial     PRIMARY KEY,
     item_id                  int        NOT NULL,
@@ -125,6 +118,7 @@ CREATE TABLE IF NOT EXISTS ItemsServiceHistory (
     change_reason  text    NOT NULL,
     CONSTRAINT fk_itemsservice_items FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
 
 CREATE TABLE IF NOT EXISTS ItemsDecommissioning (
     id       serial  PRIMARY KEY,

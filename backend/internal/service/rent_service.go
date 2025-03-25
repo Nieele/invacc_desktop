@@ -46,6 +46,13 @@ func (s *rentService) Rent(mrent models.MultiRent) error {
 	return s.rentRepo.Rent(mrent)
 }
 
+<<<<<<< HEAD
+=======
+func (s *rentService) Rent(mrent models.MultiRent) error {
+	return s.rentRepo.Rent(mrent)
+}
+
+>>>>>>> frontend
 func (s *rentService) CancelRent(CustomerID uint, rentsID []uint) error {
 	return s.rentRepo.CancelRent(CustomerID, rentsID)
 }
