@@ -258,6 +258,13 @@ BEGIN
     -- Set initial status
     NEW.delivery_status_id := delivery_status_request;
 
+    -- calculate expected payment
+    NEW.total_payments  = calculate_total_interim_payment_rent(
+                        NEW.item_id,
+                        NOW(),
+                        NOW() + (INTERVAL '1 day' * NEW.number_of_days)
+                        );
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -355,6 +362,7 @@ DECLARE
     delivery_status_received  CONSTANT int := 5;
     delivery_status_returning CONSTANT int := 6;
     new_total_payment         decimal(10, 2);
+    expected_end_rent_time    timestamp;
 BEGIN
     -- Raise reverse status change, but accept returning -> in_stock
     IF NEW.delivery_status_id < OLD.delivery_status_id THEN
@@ -379,11 +387,12 @@ BEGIN
 
     -- Set rental start time and end time when item is received
     IF NEW.delivery_status_id = delivery_status_received THEN
+        expected_end_rent_time = CURRENT_DATE + 
+                                (INTERVAL '1 day' * NEW.number_of_days) + 
+                                INTERVAL '12 hours';
         UPDATE Rent
         SET start_rent_time = CURRENT_TIMESTAMP,
-            end_rent_time   = CURRENT_DATE + 
-                              (INTERVAL '1 day' * NEW.number_of_days) + 
-                               INTERVAL '12 hours'
+            end_rent_time   = expected_end_rent_time
         WHERE id = NEW.id;
     END IF;
 
