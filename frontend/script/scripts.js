@@ -110,15 +110,15 @@ function getQueryParam(param) {
   }
   
   // --- Логика для загрузки товаров (главная страница) ---
-  function loadProducts() {
-    const productsContainer = document.getElementById('products-container');
-    if (productsContainer) {
+  function loaditems() {
+    const itemsContainer = document.getElementById('products-wrap');
+    if (itemsContainer) {
       fetch('https://stroylomay.shop/api/v1/items?page=1')
       .then(response => response.json())
       .then(data => {
-        data.items.slice(0, data.count).forEach(product => {
-          const card = createProductCard(product);
-          productsContainer.appendChild(card);
+        data.items.slice(0, data.count).forEach(item => {
+          const card = createProductCard(item);
+          itemsContainer.appendChild(card);
         });
       })
       .catch(error => console.error('Ошибка при загрузке товаров:', error));
@@ -126,27 +126,84 @@ function getQueryParam(param) {
   }
   
   function createProductCard(product) {
+    // Создаем контейнер карточки
     const card = document.createElement('div');
     card.className = 'product-card';
-    card.addEventListener('click', () => {
-      window.location.href = 'item.html?id=' + product.id;
-    });
-    const title = document.createElement('div');
+
+    // Изображение товара
+    const image = document.createElement('img');
+    image.className = 'product-image';
+    image.src = product.img_url; // берется из json поля
+    image.alt = product.name;
+  
+    // Контейнер деталей
+    const details = document.createElement('div');
+    details.className = 'product-details';
+  
+    // Название товара
+    const title = document.createElement('h3');
     title.className = 'product-title';
     title.textContent = product.name;
-    card.appendChild(title);
-    const description = document.createElement('div');
+  
+    // Цена товара
+    const price = document.createElement('p');
+    price.className = 'product-price';
+    price.textContent = product.price ? `$${product.price}` : '';
+  
+    // Описание товара
+    const description = document.createElement('p');
     description.className = 'product-description';
-    description.textContent = truncateText(product.description, 100);
-    card.appendChild(description);
-    const info = document.createElement('div');
-    info.className = 'product-info';
-    info.innerHTML = `<div>Цена: ${product.price}</div>
-                      <div>Склад: ${product.warehouse_id}</div>
-                      <div>Активность: ${product.active ? 'Да' : 'Нет'}</div>`;
-    card.appendChild(info);
+    description.textContent = product.description || '';
+  
+    // Добавляем заголовок, цену и описание в details
+    details.appendChild(title);
+    details.appendChild(price);
+    details.appendChild(description);
+  
+    // Контейнер действия (кнопка "Добавить в корзину")
+    const action = document.createElement('div');
+    action.className = 'product-action';
+  
+    // Кнопка для добавления в корзину
+    const cartButton = document.createElement('button');
+    cartButton.className = 'cartButton';
+    cartButton.textContent = 'Добавить в корзину';
+  
+    // Обработчик клика по кнопке
+    cartButton.addEventListener('click', () => {
+      fetch('https://stroylomay.shop/api/v1/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ item_id: product.id }) // отправка id товара
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Ошибка при добавлении в корзину');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Товар успешно добавлен в корзину:', data);
+        // Здесь можно добавить уведомление для пользователя об успешном добавлении
+      })
+      .catch(error => {
+        console.error('Ошибка:', error);
+        // Здесь можно добавить уведомление для пользователя об ошибке
+      });
+    });
+  
+    // Добавляем кнопку в контейнер действия
+    action.appendChild(cartButton);
+  
+    // Собираем карточку: изображение, детали и действие
+    card.appendChild(image);
+    card.appendChild(details);
+    card.appendChild(action);
+  
     return card;
-  }
+  }  
   
   // --- Логика для страницы товара ---
   function loadItemDetails() {
@@ -159,16 +216,16 @@ function getQueryParam(param) {
       }
       fetch('/api/v1/items?id=' + itemId)
       .then(response => response.json())
-      .then(product => {
+      .then(item => {
         itemDetailsDiv.innerHTML = `
-          <h2>${product.name}</h2>
-          <p>${product.description}</p>
-          <p>Цена: ${product.price}</p>
-          <p>Склад: ${product.warehouse_id}</p>
-          <p>Активность: ${product.active ? 'Да' : 'Нет'}</p>
-          <p>Качество: ${product.quality}</p>
-          <p>Штраф за опоздание: ${product.late_penalty}</p>
-          <p>Изображение: <img src="${product.img_url}" alt="${product.name}" style="max-width:100%;"></p>
+          <h2>${item.name}</h2>
+          <p>${item.description}</p>
+          <p>Цена: ${item.price}</p>
+          <p>Склад: ${item.warehouse_id}</p>
+          <p>Активность: ${item.active ? 'Да' : 'Нет'}</p>
+          <p>Качество: ${item.quality}</p>
+          <p>Штраф за опоздание: ${item.late_penalty}</p>
+          <p>Изображение: <img src="${item.img_url}" alt="${item.name}" style="max-width:100%;"></p>
         `;
       })
       .catch(error => {
@@ -260,7 +317,7 @@ function getQueryParam(param) {
     setupAccountLink();
     setupLoginForm();
     setupRegisterForm();
-    loadProducts();
+    loaditems();
     loadItemDetails();
     loadAccountInfo();
     setupLogout();
