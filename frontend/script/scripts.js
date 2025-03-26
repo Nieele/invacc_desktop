@@ -133,7 +133,7 @@ function getQueryParam(param) {
     // Изображение товара
     const image = document.createElement('img');
     image.className = 'product-image';
-    image.src = product.img_url; // берется из json поля
+    image.src = 'img/' + product.img_url; // берется из json поля
     image.alt = product.name;
   
     // Контейнер деталей
