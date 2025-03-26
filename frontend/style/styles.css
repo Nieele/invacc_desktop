@@ -37,6 +37,7 @@ ul {
   background-color: var(--yellow);
   box-shadow: 1px 1px 5px 0 var(--yellow-select);
   width: 100%;
+  position: sticky;
 }
 
 /* Logo */
@@ -56,7 +57,7 @@ ul {
 .menu {
   width: 100%;
   height: 100%;
-  position: fixed;
+  position: sticky;
   background-color: var(--yellow);
   overflow: hidden;
   padding-top: 0.1rem;
