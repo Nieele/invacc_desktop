@@ -153,7 +153,7 @@ function getQueryParam(param) {
     // Описание товара
     const description = document.createElement('p');
     description.className = 'product-description';
-    description.textContent = product.description || '';
+    description.textContent = truncateText(product.description, 100) || '';
   
     // Добавляем заголовок, цену и описание в details
     details.appendChild(title);

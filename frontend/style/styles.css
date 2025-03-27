@@ -6,96 +6,101 @@
   --yellow-select: #b69c08;
 }
 
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-    height: 100%;
-}
-
 body {
-  background-color: var(--white);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-ul {
-  list-style: none;
+  background-color: var(--white);
 }
 
 /* Header */
-.header {
+
+/* navbar */
+.navbar {
+  width: 100%;
+  height: 50px; /* Высота навигационного меню */
   background-color: var(--yellow);
+  /* Проверить тень */
   box-shadow: 1px 1px 5px 0 var(--yellow-select);
-  width: 100%;
-  position: sticky;
 }
 
-/* Logo */
-.logo {
-  display: inline-block;
-  color: var(--white);
-  margin: 0.3rem auto 0.3rem 0.5rem;
+.navbar .container {
+  display: flex;
+  height: inherit;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.logo-text {
+/* Navbar brand text */
+
+.navbar-brand {
+  margin-left: 5px;
+}
+
+.navbar-brand-text {
   font-family: "Rubik Dirt", system-ui;
-  font-size: 1.4rem;
+  font-size: 24px;
   color: var(--white);
+  padding: 10px;
 }
 
-/* Nav menu */
-.menu {
-  width: 100%;
-  height: 100%;
-  position: sticky;
+/* Navbar menu */
+
+.navbar-wrap {
+  display: flex;
+  flex-flow: row nowrap;
+  position: absolute;
+  top: 50px; /* Ниже навигационного меню */
+  left: 0;
+  right: 0;
   background-color: var(--yellow);
   overflow: hidden;
-  padding-top: 0.1rem;
   max-height: 0;
   transition: max-height 0.3s ease-out;
+  z-index: 100;
 }
 
-.menu-links a {
-  font-family: "Exo 2", sans-serif;
-  font-weight: 500;
+.navbar-menu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.navbar-menu li {
+  list-style: none;
+}
+
+.navbar-menu li a {
   display: block;
-  padding: 0.7rem;
+  font-size: 20px;
   color: var(--white);
-  font-size: 1.1rem;
+  /* Высота кнопки с преувеличением норм? */
+  padding: 15px;
 }
 
-.menu-links a:hover {
+.navbar-menu li a:hover {
   background-color: var(--yellow-select);
 }
 
-/* Hamburger Menu */
+/* Hamburger menu */
 .hamb {
   cursor: pointer;
   float: right;
-  padding: 1.2rem 1.1rem;
+  padding: 15px;
+  margin-right: 10px;
 }
 
 .hamb-line {
   background: var(--white);
   display: block;
-  height: 0.1rem;
-  width: 1.4rem;
+  height: 2px;
+  width: 24px;
   position: relative;
 }
 
 .hamb-line::before,
 .hamb-line::after {
-  content: '';
+  content: "";
   display: block;
   background: var(--white);
   width: 100%;
@@ -116,13 +121,9 @@ ul {
   display: none;
 }
 
-/* Toggle Menu */
-.side-menu:checked ~ nav {
-  max-height: 11.7rem;
-}
-
+/* Toggle hamburger menu */
 .side-menu:checked ~ .hamb .hamb-line {
-  background: transparent;
+  background-color: transparent;
 }
 
 .side-menu:checked ~ .hamb .hamb-line::before {
@@ -135,188 +136,65 @@ ul {
   top: 0;
 }
 
+.side-menu:checked ~ .navbar-wrap {
+  max-height: 300px;
+}
 
-/* main */
+/* Main */
 
 .content {
-    flex: 1;
+  flex: 1;
 }
-
-.products-wrap {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 1rem;
-    margin: 1vw 10vw 0 10vw;
-    gap: 2vw;
-}
-
-.product-card{
-    height: 18.75rem;
-}
-
-
-/* Карточка товара */
-.product-card {
-    background-color: var(--white);
-    border: 2px solid var(--yellow);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    margin: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* Изображение товара */
-  .product-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  /* Детали карточки */
-  .product-details {
-    padding: 1rem;
-    flex: 1;
-  }
-  
-  .product-title {
-    font-size: 1.2rem;
-    color: var(--black);
-    margin-bottom: 0.5rem;
-  }
-  
-  .product-price {
-    font-family: "Exo 2", sans-serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--yellow);
-    margin-bottom: 0.5rem;
-  }
-  
-  .product-description {
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 1rem;
-  }
-  
-  /* Действия карточки */
-  .product-action {
-    padding: 0 1rem 1rem;
-    text-align: center;
-  }
-  
-  .cartButton {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background-color: var(--yellow);
-    color: var(--white);
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .cartButton:hover {
-    background-color: var(--yellow-select);
-  }
-
-
 
 /* Footer */
 
 .footer {
-    width: 100%;
-    background-color: var(--yellow);
-    padding: 0.2rem;
-    font-size: 0.9rem;
-    text-align: center;
-    color:var(--black);
-}
+  font-size: 14px;
+  text-align: center;
+  padding: 2px;
 
+  color: var(--white);
+  background-color: var(--yellow);
+}
 
 /* Media Queries */
-@media (min-width: 37.5rem) {
-  .logo-text {
-    font-size: 1.6rem;
-  }
-  
-  .hamb {
-    padding: 1.25rem 1.2rem;
-  }
-  
-  .menu-links a {
-    font-size: 1.2rem;
-    padding: 0.6rem;
-  }
-
-  .products-wrap {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .product-card{
-    height: 18.75rem;
-  }
+@media (min-width: 576px) {
 }
 
-@media (min-width: 53.75rem) {
-  .logo-text {
-    font-size: 2rem;
-  }
-  
-  .menu {
-    max-height: none;
-    position: relative;
-    float: right;
-    width: fit-content;
-    background-color: transparent;
-    top: 0;
-  }
-  
-  .menu-links {
-    margin-right: 0.5rem;
-  }
-  
-  .menu-links li {
-    float: left;
+@media (min-width: 768px) {
+  .navbar {
+    height: 70px;
   }
 
-  .menu-links a {
-    padding: 0.7rem;
-    font-size: 1.2rem
+  .navbar-brand-text{
+    font-size: 28px;
   }
-  
+
+  .navbar-wrap {
+    margin-right: 30px;
+    position: sticky;
+    max-height: none;
+    top: 70px;
+  }
+
+  .navbar-menu {
+    flex-direction: row;
+  }
+
+  .navbar-menu li a {
+    padding: 20px;
+  }
+
   .hamb {
     display: none;
   }
-
-  .products-wrap {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .product-card{
-    justify-content:center;
-  }
-
-  .product-card{
-    height: 25rem;
-}
 }
 
-@media (min-width: 81.25rem) {
-    .products-wrap {
-        grid-template-columns: repeat(4, 1fr);
-    }
+@media (min-width: 991px) {
+  .navbar-brand-text{
+    font-size: 32px;
+  }
+}
 
-    .product-card{
-        height: 28.125rem;
-    }
+@media (min-width: 1200px) {
 }
