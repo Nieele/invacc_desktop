@@ -161,7 +161,6 @@ p {
   flex-direction: column;
   justify-content: center;
   margin-top: 10px;
-  align-self: center;
 }
 
 .container {
@@ -182,9 +181,10 @@ p {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  height: 40vh;
+  height: 45vh;
   width: 80vw;
   padding: 0 20px;
+  max-width: 1000px;
 }
 
 .hero-info {
