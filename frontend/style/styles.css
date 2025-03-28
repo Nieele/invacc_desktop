@@ -24,6 +24,10 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Exo 2', sans-serif;
 }
 
+p {
+  text-indent: 16px;
+}
+
 /* Header & Navbar */
 .navbar {
   display: flex;
@@ -153,6 +157,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Main Content */
 .content {
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: center;
   margin-top: 10px;
@@ -351,6 +356,57 @@ h1, h2, h3, h4, h5, h6 {
   background-color: var(--yellow-select);
 }
 
+/* About */
+
+.about-heading {
+  text-align: left;
+  font-size: 16px;
+  margin: 10px;
+}
+
+.about-heading h1 {
+  font-weight: 700;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.about-heading p {
+  font-size: 1em;
+}
+
+.about-wrapper {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 30px;
+  margin: 20px 10px;
+  font-size: 16px;
+}
+
+.about-item {
+  background-color: var(--yellow);
+  color: var(--white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: -4px 6px 18px 8px rgba(153, 111, 32, 0.3);
+  font-size: 1em;
+}
+
+.about-item-heading {
+  font-size: 1.2em;
+  font-weight: 700;
+  text-decoration: underline;
+  text-align: center;
+}
+
+.about-item-text {
+  font-size: 1em;
+}
+
+.about-item-text ul{
+  padding: 0 20px;
+  list-style-type:square;
+}
+
 /* Footer */
 .footer {
   font-size: 14px;
@@ -421,11 +477,33 @@ h1, h2, h3, h4, h5, h6 {
   .products-wrap {
     grid-template-columns: repeat(3, minmax(200px, 1fr));
   }
+
+  .about-heading {
+    text-align: center;
+    font-size: 18px;
+    margin-inline: 30vh;
+  }
+
+  .about-wrapper {
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 18px;
+  }
 }
 
 @media (min-width: 1150px) {
   .products-wrap {
     grid-template-columns: repeat(4, minmax(200px, 1fr));
+  }
+
+  .about-heading {
+    text-align: center;
+    font-size: 20px;
+    margin-inline: 40vh;
+  }
+
+  .about-wrapper {
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 20px;
   }
 }
 
