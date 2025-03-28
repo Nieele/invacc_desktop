@@ -21,7 +21,7 @@ body {
 
 /* Global Heading Styles */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Rubik Dirt', 'Exo 2', sans-serif;
+  font-family: 'Exo 2', sans-serif;
 }
 
 /* Header & Navbar */
@@ -43,6 +43,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 24px;
   color: var(--white);
   padding: 10px;
+  font-family: 'Rubik Dirt', 'Exo 2', sans-serif;
 }
 
 /* Navbar Menu */
@@ -219,6 +220,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Common Button Styles in Hero */
+.hero-button a {
+  display: flex;
+  text-decoration: none;
+  width: 100%;
+}
+
 .hero-button-catalog,
 .hero-button-contact {
   color: var(--white);
@@ -299,7 +306,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .product-title {
   text-align: center;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   padding: 5px;
 }
@@ -469,7 +476,7 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
     height: 60vh;
     position: relative;
-    background: url('./assets/img/hero-img.webp') center center fixed;
+    background: url('../assets/img/hero-img.webp') center center fixed;
     background-size: cover;
     border-radius: 0;
   }
@@ -504,7 +511,7 @@ h1, h2, h3, h4, h5, h6 {
     grid-template-columns: 1fr;
   }
   
-  /* Product card: occupies 90% width, centered */
+  /* Обновлённая карточка товара для мобильной версии */
   .product-card {
     width: 90%;
     max-width: 90%;
@@ -512,34 +519,56 @@ h1, h2, h3, h4, h5, h6 {
     padding: 10px;
     display: grid;
     grid-template-columns: 40% 60%;
-    grid-template-rows: auto;
-    grid-template-areas: 
-      "image title"
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      "title title"
       "image price"
       "image description"
-      "image button";
+      "button button";
     gap: 10px;
     align-items: center;
     justify-items: center;
     text-align: center;
   }
-  .product-card > .title-section,
-  .product-card > .action-section{
-    width: 90%;
+
+  /* Название на всю ширину */
+  .title-section {
+    grid-area: title;
+    width: 100%;
+    margin-right: 10px;
   }
+  /* Изображение товара */
   .image-section {
     grid-area: image;
   }
-  .title-section {
-    grid-area: title;
-  }
+  /* Цена товара */
   .price-section {
     grid-area: price;
+    width: 100%;
+    margin-right: 10px;
   }
-  .product-description {
+  /* Описание товара */
+  .description-section {
     grid-area: description;
+    width: 100%;
+    margin-right: 10px;
   }
-  .cart-button {
+  /* Кнопка "Добавить в корзину" */
+  .action-section {
     grid-area: button;
+    width: 100%;
+    margin-right: 10px;
+  }
+
+  .product-price {
+    font-size: 24px;
+  }
+
+  .product-description {
+    font-size: 16px;
+  }
+
+  .hero-img {
+    display: none;
   }
 }
