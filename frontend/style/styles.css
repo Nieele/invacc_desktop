@@ -289,7 +289,12 @@ body {
   }
 
   .navbar-menu li a {
-    padding: 20px;
+    padding: 20px 12px;
+    font-size: 18px;
+  }
+
+  .navbar-menu-icon {
+    padding: 0px 10px;
   }
 
   /* Hamburger menu */
@@ -302,6 +307,10 @@ body {
   /* Navbar menu */
   .navbar-brand-text{
     font-size: 32px;
+  }
+  .navbar-menu li a {
+    padding: 20px;
+    font-size: 20px;
   }
 }
 
