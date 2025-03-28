@@ -212,11 +212,12 @@ h1, h2, h3, h4, h5, h6 {
 .hero-button {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   height: 75px;
   font-size: 18px;
   width: 95%;
+  gap: 10px;
 }
 
 /* Common Button Styles in Hero */
@@ -224,6 +225,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   text-decoration: none;
   width: 100%;
+  justify-content: center;
 }
 
 .hero-button-catalog,
@@ -451,7 +453,7 @@ h1, h2, h3, h4, h5, h6 {
   }
   .hero-button-catalog,
   .hero-button-contact {
-    width: auto;
+    width: 220px;
   }
   .products-wrap {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
