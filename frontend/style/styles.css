@@ -452,10 +452,11 @@ p {
 }
 
 .contacts-value {
-  display: inline-block;
+  display: flex;
   color: var(--hero-h3);
   font-weight: 600;
   font-size: 1em;
+  text-indent: 16px;
 }
 
 .contacts-value a {
@@ -629,14 +630,14 @@ p {
   }
 
   .contacts-container {
-    grid-template-columns: repeat(2, minmax(200px, 400px));
+    grid-template-columns: repeat(2, minmax(200px, 600px));
     justify-content: center;
-    gap: 100px;
-    margin: 20px 10vw;
+    gap: 45px;
+    margin: 20px 2vw;
   }
 
   .ya-map iframe {
-    width: 1000px;
+    width: 1100px;
     height: 500px;
   }
 }
