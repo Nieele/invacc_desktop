@@ -13,14 +13,14 @@
 /* Font Imports */
 @font-face {
   font-family: 'Rubik Dirt';
-  src: url('../assets/fonts/RubikDirt.ttf') format('truetype');
+  src: url('../assets/fonts/RubikDirt-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Exo 2';
-  src: url('../assets/fonts/Exo2.ttf') format('truetype');
+  src: url('../assets/fonts/Exo2-VariableFont_wght.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
