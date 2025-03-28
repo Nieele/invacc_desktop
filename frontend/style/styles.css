@@ -10,6 +10,21 @@
   --button-text: #f9f9f9;
 }
 
+/* Font Imports */
+@font-face {
+  font-family: 'Rubik Dirt';
+  src: url('../assets/fonts/RubikDirt.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Exo 2';
+  src: url('../assets/fonts/Exo2.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* Base Styles */
 body {
   min-height: 100vh;
