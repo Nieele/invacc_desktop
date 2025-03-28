@@ -533,6 +533,19 @@ p {
   border-radius: 12px;
 }
 
+/* Yandex map */
+
+.ya-map {
+  display: flex;
+  justify-content: center;
+  margin: 0px 0px;
+}
+
+.ya-map iframe {
+  width: 400px;
+  height: 250px;
+}
+
 /* Footer */
 .footer {
   font-size: 14px;
@@ -620,6 +633,11 @@ p {
     justify-content: center;
     gap: 100px;
     margin: 20px 10vw;
+  }
+
+  .ya-map iframe {
+    width: 1000px;
+    height: 500px;
   }
 }
 
