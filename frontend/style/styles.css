@@ -395,7 +395,7 @@ p {
 }
 
 .about-item-heading {
-  font-size: 1.2em;
+  font-size: 1em;
   font-weight: 700;
   text-decoration: underline;
   text-align: center;
@@ -412,18 +412,19 @@ p {
 
 /* Contact */
 
-.contacts {
-  font-size: 16px;
-}
-
 .contacts-container {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   justify-content: space-between;
   gap: 40px;
   margin: 20px 0;
-  font-size: 1em;
   justify-items:center;
+
+  font-size: 16px;
+}
+
+.contacts {
+  font-size: 1em;
 }
 
 .contacts-container h3 {
@@ -450,7 +451,8 @@ p {
 /* Feedback Form */
 
 .feedback {
-  font-size: 16px;
+  font-size: 1em;
+  margin-inline: 10px;
 }
 
 .feedback-name{
@@ -475,18 +477,20 @@ p {
 .feedback-form-item {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 1.5em;
+  gap: 1em;
+  margin-block: 10px;
 }
 
 .feedback-form-item label {
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 
 .feedback-form-item input {
-  height: 1.5em;
+  height: 1.7em;
   font-size: 1em;
   border-radius: 12px;
   padding: 5px;
+  width: 100%;
 }
 
 .feedback-form-item textarea {
@@ -495,13 +499,14 @@ p {
   border-radius: 12px;
   padding: 5px;
   resize: none;
+  width: 100%;
 }
 
 .feedback-form-button {
   display: grid;
   grid-template-columns: 1fr 2fr;
   font-size: 1em;
-  gap: 1.5em;
+  gap: 1em;
 }
 
 .feedback-button {
@@ -511,7 +516,6 @@ p {
   color: var(--button-text);
   background-color: var(--yellow-button);
   border-radius: 12px;
-  margin-top: 10px;
 }
 
 /* Footer */
@@ -633,6 +637,25 @@ p {
 
   .feedback {
     font-size: 20px;
+  }
+
+  .feedback-form-item {
+    min-width: 400px;
+    grid-template-columns: 1fr 3fr;
+  }
+
+  .feedback-form-item input{
+    min-width: 350px;;
+    grid-template-columns: 1fr 3fr;
+  }
+
+  .feedback-form-item textarea{
+    min-width: 350px;;
+    grid-template-columns: 1fr 3fr;
+  }
+
+  .feedback-form-button {
+    grid-template-columns: 1fr 3fr;
   }
 }
 
