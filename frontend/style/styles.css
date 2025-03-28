@@ -49,9 +49,10 @@ body {
 
 .navbar-wrap {
   display: flex;
+  justify-content: space-between;
   flex-flow: row nowrap;
   position: absolute;
-  top: 50px; /* Ниже навигационного меню */
+  top: 50px;
   left: 0;
   right: 0;
   background-color: var(--yellow);
@@ -65,6 +66,10 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+.navbar-menu-account {
+  display: flex;
 }
 
 .navbar-menu li {
@@ -81,6 +86,11 @@ body {
 
 .navbar-menu li a:hover {
   background-color: var(--yellow-select);
+}
+
+.navbar-menu-icon {
+  height: 20px;
+  fill: var(--white);
 }
 
 /* Hamburger menu */
@@ -173,6 +183,7 @@ body {
   padding: 10px;
   height: 100%;
   background-color: var(--dirty-white);
+  box-shadow: -4px 6px 18px 8px rgba(34, 60, 80, 0.2);
 }
 
 .product-card:hover {
@@ -260,6 +271,17 @@ body {
 
   .navbar-menu {
     flex-direction: row;
+    width: auto;
+  }
+
+  .navbar-menu-central {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .navbar-menu-account-text {
+    display: none;
   }
 
   .navbar-menu li a {
