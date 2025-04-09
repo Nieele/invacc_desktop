@@ -1,0 +1,192 @@
+/* Стили для форм авторизации */
+
+.auth-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	max-width: 450px;
+	margin: 0 auto;
+	padding: 35px;
+	background-color: var(--yellow);
+	border-radius: 15px;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+	position: relative;
+	overflow: hidden;
+}
+
+.auth-container::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 5px;
+	background: linear-gradient(to right, var(--yellow-select), var(--yellow-button));
+}
+
+.auth-form {
+	width: 100%;
+}
+
+.auth-form-title {
+	font-size: 1.8em;
+	font-weight: 600;
+	color: var(--white);
+	text-align: center;
+	margin-bottom: 25px;
+	position: relative;
+}
+
+.auth-form-title::after {
+	content: "";
+	position: absolute;
+	bottom: -10px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 60px;
+	height: 3px;
+	background-color: var(--white);
+	border-radius: 3px;
+}
+
+.auth-form-group {
+	margin-bottom: 20px;
+	position: relative;
+}
+
+.auth-form-label {
+	display: block;
+	font-size: 1em;
+	font-weight: 500;
+	color: var(--white);
+	margin-bottom: 8px;
+}
+
+.auth-form-input {
+	width: 100%;
+	padding: 12px 15px;
+	background-color: var(--white);
+	border: 2px solid transparent;
+	border-radius: 8px;
+	color: var(--black);
+	font-family: "Exo 2", sans-serif;
+	font-size: 1em;
+	transition: all 0.3s ease;
+}
+
+.auth-form-input:focus {
+	outline: none;
+	border-color: var(--yellow-select);
+	box-shadow: 0 0 0 3px rgba(224, 103, 33, 0.2);
+}
+
+.auth-form-input::placeholder {
+	color: #999;
+}
+
+.auth-form-checkbox {
+	display: flex;
+	align-items: center;
+	margin: 20px 0;
+}
+
+.auth-form-checkbox input[type="checkbox"] {
+	width: 20px;
+	height: 20px;
+	min-width: 20px;
+	min-height: 20px;
+	accent-color: var(--yellow-select);
+	margin-right: 10px;
+	flex-shrink: 0;
+}
+
+.auth-form-checkbox label {
+	color: var(--white);
+	font-size: 0.95em;
+}
+
+.auth-form-button {
+	width: 100%;
+	padding: 14px;
+	background-color: var(--yellow-select);
+	color: var(--white);
+	border: none;
+	border-radius: 8px;
+	font-size: 1.1em;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	text-align: center;
+	margin-top: 10px;
+}
+
+.auth-form-button:hover {
+	background-color: var(--yellow-button);
+	transform: translateY(-2px);
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.auth-links {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 25px;
+}
+
+.auth-link {
+	color: var(--white);
+	text-decoration: none;
+	font-size: 0.95em;
+	transition: all 0.3s ease;
+	position: relative;
+}
+
+.auth-link::after {
+	content: "";
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	width: 0;
+	height: 1px;
+	background-color: var(--white);
+	transition: width 0.3s ease;
+}
+
+.auth-link:hover::after {
+	width: 100%;
+}
+
+.auth-link:hover {
+	color: var(--yellow-select);
+}
+
+/* Адаптация под разные экраны */
+@media (max-width: 768px) {
+	.auth-container {
+		padding: 30px;
+		max-width: 100%;
+	}
+	
+	.auth-form-title {
+		font-size: 1.6em;
+	}
+	
+	.auth-links {
+		flex-direction: column;
+		align-items: center;
+		gap: 15px;
+	}
+}
+
+@media (max-width: 480px) {
+	.auth-container {
+		padding: 25px;
+	}
+	
+	.auth-form-title {
+		font-size: 1.4em;
+	}
+	
+	.auth-form-input {
+		padding: 10px 12px;
+	}
+} 

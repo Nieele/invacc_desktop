@@ -1,44 +1,122 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Строй Ломай - Вход</title>
-  <link rel="stylesheet" href="style/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="description" content="Строй Ломай - аренда строительного оборудования" />
+  <meta name="keywords" content="аренда инструментов" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Строй Ломай - Вход в аккаунт</title>
+  <link rel="preload" href="assets/fonts/RubikDirt-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/Exo2-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/GreatVibes-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style/reset.css" />
+  <link rel="stylesheet" href="style/navbar.css" />
+  <link rel="stylesheet" href="style/auth.css" />
+  <link rel="stylesheet" href="style/styles.css" />
 </head>
+
 <body>
-  <header>
-    <div class="header-container">
-      <div class="brand">
-        <a href="index.html"><h1>Строй Ломай</h1></a>
-      </div>
-      <nav class="nav-menu">
-        <a href="index.html" class="nav-link">Главная</a>
-        <a href="about.html" class="nav-link">О нас</a>
-        <a href="cart.html" class="nav-link">Корзина</a>
-        <a href="account.html" class="nav-link" id="account-link">Аккаунт</a>
+  <header class="header">
+    <div class="navbar-wrap">
+      <nav class="navbar">
+        <div class="navbar__brand">
+          <a href="/" class="navbar__brand-link">Строй Ломай</a>
+        </div>
+
+        <input id="burger-toggle" type="checkbox" />
+        <label for="burger-toggle" class="navbar__burger--icon">
+          <span class="navbar__burger--icon-line"></span>
+        </label>
+
+        <div class="navbar__menu-container">
+          <ul class="navbar__menu">
+            <li class="navbar__item">
+              <a href="/" class="navbar__link">Главная</a>
+            </li>
+            <li class="navbar__item">
+              <a href="/catalog.html" class="navbar__link">Каталог</a>
+            </li>
+            <li class="navbar__item">
+              <a href="/about.html" class="navbar__link">О нас</a>
+            </li>
+            <li class="navbar__item">
+              <a href="/contacts.html" class="navbar__link">Контакты</a>
+            </li>
+            <li class="navbar__item mobile-only">
+              <a href="/cart.html" class="navbar__link">Корзина</a>
+            </li>
+            <li class="navbar__item mobile-only">
+              <a href="/account.html" class="navbar__link">Аккаунт</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="navbar__account desktop-only">
+          <ul class="navbar__menu">
+            <li class="navbar__item">
+              <a href="/cart.html" class="navbar__link">
+                <svg class="navbar__icon" viewBox="0 0 24 24">
+                  <path
+                    d="M5.50835165,12.5914912 C5.5072855,12.5857255 5.50631828,12.5799252 5.5054518,12.5740921 L4.28533671,5.25340152 C4.16478972,4.53011956 3.53900455,4 2.80574582,4 L2.5,4 C2.22385763,4 2,3.77614237 2,3.5 C2,3.22385763 2.22385763,3 2.5,3 L2.80574582,3 C3.99756372,3 5.0190253,3.84029234 5.25525588,5 L21.5,5 C21.8321894,5 22.0720214,5.31795246 21.980762,5.63736056 L19.980762,12.6373606 C19.9194332,12.8520113 19.7232402,13 19.5,13 L6.59023021,13 L6.71466329,13.7465985 C6.83521028,14.4698804 7.46099545,15 8.19425418,15 L19.5,15 C19.7761424,15 20,15.2238576 20,15.5 C20,15.7761424 19.7761424,16 19.5,16 L8.19425418,16 C6.97215629,16 5.92918102,15.1164674 5.72826937,13.9109975 L5.5083519,12.5914927 L5.50835165,12.5914912 Z M5.42356354,6 L6.42356354,12 L19.1228493,12 L20.837135,6 L5.42356354,6 Z M8,21 C6.8954305,21 6,20.1045695 6,19 C6,17.8954305 6.8954305,17 8,17 C9.1045695,17 10,17.8954305 10,19 C10,20.1045695 9.1045695,21 8,21 Z M8,20 C8.55228475,20 9,19.5522847 9,19 C9,18.4477153 8.55228475,18 8,18 C7.44771525,18 7,18.4477153 7,19 C7,19.5522847 7.44771525,20 8,20 Z M17,21 C15.8954305,21 15,20.1045695 15,19 C15,17.8954305 15.8954305,17 17,17 C18.1045695,17 19,17.8954305 19,19 C19,20.1045695 18.1045695,21 17,21 Z M17,20 C17.5522847,20 18,19.5522847 18,19 C18,18.4477153 17.5522847,18 17,18 C16.4477153,18 16,18.4477153 16,19 C16,19.5522847 16.4477153,20 17,20 Z">
+                  </path>
+                </svg>
+              </a>
+            </li>
+            <li class="navbar__item">
+              <a href="/account.html" class="navbar__link">
+                <svg class="navbar__icon" viewBox="0 0 32 32">
+                  <g id="about">
+                    <path d="M16,16A7,7,0,1,0,9,9,7,7,0,0,0,16,16ZM16,4a5,5,0,1,1-5,5A5,5,0,0,1,16,4Z" />
+                    <path
+                      d="M17,18H15A11,11,0,0,0,4,29a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1A11,11,0,0,0,17,18ZM6.06,28A9,9,0,0,1,15,20h2a9,9,0,0,1,8.94,8Z" />
+                  </g>
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </div>
       </nav>
     </div>
   </header>
+
   <main class="content">
-    <div class="login-container">
-      <h2>Вход в аккаунт</h2>
-      <form id="login-form">
-        <div class="form-group">
-          <label for="login">Логин:</label>
-          <input type="text" id="login" name="login" placeholder="Введите ваш логин">
-        </div>
-        <div class="form-group">
-          <label for="password">Пароль:</label>
-          <input type="password" id="password" name="password" placeholder="Введите ваш пароль">
-        </div>
-        <button type="submit" class="btn">Войти</button>
-      </form>
-      <div class="message" id="login-message"></div>
-      <p class="switch">
-        Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
-      </p>
+    <div class="container">
+      <div class="auth-container">
+        <form class="auth-form">
+          <h2 class="auth-form-title">Вход в аккаунт</h2>
+
+          <div class="auth-form-group">
+            <label for="login" class="auth-form-label">Логин</label>
+            <input type="login" id="login" name="login" class="auth-form-input" placeholder="Введите ваш логин"
+              required>
+          </div>
+
+          <div class="auth-form-group">
+            <label for="password" class="auth-form-label">Пароль</label>
+            <input type="password" id="password" name="password" class="auth-form-input"
+              placeholder="Введите ваш пароль" required>
+          </div>
+
+          <div class="auth-form-checkbox">
+            <input type="checkbox" id="remember" name="remember">
+            <label for="remember">Запомнить меня</label>
+          </div>
+
+          <button type="submit" class="auth-form-button">Войти</button>
+
+          <div class="auth-links">
+            <a href="/forgot-password.html" class="auth-link">Забыли пароль?</a>
+            <a href="/register.html" class="auth-link">Регистрация</a>
+          </div>
+        </form>
+      </div>
     </div>
   </main>
-  <script src="script/scripts.js"></script>
+
+  <footer class="footer">
+    <p>&copy; 2025 Строй Ломай. Все права защищены.</p>
+  </footer>
 </body>
+
 </html>
