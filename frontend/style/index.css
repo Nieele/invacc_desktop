@@ -1,0 +1,186 @@
+/* index.html hero */
+
+.hero-wrap {
+	display: flex;
+
+	justify-content: center;
+
+	min-height: 300px;
+	max-height: 500px;
+
+	margin: 0 100px;
+
+	background-color: var(--yellow);
+
+	border-radius: 15px;
+}
+
+.hero {
+	display: flex;
+
+	align-items: center;
+	justify-content: space-around;
+
+	max-width: 1000px;
+	min-height: 320px;
+
+	width: 80vw;
+
+	padding: 0 20px;
+}
+
+.hero-info {
+	display: flex;
+	flex-direction: column;
+
+	align-items: center;
+	text-align: center;
+}
+
+.hero-info h1 {
+	font-size: 30px;
+	font-weight: 700;
+
+	color: var(--white);
+}
+
+.hero-info h2 {
+	font-size: 20px;
+	font-weight: 500;
+
+	color: var(--white);
+}
+
+.hero-info h3 {
+	padding-bottom: 10px;
+
+	font-family: "Great Vibes";
+	font-size: 24px;
+	font-weight: 500;
+
+	color: var(--hero-h3);
+}
+
+.hero-button {
+	display: flex;
+	flex-direction: column;
+
+	align-items: center;
+	gap: 10px;
+
+	width: 95%;
+
+	font-size: 18px;
+}
+
+.hero-button a {
+	display: flex;
+	justify-content: center;
+
+	width: 100%;
+
+	text-decoration: none;
+}
+
+.hero-button-catalog,
+.hero-button-contact {
+	width: 100%;
+
+	color: var(--white);
+	background-color: var(--yellow-button);
+
+	border-radius: 12px;
+}
+
+.hero-button-catalog:hover,
+.hero-button-contact:hover {
+	background-color: var(--yellow-select);
+}
+
+.hero-img-container {
+	display: flex;
+
+	justify-content: center;
+	align-items: center;
+
+	max-width: 50%;
+	height: 100%;
+}
+
+.hero-img {
+	width: 90%;
+	height: 80%;
+	border-radius: 20px;
+	box-shadow: 12px 12px 13px 3px rgba(163, 91, 8, 0.6);
+	object-fit: cover;
+	object-position: left center;
+	max-height: 400px;
+}
+
+@media (min-width: 1600px) {
+	.hero-info h1 {
+		font-size: 36px;
+	}
+
+	.hero-info h2 {
+		font-size: 25px;
+	}
+
+	.hero-info h3 {
+		font-size: 30px;
+		padding-bottom: 0;
+	}
+
+	.hero-button {
+		flex-direction: row;
+		font-size: 20px;
+		min-width: 100%;
+		gap: 20px;
+	}
+
+	.hero-button-catalog,
+	.hero-button-contact {
+		width: 220px;
+	}
+}
+
+@media (max-width: 768px) {
+	.hero-wrap {
+		margin: 0;
+		height: 60vh;
+		position: relative;
+		background: url(../assets/img/index-hero.webp) center center;
+		background-size: cover;
+		border-radius: 0;
+	}
+
+	.hero-wrap::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background-color: rgba(0, 0, 0, 0.5);
+		z-index: 1;
+	}
+
+	.hero-info {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 90%;
+		max-width: 500px;
+		padding: 20px;
+		background-color: rgba(0, 0, 0, 0.4);
+		z-index: 2;
+	}
+
+	.hero-info h1,
+	.hero-info h2,
+	.hero-info h3 {
+		color: var(--white);
+	}
+
+	.hero-img-container {
+		display: none;
+	}
+}
