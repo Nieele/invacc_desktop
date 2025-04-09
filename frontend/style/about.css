@@ -1,0 +1,720 @@
+.about-container,
+.contacts-container {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 40px;
+	max-width: 1200px;
+	margin: 20px auto;
+	padding: 0 20px;
+}
+
+.about-content-grid,
+.contacts-content-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 40px;
+}
+
+.about-overview {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 30px;
+	padding: 30px;
+}
+
+.about-mission,
+.about-story {
+	display: grid;
+	gap: 15px;
+}
+
+.about-mission h3,
+.about-story h3 {
+	color: var(--yellow-select);
+	font-size: 22px;
+}
+
+.about-mission p,
+.about-story p {
+	color: var(--black);
+	font-size: 16px;
+	line-height: 1.8;
+}
+
+.about-services {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 25px;
+	padding: 40px;
+	background-color: var(--yellow);
+	border-radius: 15px;
+	color: var(--white);
+}
+
+.address-grid,
+.services-grid,
+.testimonials-grid {
+	display: grid;
+	gap: 25px;
+}
+
+.services-grid {
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.address-card,
+.service-card,
+.testimonial-card {
+	display: grid;
+	gap: 15px;
+	border-radius: 10px;
+	transition: all 0.3s ease;
+}
+
+.service-card {
+	grid-template-rows: auto auto 1fr;
+	background-color: rgba(255, 255, 255, 0.1);
+	padding: 25px;
+}
+
+.service-card:hover {
+	transform: translateY(-5px);
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+.service-icon {
+	display: flex;
+	justify-content: center;
+	font-size: 36px;
+	color: var(--white);
+}
+
+.service-card p {
+	font-size: 15px;
+	line-height: 1.5;
+	text-align: center;
+}
+
+.testimonials-section {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 30px;
+	padding: 40px;
+}
+
+.testimonials-grid {
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.testimonial-card {
+	grid-template-rows: auto 1fr auto;
+	padding: 25px;
+	background-color: #f9f5ed;
+	position: relative;
+}
+
+.testimonial-card::before {
+	content: "\201C";
+	position: absolute;
+	top: 10px;
+	left: 15px;
+	font-size: 60px;
+	color: rgba(211, 162, 105, 0.2);
+	font-family: serif;
+	line-height: 1;
+}
+
+.testimonial-text {
+	font-style: italic;
+	line-height: 1.7;
+	color: var(--black);
+	font-size: 16px;
+	padding-left: 20px;
+}
+
+/* Стили для страницы О нас */
+.about-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+/* Секция Hero */
+.about-hero {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: var(--yellow);
+	border-radius: 15px;
+	padding: 40px;
+	margin-bottom: 40px;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.about-hero-content {
+	flex: 1;
+	padding-right: 30px;
+}
+
+.about-hero-content h2 {
+	font-family: 'Exo 2', sans-serif;
+	font-size: 2rem;
+	font-weight: 600;
+	color: var(--white);
+	margin-bottom: 20px;
+}
+
+.about-hero-content p {
+	font-family: 'Exo 2', sans-serif;
+	font-size: 1.1rem;
+	line-height: 1.6;
+	color: var(--white);
+}
+
+.about-hero-image {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.about-hero-image img {
+	max-width: 100%;
+	max-height: 300px;
+	border-radius: 10px;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Сетка контента */
+.about-content-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 40px;
+	margin-bottom: 40px;
+}
+
+/* Обзор компании */
+.about-overview {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 30px;
+}
+
+.section-heading {
+	font-family: 'Exo 2', sans-serif;
+	font-size: 1.8rem;
+	font-weight: 600;
+	color: var(--black);
+	margin-bottom: 20px;
+	text-align: center;
+	position: relative;
+	padding-bottom: 15px;
+}
+
+.section-heading::after {
+	content: "";
+	position: absolute;
+	height: 3px;
+	width: 80px;
+	bottom: 0;
+	left: 50%;
+	background-color: var(--yellow-select);
+	transform: translateX(-50%);
+}
+
+.about-mission h3,
+.about-story h3 {
+	font-family: 'Exo 2', sans-serif;
+	color: var(--yellow-select);
+	font-size: 1.4rem;
+	font-weight: 600;
+	margin-bottom: 15px;
+}
+
+.about-mission p,
+.about-story p {
+	font-family: 'Exo 2', sans-serif;
+	color: var(--black);
+	font-size: 1rem;
+	line-height: 1.8;
+	margin-bottom: 15px;
+}
+
+.about-story ul {
+	list-style-type: none;
+	padding-left: 0;
+}
+
+.about-story ul li {
+	font-family: 'Exo 2', sans-serif;
+	color: var(--black);
+	font-size: 1rem;
+	line-height: 1.8;
+	margin-bottom: 10px;
+	padding-left: 25px;
+	position: relative;
+}
+
+.about-story ul li::before {
+	content: "✓";
+	position: absolute;
+	left: 0;
+	color: var(--yellow-select);
+	font-weight: bold;
+}
+
+/* Услуги */
+.about-services {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 25px;
+	padding: 40px;
+	background-color: var(--yellow);
+	border-radius: 15px;
+	color: var(--white);
+}
+
+.services-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 25px;
+}
+
+.service-card {
+	display: grid;
+	grid-template-rows: auto auto 1fr;
+	background-color: rgba(255, 255, 255, 0.1);
+	padding: 25px;
+	border-radius: 10px;
+	transition: all 0.3s ease;
+}
+
+.service-card:hover {
+	transform: translateY(-5px);
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+.service-icon {
+	display: flex;
+	justify-content: center;
+	font-size: 36px;
+	color: var(--white);
+	margin-bottom: 15px;
+}
+
+.service-card h3 {
+	font-family: 'Exo 2', sans-serif;
+	font-size: 1.3rem;
+	font-weight: 600;
+	color: var(--white);
+	text-align: center;
+	margin-bottom: 15px;
+}
+
+.service-card p {
+	font-family: 'Exo 2', sans-serif;
+	font-size: 1rem;
+	line-height: 1.5;
+	text-align: center;
+	color: var(--white);
+}
+
+/* Команда */
+.about-team {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 30px;
+}
+
+.team-description p {
+	font-family: 'Exo 2', sans-serif;
+	color: var(--black);
+	font-size: 1rem;
+	line-height: 1.8;
+	text-align: center;
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.team-stats {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 20px;
+	margin-top: 20px;
+}
+
+.stat-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	padding: 20px;
+	background-color: rgba(211, 162, 105, 0.1);
+	border-radius: 10px;
+	transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+	transform: translateY(-5px);
+	background-color: rgba(211, 162, 105, 0.2);
+}
+
+.stat-number {
+	font-family: 'Exo 2', sans-serif;
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--yellow-select);
+	margin-bottom: 10px;
+}
+
+.stat-label {
+	font-family: 'Exo 2', sans-serif;
+	font-size: 1rem;
+	color: var(--black);
+}
+
+/* Отзывы */
+.testimonials-section {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 30px;
+}
+
+.testimonials-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 25px;
+}
+
+.testimonial-card {
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	padding: 25px;
+	background-color: #f9f5ed;
+	border-radius: 10px;
+	position: relative;
+	transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-card::before {
+	content: "\201C";
+	position: absolute;
+	top: 10px;
+	left: 15px;
+	font-size: 60px;
+	color: rgba(211, 162, 105, 0.2);
+	font-family: serif;
+	line-height: 1;
+}
+
+.testimonial-text {
+	font-family: 'Exo 2', sans-serif;
+	font-style: italic;
+	line-height: 1.7;
+	color: var(--black);
+	font-size: 1rem;
+	padding-left: 20px;
+	margin-bottom: 20px;
+}
+
+.testimonial-author {
+	display: flex;
+	align-items: center;
+	padding-left: 20px;
+}
+
+.author-details {
+	display: flex;
+	flex-direction: column;
+}
+
+.author-name {
+	font-family: 'Exo 2', sans-serif;
+	font-weight: 600;
+	color: var(--black);
+	font-size: 1rem;
+}
+
+.author-title {
+	font-family: 'Exo 2', sans-serif;
+	color: var(--yellow-select);
+	font-size: 0.9rem;
+}
+
+/* CTA секция */
+.about-cta {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	padding: 40px;
+	background-color: var(--yellow);
+	border-radius: 15px;
+	color: var(--white);
+}
+
+.about-cta h2 {
+	font-family: 'Exo 2', sans-serif;
+	font-size: 1.8rem;
+	font-weight: 600;
+	margin-bottom: 20px;
+}
+
+.about-cta p {
+	font-family: 'Exo 2', sans-serif;
+	font-size: 1.1rem;
+	line-height: 1.6;
+	max-width: 700px;
+	margin: 0 auto 30px;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+	.about-container {
+		max-width: 100%;
+		padding: 0 15px;
+	}
+	
+	.about-hero {
+		padding: 35px;
+	}
+	
+	.about-hero-content h2 {
+		font-size: 1.8rem;
+	}
+	
+	.services-grid {
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	}
+}
+
+@media (max-width: 992px) {
+	.about-hero {
+		flex-direction: column;
+		padding: 30px;
+	}
+	
+	.about-hero-content {
+		padding-right: 0;
+		margin-bottom: 30px;
+		text-align: center;
+	}
+	
+	.about-hero-image img {
+		max-height: 250px;
+	}
+	
+	.services-grid {
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	}
+	
+	.testimonials-grid {
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	}
+	
+	.team-stats {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 768px) {
+	.about-container {
+		padding: 0 15px;
+	}
+	
+	.about-hero {
+		padding: 25px;
+		margin-bottom: 30px;
+	}
+	
+	.about-hero-content h2 {
+		font-size: 1.6rem;
+	}
+	
+	.about-hero-content p {
+		font-size: 1rem;
+	}
+	
+	.section-heading {
+		font-size: 1.5rem;
+	}
+	
+	.about-mission h3,
+	.about-story h3 {
+		font-size: 1.2rem;
+	}
+	
+	.about-services,
+	.testimonials-section,
+	.about-cta {
+		padding: 25px;
+	}
+	
+	.service-card,
+	.testimonial-card {
+		padding: 20px;
+	}
+	
+	.stat-number {
+		font-size: 1.8rem;
+	}
+	
+	.about-cta h2 {
+		font-size: 1.5rem;
+	}
+	
+	.about-cta p {
+		font-size: 1rem;
+	}
+	
+	.team-stats {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 576px) {
+	.about-hero {
+		padding: 20px;
+		border-radius: 10px;
+	}
+	
+	.about-hero-content h2 {
+		font-size: 1.4rem;
+	}
+	
+	.about-hero-image img {
+		max-height: 200px;
+	}
+	
+	.section-heading {
+		font-size: 1.3rem;
+	}
+	
+	.about-mission h3,
+	.about-story h3 {
+		font-size: 1.1rem;
+	}
+	
+	.about-services,
+	.testimonials-section,
+	.about-cta {
+		padding: 20px;
+		border-radius: 10px;
+	}
+	
+	.services-grid,
+	.testimonials-grid {
+		gap: 15px;
+	}
+	
+	.service-card,
+	.testimonial-card {
+		padding: 15px;
+		border-radius: 8px;
+	}
+	
+	.service-icon {
+		font-size: 30px;
+	}
+	
+	.service-card h3 {
+		font-size: 1.1rem;
+	}
+	
+	.stat-number {
+		font-size: 1.6rem;
+	}
+	
+	.about-cta h2 {
+		font-size: 1.3rem;
+	}
+	
+	.team-stats {
+		grid-template-columns: 1fr;
+		gap: 15px;
+	}
+	
+	.stat-item {
+		padding: 15px;
+	}
+	
+	.testimonial-text {
+		font-size: 0.95rem;
+		padding-left: 15px;
+	}
+	
+	.testimonial-author {
+		padding-left: 15px;
+	}
+	
+	.author-name {
+		font-size: 0.95rem;
+	}
+	
+	.author-title {
+		font-size: 0.85rem;
+	}
+}
+
+@media (max-width: 400px) {
+	.about-hero-content h2 {
+		font-size: 1.3rem;
+	}
+	
+	.about-hero-content p {
+		font-size: 0.95rem;
+	}
+	
+	.about-hero-image img {
+		max-height: 180px;
+	}
+	
+	.section-heading {
+		font-size: 1.2rem;
+	}
+	
+	.about-mission h3,
+	.about-story h3 {
+		font-size: 1rem;
+	}
+	
+	.about-mission p,
+	.about-story p,
+	.about-story ul li {
+		font-size: 0.95rem;
+	}
+	
+	.service-card h3 {
+		font-size: 1rem;
+	}
+	
+	.service-card p {
+		font-size: 0.9rem;
+	}
+	
+	.stat-number {
+		font-size: 1.5rem;
+	}
+	
+	.stat-label {
+		font-size: 0.9rem;
+	}
+	
+	.about-cta h2 {
+		font-size: 1.2rem;
+	}
+	
+	.about-cta p {
+		font-size: 0.95rem;
+	}
+	
+	.btn--lg {
+		padding: 10px 20px;
+		font-size: 0.95rem;
+	}
+}
