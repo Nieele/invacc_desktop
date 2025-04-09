@@ -144,7 +144,67 @@ function requireAuth(redirectUrl) {
   }
 })();
 
+function login() {
+  // Находим форму по классу
+  const authForm = document.querySelector(".auth-form");
+
+  authForm.addEventListener("submit", async (event) => {
+    event.preventDefault(); // Отменяем стандартное поведение формы
+
+    // Получаем значения логина и пароля из формы
+    const loginInput = document.getElementById("login");
+    const passwordInput = document.getElementById("password");
+
+    const login = loginInput.value.trim();
+    const password = passwordInput.value;
+
+    // Формируем объект с данными для отправки
+    const credentials = {
+      login: login,
+      password: password
+    };
+
+    try {
+      // Отправляем запрос к API
+      const response = await fetch("https://stroylomay.shop/api/v1/login", {
+        method: "GET", // Если возможно, лучше использовать POST
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(credentials)
+      });
+
+      if (!response.ok) {
+        // Если статус ответа не 200, выбрасываем ошибку
+        throw new Error("Ошибка авторизации: " + response.statusText);
+      }
+
+      // Если ответ успешный, разбираем JSON
+      const data = await response.json();
+
+      // Предполагается, что сервер возвращает объект с JWT-токеном в свойстве token
+      if (data.token) {
+        // Сохраняем токен в cookies (вы можете добавить дополнительные параметры, например, expires или secure)
+        document.cookie = `jwt=${data.token}; path=/;`;
+
+        // Перенаправляем пользователя на главную страницу
+        window.location.href = "/";
+      } else {
+        throw new Error("Токен не получен");
+      }
+    } catch (error) {
+      console.error("Ошибка авторизации:", error);
+      // Здесь можно добавить вывод ошибки для пользователя, например, через alert или вставку текста в элемент страницы.
+    }
+  });
+};
+
+
+
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
   loadItems();
+  login();
 });
+
+
