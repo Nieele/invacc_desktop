@@ -107,6 +107,43 @@ function createProductCard(product) {
   return link;
 }
 
+function getCookie(name) {
+  const cookies = document.cookie.split('; ');
+  for (const cookie of cookies) {
+    const [key, value] = cookie.split('=');
+    if (key === name) {
+      return value;
+    }
+  }
+  return null;
+}
+
+function requireAuth(redirectUrl) {
+  if (!getCookie('jwt')) {
+    window.location.replace(redirectUrl);
+  }
+}
+
+// Немедленно вызываемая функция для инициализации логики авторизации
+(function() {
+  // Если пользователь находится на странице account.html, проверяем наличие jwt
+  if (window.location.pathname.endsWith('/account.html')) {
+    requireAuth('/login.html');
+  }
+
+  // Если на странице присутствует элемент с id="accountIcon", привязываем к нему обработчик клика
+  const accountIcon = document.getElementById('accountIcon');
+  if (accountIcon) {
+    accountIcon.addEventListener('click', function(e) {
+      // Если jwt отсутствует, предотвращаем переход по ссылке и делаем редирект
+      if (!getCookie('jwt')) {
+        e.preventDefault();
+        window.location.replace('/login.html');
+      }
+    });
+  }
+})();
+
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
   loadItems();
