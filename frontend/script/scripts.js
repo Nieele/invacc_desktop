@@ -15,7 +15,7 @@ function truncateText(text, maxLength) {
 function loadItems() {
   const itemsContainer = document.getElementById('products-wrap');
   if (!itemsContainer) return;
-  
+
   fetch('https://stroylomay.shop/api/v1/items?page=1')
     .then(response => response.json())
     .then(data => {
@@ -125,7 +125,7 @@ function requireAuth(redirectUrl) {
 }
 
 // Немедленно вызываемая функция для инициализации логики авторизации
-(function() {
+(function () {
   // Если пользователь находится на странице account.html, проверяем наличие jwt
   if (window.location.pathname.endsWith('/account.html')) {
     requireAuth('/login.html');
@@ -134,7 +134,7 @@ function requireAuth(redirectUrl) {
   // Если на странице присутствует элемент с id="accountIcon", привязываем к нему обработчик клика
   const accountIcon = document.getElementById('accountIcon');
   if (accountIcon) {
-    accountIcon.addEventListener('click', function(e) {
+    accountIcon.addEventListener('click', function (e) {
       // Если jwt отсутствует, предотвращаем переход по ссылке и делаем редирект
       if (!getCookie('jwt')) {
         e.preventDefault();
@@ -145,29 +145,21 @@ function requireAuth(redirectUrl) {
 })();
 
 function login() {
-  // Находим форму по классу
-  const authForm = document.querySelector(".auth-form");
+  const authForm = document.getElementById("auth-form");
 
   authForm.addEventListener("submit", async (event) => {
-    event.preventDefault(); // Отменяем стандартное поведение формы
+    event.preventDefault(); // Отменяем стандартную отправку формы
 
-    // Получаем значения логина и пароля из формы
-    const loginInput = document.getElementById("login");
-    const passwordInput = document.getElementById("password");
+    // Получаем значения из полей
+    const login = document.getElementById("login").value.trim();
+    const password = document.getElementById("password").value;
 
-    const login = loginInput.value.trim();
-    const password = passwordInput.value;
-
-    // Формируем объект с данными для отправки
-    const credentials = {
-      login: login,
-      password: password
-    };
+    const credentials = { login, password };
 
     try {
-      // Отправляем запрос к API
+      // Отправляем запрос к API методом POST
       const response = await fetch("https://stroylomay.shop/api/v1/login", {
-        method: "GET", // Если возможно, лучше использовать POST
+        method: "POST", // Изменили метод на POST
         headers: {
           "Content-Type": "application/json"
         },
@@ -175,36 +167,29 @@ function login() {
       });
 
       if (!response.ok) {
-        // Если статус ответа не 200, выбрасываем ошибку
         throw new Error("Ошибка авторизации: " + response.statusText);
       }
 
-      // Если ответ успешный, разбираем JSON
       const data = await response.json();
 
-      // Предполагается, что сервер возвращает объект с JWT-токеном в свойстве token
       if (data.token) {
-        // Сохраняем токен в cookies (вы можете добавить дополнительные параметры, например, expires или secure)
+        // Сохраняем токен в cookies
         document.cookie = `jwt=${data.token}; path=/;`;
 
-        // Перенаправляем пользователя на главную страницу
+        // Редирект на главную страницу
         window.location.href = "/";
       } else {
-        throw new Error("Токен не получен");
+        throw new Error("JWT токен не получен");
       }
     } catch (error) {
       console.error("Ошибка авторизации:", error);
-      // Здесь можно добавить вывод ошибки для пользователя, например, через alert или вставку текста в элемент страницы.
+      alert("Ошибка авторизации: " + error.message);
     }
   });
-};
-
-
+}
 
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
   loadItems();
   login();
 });
-
-
