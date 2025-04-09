@@ -1,0 +1,96 @@
+/* Стили для страницы условий использования */
+.terms-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.terms-title {
+  font-family: 'Exo 2', sans-serif;
+  color: #333;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.terms-section {
+  margin-bottom: 2rem;
+}
+
+.terms-section h2 {
+  font-family: 'Exo 2', sans-serif;
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #ffd700;
+  font-weight: 600;
+}
+
+.terms-section p {
+  font-family: 'Exo 2', sans-serif;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.terms-footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+  text-align: center;
+  font-family: 'Exo 2', sans-serif;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.terms-footer p {
+  margin-bottom: 0.5rem;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .terms-content {
+    padding: 1.5rem;
+  }
+  
+  .terms-title {
+    font-size: 1.5rem;
+  }
+  
+  .terms-section h2 {
+    font-size: 1.3rem;
+  }
+  
+  .terms-section p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .terms-content {
+    padding: 1rem;
+  }
+  
+  .terms-title {
+    font-size: 1.3rem;
+  }
+  
+  .terms-section h2 {
+    font-size: 1.2rem;
+  }
+  
+  .terms-section p {
+    font-size: 0.9rem;
+  }
+  
+  .terms-footer {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+  }
+} 
