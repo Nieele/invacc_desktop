@@ -296,6 +296,31 @@ function login() {
   });
 }
 
+// Функция инициализации страницы аккаунта
+async function initAccountPage() {
+  try {
+    const response = await fetch('https://stroylomay.shop/api/v1/account', { credentials: 'same-origin' });
+    if (!response.ok) {
+      throw new Error('Ошибка загрузки информации о пользователе: ' + response.statusText);
+    }
+    const data = await response.json();
+
+    document.getElementById('account-id').textContent = data.id;
+    document.getElementById('account-login').textContent = data.login;
+    document.getElementById('account-firstname').textContent = data.firstname;
+    document.getElementById('account-lastname').textContent = data.lastname;
+    document.getElementById('account-phone').textContent = data.phone;
+    document.getElementById('account-phone-verified').textContent = data.phone_verified ? '(Проверен)' : '(Не проверен)';
+    document.getElementById('account-email').textContent = data.email;
+    document.getElementById('account-email-verified').textContent = data.email_verified ? '(Проверен)' : '(Не проверен)';
+    document.getElementById('account-passport').textContent = data.passport;
+    document.getElementById('account-passport-verified').textContent = data.passport_verified ? '(Проверен)' : '(Не проверен)';
+  } catch (err) {
+    console.error('Ошибка загрузки информации о пользователе:', err);
+    alert('Не удалось загрузить информацию о пользователе.');
+  }
+}
+
 // Основной обработчик загрузки страницы
 document.addEventListener('DOMContentLoaded', () => {
   const path = window.location.pathname;
@@ -317,7 +342,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Если открыта страница аккаунта, проверяем наличие JWT
-  if (path.endsWith("account.html") && (!isLoggedIn())) {
-    redirectToLogin();
+  if (path.endsWith('account.html')) {
+    if (!isLoggedIn()) {
+      redirectToLogin();
+    } else {
+      initAccountPage();
+    }
   }
 });
