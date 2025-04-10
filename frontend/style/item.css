@@ -1,0 +1,130 @@
+/* Обеспечиваем, чтобы тело страницы занимало всю высоту и корректно размещало footer */
+body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	margin: 0;
+}
+
+main {
+	flex: 1;
+}
+
+/* Общие стили контейнера */
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 1rem;
+}
+
+/* Блок с информацией о товаре */
+.item-wrapper {
+	display: flex;
+	gap: 2rem;
+	margin: 2rem 0;
+	align-items: flex-start;
+}
+
+/* Левая колонка – изображение товара */
+.item-image {
+	flex: 0 0 40%;
+	max-width: 400px;
+	align-self: center;
+}
+.item-image img {
+	width: 100%;
+	border: 2px solid #ccc;
+	border-radius: 8px;
+	object-fit: cover;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Правая колонка – информация о товаре */
+.item-info {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+.item-info h1 {
+	font-size: 2rem;
+	margin-bottom: 0.5rem;
+	color: #333;
+}
+.item-desc {
+	font-size: 1.1rem;
+	line-height: 1.5;
+	color: #555;
+}
+
+/* Сетка с детальной информацией */
+.item-details-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+	margin-top: 1rem;
+}
+.item-detail {
+	font-size: 1.1rem;
+	color: #333;
+	padding: 0.5rem;
+	background: #f7f7f7;
+	border-radius: 4px;
+}
+.detail-label {
+	font-weight: bold;
+	margin-right: 0.5rem;
+}
+.detail-value {
+	font-weight: normal;
+}
+.item-detail a {
+	color: #0066cc;
+	text-decoration: none;
+}
+.item-detail a:hover {
+	text-decoration: underline;
+}
+
+/* Кнопка "Добавить в корзину" */
+.item-action {
+	margin-top: 1rem;
+	/* Для desktop-версии выравниваем кнопку по левому краю */
+	text-align: left;
+}
+.item-action button {
+	padding: 0.75rem 1.25rem;
+	font-size: 1rem;
+	background-color: var(--yellow-select, #e58900);
+	color: var(--white, #fff);
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	/* Автоматическая ширина для desktop */
+	width: auto;
+}
+.item-action button:hover {
+	background-color: var(--yellow-button, #cf934e);
+}
+
+/* Responsive: на устройствах с шириной до 768px все блоки располагаются вертикально */
+@media (max-width: 768px) {
+	.item-wrapper {
+		flex-direction: column;
+		align-items: center;
+	}
+	.item-image,
+	.item-info {
+		width: 100%;
+	}
+	.item-details-grid {
+		grid-template-columns: 1fr;
+	}
+	.item-action {
+		text-align: center;
+	}
+	.item-action button {
+		width: 100%;
+	}
+}
