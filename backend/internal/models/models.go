@@ -103,3 +103,14 @@ type MultiRentWithoutCustomerID struct {
 	Address      string `json:"address"`
 	NumberOfDays uint   `json:"number_of_days"`
 }
+
+// not in db
+type CustomerAuthRegistration struct {
+	Login     string `json:"login"`
+	Password  string `json:"password"`
+	FirstName string `json:"firstname"`
+	LastName  string `json:"lastname"`
+	Email     string `json:"email"`
+	Phone     string `json:"phone"`
+	Passport  string `json:"passport"`
+}
