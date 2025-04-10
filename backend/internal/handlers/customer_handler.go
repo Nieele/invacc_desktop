@@ -48,6 +48,8 @@ func (h *customerHandler) UpdatePesonalInfo(w http.ResponseWriter, r *http.Reque
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
+	response := map[string]string{"message": "personal info updated"}
+	json.NewEncoder(w).Encode(response)
 }
 
 func (h *customerHandler) GetPesonalInfo(w http.ResponseWriter, r *http.Request) {
