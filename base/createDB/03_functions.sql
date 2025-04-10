@@ -261,8 +261,8 @@ BEGIN
     -- calculate expected payment
     NEW.total_payments  = calculate_total_interim_payment_rent(
                         NEW.item_id,
-                        NOW(),
-                        NOW() + (INTERVAL '1 day' * NEW.number_of_days)
+                        NOW()::timestamp,
+                        (NOW() + (INTERVAL '1 day' * NEW.number_of_days))::timestamp
                         );
 
     RETURN NEW;
