@@ -48,23 +48,21 @@ func (r *authRepo) InsertCustomer(regInfo models.CustomerAuthRegistration) error
 		Passport_verified: false,
 	}
 
-	r.db.Begin()
+	tx := r.db.Begin()
 
-	result := r.db.Create(&cAuth)
+	result := tx.Create(&cAuth)
 	if result.Error != nil {
-		r.db.Rollback()
+		tx.Rollback()
 		return fmt.Errorf("couldn't insert customer with login %s: %w", regInfo.Login, result.Error)
 	}
 
-	result = r.db.Create(&cInfo)
+	result = tx.Model(&models.CustomerInfo{}).Where("id = ?", cAuth.ID).Updates(&cInfo)
 	if result.Error != nil {
-		r.db.Rollback()
-		return fmt.Errorf("couldn't insert customer info with login %s: %w", regInfo.Login, result.Error)
+		tx.Rollback()
+		return fmt.Errorf("couldn't update customer info with id %d: %w", cAuth.ID, result.Error)
 	}
 
-	r.db.Commit()
-
-	return nil
+	return tx.Commit().Error
 }
 
 // func (r *authRepo) InsertCustomer(login, password string) error {
