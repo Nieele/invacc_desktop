@@ -9,7 +9,8 @@ import (
 
 type AuthRepository interface {
 	GetCustomerAuth(login string) (models.CustomerAuth, error)
-	InsertCustomer(login, password string) error
+	// InsertCustomer(login, password string) error // not used
+	InsertCustomer(regInfo models.CustomerAuthRegistration) error
 }
 
 type authRepo struct {
@@ -30,15 +31,51 @@ func (r *authRepo) GetCustomerAuth(login string) (models.CustomerAuth, error) {
 	return auth, nil
 }
 
-func (r *authRepo) InsertCustomer(login, password string) error {
-	customer := models.CustomerAuth{
-		Login:    login,
-		Password: password,
+func (r *authRepo) InsertCustomer(regInfo models.CustomerAuthRegistration) error {
+	cAuth := models.CustomerAuth{
+		Login:    regInfo.Login,
+		Password: regInfo.Password,
 	}
 
-	result := r.db.Create(&customer)
-	if result.Error != nil {
-		return fmt.Errorf("couldn't insert customer with login %s: %w", login, result.Error)
+	cInfo := models.CustomerInfo{
+		FirstName:         regInfo.FirstName,
+		LastName:          regInfo.LastName,
+		Phone:             regInfo.Phone,
+		Phone_verified:    false,
+		Email:             regInfo.Email,
+		Email_verified:    false,
+		Passport:          regInfo.Passport,
+		Passport_verified: false,
 	}
+
+	r.db.Begin()
+
+	result := r.db.Create(&cAuth)
+	if result.Error != nil {
+		r.db.Rollback()
+		return fmt.Errorf("couldn't insert customer with login %s: %w", regInfo.Login, result.Error)
+	}
+
+	result = r.db.Create(&cInfo)
+	if result.Error != nil {
+		r.db.Rollback()
+		return fmt.Errorf("couldn't insert customer info with login %s: %w", regInfo.Login, result.Error)
+	}
+
+	r.db.Commit()
+
 	return nil
 }
+
+// func (r *authRepo) InsertCustomer(login, password string) error {
+// 	customer := models.CustomerAuth{
+// 		Login:    login,
+// 		Password: password,
+// 	}
+
+// 	result := r.db.Create(&customer)
+// 	if result.Error != nil {
+// 		return fmt.Errorf("couldn't insert customer with login %s: %w", login, result.Error)
+// 	}
+// 	return nil
+// }
