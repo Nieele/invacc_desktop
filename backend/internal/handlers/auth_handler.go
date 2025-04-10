@@ -30,18 +30,12 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var creds models.CustomerAuth
+	var creds models.CustomerAuthRegistration
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&creds); err != nil {
 		http.Error(w, "incorrect format data", http.StatusBadRequest)
-		return
-	}
-
-	// TODO: add validation (github.com/go-playground/validator/v10)
-	if len(creds.Login) < 4 || len(creds.Password) < 4 {
-		http.Error(w, "login or password less than 4", http.StatusBadRequest)
 		return
 	}
 
