@@ -39,9 +39,7 @@ function initCatalogPage() {
           </div>
           <div class="card-bottom">
             <p class="card-price">${item.price} ₽/День</p>
-            <p class="card-warehouse">
-              Склад: <a href="wirehouse.html?id=${item.warehouse_id || ''}">${item.warehouse_name}</a>
-            </p>
+            <p class="card-warehouse"><a href="wirehouse.html?id=${item.warehouse_id || ''}" class="warehouse-label">Склад:</a>&nbsp;<a href="wirehouse.html?id=${item.warehouse_id || ''}">${item.warehouse_name}</a></p>
           </div>
         </div>
       </a>

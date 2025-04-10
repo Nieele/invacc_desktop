@@ -24,7 +24,6 @@
 	text-decoration: none;
 	color: inherit;
 	flex: 1;
-	padding: 1rem;
 }
 
 .card-image {
@@ -69,15 +68,28 @@
 .card-bottom .card-warehouse {
 	font-size: 1rem;
 	margin: 0.5rem 0;
+	white-space: nowrap;
 }
 
 .card-bottom .card-warehouse a {
 	color: #0066cc;
 	text-decoration: none;
+	display: inline;
 }
 
 .card-bottom .card-warehouse a:hover {
 	text-decoration: underline;
+}
+
+.card-bottom .card-warehouse a.warehouse-label {
+	color: #555;
+	text-decoration: none !important;
+	display: inline;
+	cursor: pointer;
+}
+
+.card-bottom .card-warehouse a.warehouse-label:hover {
+	text-decoration: none !important;
 }
 
 .card-button {
@@ -100,28 +112,63 @@
 	background: var(--yellow-select);
 }
 
-@media (max-width: 635px) {
+@media (max-width: 635px) and (min-width: 451px) {
+	.card {
+		max-width: 450px;
+		margin: 0 auto;
+	}
+
+	.card-content {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.card-image {
+		flex: 0 0 auto;
+		width: 80%;
+		margin: 0 auto 1rem auto;
+		text-align: center;
+	}
+
+	.card-info {
+		flex: 1;
+		width: 100%;
+		padding: 0 0.5rem;
+		text-align: center;
+	}
+
+	.card-button {
+		padding: 0.5rem 1rem;
+		width: 100%;
+	}
+}
+
+@media (max-width: 450px) {
 	.card {
 		max-width: 100%;
 	}
 
 	.card-content {
-		flex-direction: row;
+		flex-direction: column;
 		align-items: center;
-		padding: 0.5rem;
 	}
 
 	.card-image {
-		flex: 0 0 40%;
-		margin: 0;
+		flex: 0 0 auto;
+		width: 80%;
+		margin: 0 auto 1rem auto;
+		text-align: center;
 	}
 
 	.card-info {
 		flex: 1;
+		width: 100%;
 		padding: 0 0.5rem;
+		text-align: center;
 	}
 
 	.card-button {
 		padding: 0.5rem 1rem;
+		width: 100%;
 	}
 }
