@@ -51,6 +51,10 @@ body {
 	background-color: var(--white);
 }
 
+main {
+	flex: 1;
+}
+
 .header {
 	display: flex;
 	width: 100%;
