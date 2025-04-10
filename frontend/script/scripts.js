@@ -1,165 +1,249 @@
 // scripts.js
 
-// --- Utility Functions ---
-function getQueryParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
-}
+document.addEventListener('DOMContentLoaded', () => {
+  // Определяем текущую страницу по URL
+  const path = window.location.pathname;
+  if (path.endsWith('catalog.html')) {
+    initCatalogPage();
+  } else if (path.endsWith('item.html')) {
+    initItemPage();
+  } else if (path.endsWith('wirehouse.html')) {
+    initWirehousePage();
+  }
+});
 
-function truncateText(text, maxLength) {
-  if (!text) return '';
-  return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-}
+function initCatalogPage() {
+  const itemsContainer = document.getElementById('catalog-items');
+  let currentPage = 1;
+  let totalPages = null;
+  let isLoading = false;
 
-// --- Load Items for Main Page ---
-function loadItems() {
-  const itemsContainer = document.getElementById('products-wrap');
-  if (!itemsContainer) return;
+  // Функция создания карточки товара
+  function createProductCard(item) {
+    const card = document.createElement('div');
+    card.className = 'card';
 
-  fetch('https://stroylomay.shop/api/v1/items?page=1')
-    .then(response => response.json())
-    .then(data => {
-      data.items.forEach(item => {
-        const card = createProductCard(item);
-        itemsContainer.appendChild(card);
-      });
-    })
-    .catch(error => console.error('Ошибка при загрузке товаров:', error));
-}
+    // Кликабельная область карточки (переход на item.html)
+    const link = document.createElement('a');
+    link.href = `item.html?id=${item.id}`;
+    link.className = 'card-content';
 
-// --- Create Product Card ---
-function createProductCard(product) {
-  // Оборачиваем карточку в ссылку для перехода на детальную страницу
-  const link = document.createElement('a');
-  link.href = `item.html?id=${product.id}`;
-  link.className = 'product-link';
+    // Блок с изображением
+    const imageWrapper = document.createElement('div');
+    imageWrapper.className = 'card-image';
+    const img = document.createElement('img');
+    img.src = 'https://stroylomay.shop/img/' + item.img_url;
+    img.alt = item.name;
+    img.loading = 'lazy';
+    imageWrapper.appendChild(img);
+    link.appendChild(imageWrapper);
 
-  const card = document.createElement('div');
-  card.className = 'product-card';
+    // Информационный блок с данными
+    const infoBlock = document.createElement('div');
+    infoBlock.className = 'card-info';
 
-  // Image Section
-  const imageSection = document.createElement('div');
-  imageSection.className = 'image-section';
-  const image = document.createElement('img');
-  image.className = 'product-image';
-  image.src = 'img/' + product.img_url;
-  image.alt = product.name;
-  imageSection.appendChild(image);
-
-  // Title Section
-  const titleSection = document.createElement('div');
-  titleSection.className = 'title-section';
-  const title = document.createElement('h3');
-  title.className = 'product-title';
-  title.textContent = product.name;
-  titleSection.appendChild(title);
-
-  // Price Section
-  const priceSection = document.createElement('div');
-  priceSection.className = 'price-section';
-  const price = document.createElement('p');
-  price.className = 'product-price';
-  price.textContent = product.price ? `${product.price} ₽` : '';
-  priceSection.appendChild(price);
-
-  // Description Section
-  const descriptionSection = document.createElement('div');
-  descriptionSection.className = 'description-section';
-  const description = document.createElement('p');
-  description.className = 'product-description';
-  description.textContent = truncateText(product.description, 100);
-  descriptionSection.appendChild(description);
-
-  // Action Section (Cart Button)
-  const actionSection = document.createElement('div');
-  actionSection.className = 'action-section';
-  const cartButton = document.createElement('button');
-  cartButton.className = 'cart-button';
-  cartButton.textContent = 'Добавить в корзину';
-
-  // Предотвращаем переход по ссылке при клике по кнопке
-  cartButton.addEventListener('click', (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    fetch('https://stroylomay.shop/api/v1/cart', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ item_id: product.id })
-    })
-      .then(response => {
-        if (!response.ok) throw new Error('Ошибка при добавлении в корзину');
-        return response.json();
-      })
-      .then(data => console.log('Товар успешно добавлен в корзину:', data))
-      .catch(error => console.error('Ошибка:', error));
-  });
-  actionSection.appendChild(cartButton);
-
-  // Собираем карточку
-  card.appendChild(imageSection);
-  card.appendChild(titleSection);
-  card.appendChild(priceSection);
-  card.appendChild(descriptionSection);
-  card.appendChild(actionSection);
-
-  // Оборачиваем карточку в ссылку
-  link.appendChild(card);
-  return link;
-}
-
-function getCookie(name) {
-  const cookies = document.cookie.split('; ');
-  for (const cookie of cookies) {
-    const [key, value] = cookie.split('=');
-    if (key === name) {
-      return value;
+    // Верхняя часть – заголовок и описание
+    const textBlock = document.createElement('div');
+    textBlock.className = 'card-text';
+    const title = document.createElement('h3');
+    title.textContent = item.name;
+    title.className = 'card-title';
+    textBlock.appendChild(title);
+    let description = item.description || '';
+    if (description.length > 60) {
+      description = description.substring(0, 60) + '...';
     }
-  }
-  return null;
-}
+    const descElem = document.createElement('p');
+    descElem.textContent = description;
+    descElem.className = 'card-desc';
+    textBlock.appendChild(descElem);
+    infoBlock.appendChild(textBlock);
 
-function requireAuth(redirectUrl) {
-  if (!getCookie('jwt')) {
-    window.location.replace(redirectUrl);
-  }
-}
+    // Нижняя часть – цена и склад (прижатые к низу)
+    const bottomBlock = document.createElement('div');
+    bottomBlock.className = 'card-bottom';
+    const priceElem = document.createElement('p');
+    priceElem.textContent = item.price + ' ₽/День';
+    priceElem.className = 'card-price';
+    bottomBlock.appendChild(priceElem);
+    const warehouseElem = document.createElement('p');
+    warehouseElem.className = 'card-warehouse';
+    warehouseElem.innerHTML =
+      'Склад: <a href="wirehouse.html?id=' +
+      (item.warehouse_id || '') +
+      '">' +
+      item.warehouse_name +
+      '</a>';
+    bottomBlock.appendChild(warehouseElem);
+    infoBlock.appendChild(bottomBlock);
 
-// Немедленно вызываемая функция для инициализации логики авторизации
-(function () {
-  // Если пользователь находится на странице account.html, проверяем наличие jwt
-  if (window.location.pathname.endsWith('/account.html')) {
-    requireAuth('/login.html');
+    link.appendChild(infoBlock);
+    card.appendChild(link);
+
+    // Отдельный блок для кнопки "Добавить в корзину"
+    const buttonBlock = document.createElement('div');
+    buttonBlock.className = 'card-button';
+    const addBtn = document.createElement('button');
+    addBtn.textContent = 'Добавить в корзину';
+    addBtn.className = 'add-to-cart';
+    addBtn.setAttribute('data-id', item.id);
+    buttonBlock.appendChild(addBtn);
+    card.appendChild(buttonBlock);
+
+    return card;
   }
 
-  // Если на странице присутствует элемент с id="accountIcon", привязываем к нему обработчик клика
-  const accountIcon = document.getElementById('accountIcon');
-  if (accountIcon) {
-    accountIcon.addEventListener('click', function (e) {
-      // Если jwt отсутствует, предотвращаем переход по ссылке и делаем редирект
-      if (!getCookie('jwt')) {
-        e.preventDefault();
-        window.location.replace('/login.html');
-      }
+  function appendItems(items) {
+    items.forEach(item => {
+      const card = createProductCard(item);
+      itemsContainer.appendChild(card);
     });
   }
-})();
+
+  function loadItems(page) {
+    if (isLoading) return;
+    isLoading = true;
+    fetch(`https://stroylomay.shop/api/v1/items?page=${page}`)
+      .then(response => response.json())
+      .then(data => {
+        const items = data.items || data;
+        if (items && items.length > 0) {
+          appendItems(items);
+          currentPage = page;
+          if (data.total_pages) {
+            totalPages = data.total_pages;
+          }
+        }
+        if (!items || items.length === 0) {
+          totalPages = currentPage;
+        }
+      })
+      .catch(err => console.error('Ошибка загрузки товаров:', err))
+      .finally(() => {
+        isLoading = false;
+      });
+  }
+
+  loadItems(1);
+  window.addEventListener('scroll', () => {
+    const nearBottom =
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+    if (nearBottom && !isLoading) {
+      if (totalPages === null || currentPage < totalPages) {
+        loadItems(currentPage + 1);
+      }
+    }
+  });
+
+  itemsContainer.addEventListener('click', (e) => {
+    if (e.target.classList.contains('add-to-cart')) {
+      e.preventDefault();
+      const itemId = e.target.getAttribute('data-id');
+      handleAddToCart(itemId);
+    }
+  });
+}
+
+function initItemPage() {
+  const params = new URLSearchParams(window.location.search);
+  const itemId = params.get('id');
+  if (!itemId) return;
+  fetch(`https://stroylomay.shop/api/v1/items?id=${itemId}`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('item-name').textContent = data.name;
+      document.getElementById('item-desc').textContent = data.description;
+      document.getElementById('item-price').textContent = data.price;
+      document.getElementById('item-penalty').textContent = data.late_penalty;
+      document.getElementById('item-active').textContent = data.active ? 'Да' : 'Нет';
+      const imgElem = document.getElementById('item-image');
+      if (imgElem) {
+        imgElem.src = 'https://stroylomay.shop/img/' + data.img_url;
+        imgElem.alt = data.name;
+      }
+      const whLink = document.getElementById('item-warehouse-link');
+      if (whLink) {
+        whLink.textContent = data.warehouse_name;
+        if (data.warehouse_id) {
+          whLink.href = `wirehouse.html?id=${data.warehouse_id}`;
+        } else {
+          whLink.removeAttribute('href');
+          whLink.style.cursor = 'default';
+        }
+      }
+      document.title = data.name + " – Строй Ломай";
+    })
+    .catch(err => console.error('Ошибка загрузки товара:', err));
+}
+
+function initWirehousePage() {
+  const params = new URLSearchParams(window.location.search);
+  const whId = params.get('id');
+  if (!whId) return;
+  fetch(`https://stroylomay.shop/api/v1/wirehouses?id=${whId}`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('wh-name').textContent = data.name;
+      document.getElementById('wh-phone').textContent = data.phone;
+      document.getElementById('wh-email').textContent = data.email;
+      document.getElementById('wh-address').textContent = data.address;
+      document.getElementById('wh-active').textContent = data.active ? 'Да' : 'Нет';
+      document.title = data.name + " – Строй Ломай";
+    })
+    .catch(err => console.error('Ошибка загрузки склада:', err));
+}
+
+function isLoggedIn() {
+  return document.cookie.split(';').some(item => item.trim().startsWith('jwt='));
+}
+
+function handleAddToCart(itemId) {
+  if (!isLoggedIn()) {
+    alert('Пожалуйста, авторизуйтесь для добавления товара в корзину');
+    return;
+  }
+  fetch(`https://stroylomay.shop/api/v1/cart?id=${itemId}`, { method: 'POST', credentials: 'same-origin' })
+    .then(response => {
+      if (response.ok) {
+        const cartIcon = document.querySelector('.cart-icon');
+        if (cartIcon) {
+          cartIcon.classList.add('shake');
+          setTimeout(() => cartIcon.classList.remove('shake'), 500);
+        }
+      } else {
+        console.error('Не удалось добавить в корзину. Статус:', response.status);
+      }
+    })
+    .catch(err => console.error('Ошибка при добавлении в корзину:', err));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const accountLinks = document.querySelectorAll('a[href="/account.html"]');
+  accountLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      if (document.cookie.indexOf("jwt=") === -1) {
+        e.preventDefault();
+        window.location.replace("/login.html?redirect=" + encodeURIComponent(window.location.href));
+      }
+    });
+  });
+});
+
 
 function login() {
   const authForm = document.getElementById("auth-form");
 
   authForm.addEventListener("submit", async (event) => {
-    event.preventDefault(); // Отменяем стандартную отправку формы
+    event.preventDefault();
 
-    // Получаем значения из полей
     const login = document.getElementById("login").value.trim();
     const password = document.getElementById("password").value;
 
     const credentials = { login, password };
 
     try {
-      // Отправляем запрос к API методом POST
       const response = await fetch("https://stroylomay.shop/api/v1/login", {
-        method: "POST", // Изменили метод на POST
+        method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
@@ -173,10 +257,8 @@ function login() {
       const data = await response.json();
 
       if (data.token) {
-        // Сохраняем токен в cookies
         document.cookie = `jwt=${data.token}; path=/;`;
 
-        // Редирект на главную страницу
         window.location.href = "/";
       } else {
         throw new Error("JWT токен не получен");
@@ -187,9 +269,3 @@ function login() {
     }
   });
 }
-
-// --- Initialization ---
-document.addEventListener('DOMContentLoaded', () => {
-  loadItems();
-  login();
-});

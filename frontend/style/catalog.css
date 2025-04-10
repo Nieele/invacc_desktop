@@ -1,0 +1,127 @@
+.items-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 1rem;
+	justify-items: center;
+	margin: 1rem 0;
+}
+
+.card {
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	overflow: hidden;
+	width: 100%;
+	max-width: 320px;
+	font-size: 1.1rem;
+}
+
+.card-content {
+	display: flex;
+	flex-direction: column;
+	text-decoration: none;
+	color: inherit;
+	flex: 1;
+	padding: 1rem;
+}
+
+.card-image {
+	text-align: center;
+	margin-bottom: 1rem;
+}
+
+.card-image img {
+	width: 100%;
+	border: 2px solid #ccc;
+	border-radius: 4px;
+}
+
+.card-info {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+.card-text .card-title {
+	font-size: 1.2rem;
+	margin: 0.5rem 0;
+	font-weight: bold;
+}
+
+.card-text .card-desc {
+	font-size: 1rem;
+	margin: 0.5rem 0;
+	color: #555;
+}
+
+.card-bottom {
+	margin-top: auto;
+}
+
+.card-bottom .card-price {
+	font-size: 1rem;
+	margin: 0.5rem 0;
+	font-weight: bold;
+}
+
+.card-bottom .card-warehouse {
+	font-size: 1rem;
+	margin: 0.5rem 0;
+}
+
+.card-bottom .card-warehouse a {
+	color: #0066cc;
+	text-decoration: none;
+}
+
+.card-bottom .card-warehouse a:hover {
+	text-decoration: underline;
+}
+
+.card-button {
+	padding: 0.75rem 1rem;
+	border-top: 1px solid #ccc;
+}
+
+.add-to-cart {
+	width: 100%;
+	background: var(--yellow-button);
+	color: #fff;
+	border: none;
+	padding: 0.75rem;
+	border-radius: 4px;
+	font-size: 1.1rem;
+	cursor: pointer;
+}
+
+.add-to-cart:hover {
+	background: var(--yellow-select);
+}
+
+@media (max-width: 635px) {
+	.card {
+		max-width: 100%;
+	}
+
+	.card-content {
+		flex-direction: row;
+		align-items: center;
+		padding: 0.5rem;
+	}
+
+	.card-image {
+		flex: 0 0 40%;
+		margin: 0;
+	}
+
+	.card-info {
+		flex: 1;
+		padding: 0 0.5rem;
+	}
+
+	.card-button {
+		padding: 0.5rem 1rem;
+	}
+}
