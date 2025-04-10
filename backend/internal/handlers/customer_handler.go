@@ -27,7 +27,7 @@ func (h *customerHandler) GetPesonalInfo(w http.ResponseWriter, r *http.Request)
 
 	userID, ok := r.Context().Value(middleware.UserCtxKey).(uint)
 	if !ok {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		http.Error(w, "Необходима авторизация", http.StatusUnauthorized)
 		return
 	}
 
