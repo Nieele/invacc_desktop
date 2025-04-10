@@ -1,6 +1,11 @@
 // scripts.js
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Если мы на странице логина, назначаем обработчик для формы авторизации
+  if (window.location.pathname.endsWith("login.html")) {
+    login();
+  }
+
   // Определяем текущую страницу по URL
   const path = window.location.pathname;
   if (path.endsWith('catalog.html')) {
@@ -217,18 +222,14 @@ function handleAddToCart(itemId) {
     .catch(err => console.error('Ошибка при добавлении в корзину:', err));
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const accountLinks = document.querySelectorAll('a[href="/account.html"]');
-  accountLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      if (document.cookie.indexOf("jwt=") === -1) {
-        e.preventDefault();
-        window.location.replace("/login.html?redirect=" + encodeURIComponent(window.location.href));
-      }
-    });
-  });
+// Переход на страницу авторизации, если не найден JWT токен
+// и пользователь пытается открыть страницу аккаунта
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname.endsWith("account.html") && document.cookie.indexOf("jwt=") === -1) {
+    window.location.replace("/login.html?redirect=" + encodeURIComponent(window.location.href));
+    return;
+  }
 });
-
 
 function login() {
   const authForm = document.getElementById("auth-form");
