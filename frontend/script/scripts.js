@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     login();
   }
 
+  // Назначение обработчика для страницы регистрации
+  if (window.location.pathname.endsWith("register.html")) {
+    register();
+  }
+
   // Определяем текущую страницу по URL
   const path = window.location.pathname;
   if (path.endsWith('catalog.html')) {
@@ -225,11 +230,103 @@ function handleAddToCart(itemId) {
 // Переход на страницу авторизации, если не найден JWT токен
 // и пользователь пытается открыть страницу аккаунта
 document.addEventListener("DOMContentLoaded", () => {
-  if (window.location.pathname.endsWith("account.html") && document.cookie.indexOf("jwt=") === -1) {
+  const jwt = document.cookie.split(';').find(c => c.trim().startsWith('jwt='));
+  if (window.location.pathname.endsWith("account.html") && (!isLoggedIn() || !jwt || jwt === 'jwt=')) {
     window.location.replace("/login.html?redirect=" + encodeURIComponent(window.location.href));
-    return;
   }
 });
+
+function register() {
+  const regForm = document.getElementById("register-form");
+  if (!regForm) return; // Если форма регистрации отсутствует, прекращаем выполнение
+
+  regForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    // Считываем значения полей формы регистрации
+    const firstname = document.getElementById("firstname").value.trim(); // используется как firstname
+    const lastname = document.getElementById("lastname").value.trim(); // используется как lastname
+    const loginValue = document.getElementById("login").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const password = document.getElementById("password").value;
+    const passwordConfirm = document.getElementById("password-confirm").value;
+
+    // Проверка совпадения паролей
+    if (password !== passwordConfirm) {
+      alert("Пароли не совпадают!");
+      return;
+    }
+
+    // Простая валидация email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Введите корректный email адрес.");
+      return;
+    }
+
+    // Валидация номера телефона: должен начинаться с 7 и содержать ровно 11 цифр (7 + 10 цифр)
+    const phoneRegex = /^7\d{10}$/;
+    if (!phoneRegex.test(phone)) {
+      alert("Введите корректный телефонный номер вида 7XXXXXXXXXX.");
+      return;
+    }
+
+    // Формирование объекта с данными регистрации, согласно требуемой схеме
+    const registrationData = {
+      login: loginValue,
+      password: password,
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      phone: phone
+    };
+
+    try {
+      const response = await fetch("https://stroylomay.shop/api/v1/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(registrationData)
+      });
+
+      // Если ответ не ОК, читаем тело ответа один раз как текст
+      if (!response.ok) {
+        const errorText = await response.text();
+        let errorMessage;
+        try {
+          if (errorText) {
+            const errorData = JSON.parse(errorText);
+            errorMessage = errorData.message || response.statusText;
+          } else {
+            errorMessage = response.statusText;
+          }
+        } catch (e) {
+          errorMessage = errorText || response.statusText;
+        }
+        throw new Error("Ошибка регистрации: " + errorMessage);
+      }
+
+      // При успешном запросе пытаемся прочитать ответ, но сервер может вернуть пустое тело
+      const responseText = await response.text();
+      let data = null;
+      if (responseText) {
+        try {
+          data = JSON.parse(responseText);
+        } catch (e) {
+          data = responseText;
+        }
+      }
+      alert("Регистрация прошла успешно. Теперь вы можете войти.");
+      window.location.href = "/login.html";
+    } catch (error) {
+      console.error("Ошибка регистрации:", error);
+      alert("Ошибка регистрации: " + error.message);
+    }
+  });
+}
+
 
 function login() {
   const authForm = document.getElementById("auth-form");

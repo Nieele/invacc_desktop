@@ -83,17 +83,18 @@
   <main class="content">
     <div class="container">
       <div class="auth-container">
-        <form class="auth-form">
+        <form class="auth-form" id="register-form" method="POST">
           <h2 class="auth-form-title">Регистрация</h2>
 
           <div class="auth-form-group">
-            <label for="name" class="auth-form-label">Имя</label>
-            <input type="text" id="name" name="name" class="auth-form-input" placeholder="Введите ваше имя" required>
+            <label for="firstname" class="auth-form-label">Имя</label>
+            <input type="text" id="firstname" name="firstname" class="auth-form-input" placeholder="Введите ваше имя"
+              required>
           </div>
 
           <div class="auth-form-group">
-            <label for="surname" class="auth-form-label">Фамилия</label>
-            <input type="text" id="surname" name="surname" class="auth-form-input" placeholder="Введите вашу фамилию"
+            <label for="lastname" class="auth-form-label">Фамилия</label>
+            <input type="text" id="lastname" name="lastname" class="auth-form-input" placeholder="Введите вашу фамилию"
               required>
           </div>
 
