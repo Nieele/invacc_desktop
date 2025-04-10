@@ -296,29 +296,136 @@ function login() {
   });
 }
 
-// Функция инициализации страницы аккаунта
+// Функция загрузки информации о пользователе и рендеринга внутри .account-details
 async function initAccountPage() {
   try {
     const response = await fetch('https://stroylomay.shop/api/v1/account', { credentials: 'same-origin' });
     if (!response.ok) {
-      throw new Error('Ошибка загрузки информации о пользователе: ' + response.statusText);
+      throw new Error('Ошибка загрузки: ' + response.statusText);
     }
     const data = await response.json();
-
-    document.getElementById('account-id').textContent = data.id;
-    document.getElementById('account-login').textContent = data.login;
-    document.getElementById('account-firstname').textContent = data.firstname;
-    document.getElementById('account-lastname').textContent = data.lastname;
-    document.getElementById('account-phone').textContent = data.phone;
-    document.getElementById('account-phone-verified').textContent = data.phone_verified ? '(Проверен)' : '(Не проверен)';
-    document.getElementById('account-email').textContent = data.email;
-    document.getElementById('account-email-verified').textContent = data.email_verified ? '(Проверен)' : '(Не проверен)';
-    document.getElementById('account-passport').textContent = data.passport;
-    document.getElementById('account-passport-verified').textContent = data.passport_verified ? '(Проверен)' : '(Не проверен)';
+    const container = document.querySelector('.account-details');
+    container.innerHTML = `
+      <div class="account-row">
+        <div class="account-label">ID:</div>
+        <div class="account-value" id="account-id">${data.id}</div>
+        <div></div>
+      </div>
+      <div class="account-row">
+        <div class="account-label">Логин:</div>
+        <div class="account-value" id="account-login">${data.login}</div>
+        <div></div>
+      </div>
+      <div class="account-row">
+        <div class="account-label">Имя:</div>
+        <div class="account-value" id="account-firstname">${data.firstname}</div>
+        <div></div>
+      </div>
+      <div class="account-row">
+        <div class="account-label">Фамилия:</div>
+        <div class="account-value" id="account-lastname">${data.lastname}</div>
+        <div></div>
+      </div>
+      <div class="account-row">
+        <div class="account-label">Телефон:</div>
+        <div class="account-value" id="account-phone">${data.phone}</div>
+        <div class="account-verification ${data.phone_verified ? 'verified' : 'not-verified'}" id="account-phone-verified">
+          ${data.phone_verified ? 'Проверено' : 'Не проверено'}
+        </div>
+      </div>
+      <div class="account-row">
+        <div class="account-label">Email:</div>
+        <div class="account-value" id="account-email">${data.email}</div>
+        <div class="account-verification ${data.email_verified ? 'verified' : 'not-verified'}" id="account-email-verified">
+          ${data.email_verified ? 'Проверено' : 'Не проверено'}
+        </div>
+      </div>
+      <div class="account-row">
+        <div class="account-label">Паспорт:</div>
+        <div class="account-value" id="account-passport">${data.passport}</div>
+        <div class="account-verification ${data.passport_verified ? 'verified' : 'not-verified'}" id="account-passport-verified">
+          ${data.passport_verified ? 'Проверено' : 'Не проверено'}
+        </div>
+      </div>
+    `;
   } catch (err) {
     console.error('Ошибка загрузки информации о пользователе:', err);
     alert('Не удалось загрузить информацию о пользователе.');
   }
+}
+
+// Функция инициализации редактирования аккаунта
+function initAccountEdit() {
+  const editBtn = document.getElementById('edit-btn');
+  if (!editBtn) return;
+  let isEditing = false;
+  let cancelBtn = null;
+  editBtn.addEventListener('click', () => {
+    if (!isEditing) {
+      // Переводим поля в режим редактирования: заменяем содержимое input'ами
+      const fields = ['account-login', 'account-firstname', 'account-lastname', 'account-phone', 'account-email', 'account-passport'];
+      fields.forEach(id => {
+        const valueElem = document.getElementById(id);
+        if (valueElem) {
+          const currentValue = valueElem.textContent.trim();
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.value = currentValue;
+          input.className = 'edit-input';
+          input.id = id;  // сохраняем тот же ID
+          valueElem.parentNode.replaceChild(input, valueElem);
+        }
+      });
+      isEditing = true;
+      editBtn.textContent = "Готово";
+      // Добавляем кнопку Отмена
+      cancelBtn = document.createElement('button');
+      cancelBtn.textContent = "Отмена";
+      cancelBtn.className = "btn btn--secondary";
+      editBtn.parentNode.appendChild(cancelBtn);
+      cancelBtn.addEventListener('click', () => {
+        initAccountPage().then(() => {
+          isEditing = false;
+          editBtn.textContent = "Изменить информацию";
+          if (cancelBtn) cancelBtn.remove();
+        });
+      });
+    } else {
+      // Собираем данные из input'ов
+      const updateData = {
+        login: document.getElementById('account-login').value.trim(),
+        firstname: document.getElementById('account-firstname').value.trim(),
+        lastname: document.getElementById('account-lastname').value.trim(),
+        phone: document.getElementById('account-phone').value.trim(),
+        email: document.getElementById('account-email').value.trim(),
+        passport: document.getElementById('account-passport').value.trim()
+      };
+      fetch('https://stroylomay.shop/api/v1/account', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify(updateData)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Ошибка обновления: ' + response.statusText);
+          }
+          return response.json();
+        })
+        .then(data => {
+          alert('Информация успешно обновлена!');
+          initAccountPage().then(() => {
+            isEditing = false;
+            editBtn.textContent = "Изменить информацию";
+            if (cancelBtn) cancelBtn.remove();
+          });
+        })
+        .catch(err => {
+          console.error('Ошибка обновления аккаунта:', err);
+          alert('Ошибка обновления: ' + err.message);
+        });
+    }
+  });
 }
 
 // Основной обработчик загрузки страницы
@@ -346,7 +453,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isLoggedIn()) {
       redirectToLogin();
     } else {
-      initAccountPage();
+      initAccountPage().then(() => {
+        initAccountEdit();
+      });
     }
   }
 });
