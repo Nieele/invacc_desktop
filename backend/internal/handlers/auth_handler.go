@@ -43,6 +43,9 @@ func (h *authHandler) Register(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "user already exists", http.StatusConflict)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"message": "user registered"})
+	w.WriteHeader(http.StatusCreated)
 }
 
 func (h *authHandler) Login(w http.ResponseWriter, r *http.Request) {
