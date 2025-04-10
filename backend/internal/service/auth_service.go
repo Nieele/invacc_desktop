@@ -21,7 +21,7 @@ var (
 )
 
 type AuthService interface {
-	Register(creds models.CustomerAuth) error
+	Register(creds models.CustomerAuthRegistration) error
 	Login(creds models.CustomerAuth) (string, error)
 	Authentication(token string) (user_id uint, err error)
 }
@@ -62,30 +62,34 @@ func (s *authService) signJwtToken(userID uint, expirationTime time.Time) (strin
 }
 
 // TDOO: add validation github.com/go-playground/validator/v10
-func (s *authService) validateCredentials(creds models.CustomerAuth) error {
-	if creds.Login == "" || creds.Password == "" {
-		return ErrInvalidInput
-	}
-	return nil
-}
+// func (s *authService) validateCredentials(creds models.CustomerAuthRegistration) error {
+// 	if creds.Login == "" || creds.Password == "" {
+// 		return ErrInvalidInput
+// 	}
+// 	return nil
+// }
 
-func (s *authService) Register(creds models.CustomerAuth) error {
-	if err := s.validateCredentials(creds); err != nil {
-		return err
-	}
+func (s *authService) Register(creds models.CustomerAuthRegistration) error {
+	// TODO: add validation
+	// if err := s.validateCredentials(creds); err != nil {
+	// 	return err
+	// }
 
 	hashPassword, err := bcrypt.GenerateFromPassword([]byte(creds.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return fmt.Errorf("couldn't hash password: %w", err)
 	}
 
-	return s.authRepo.InsertCustomer(creds.Login, string(hashPassword))
+	creds.Password = string(hashPassword)
+
+	return s.authRepo.InsertCustomer(creds)
 }
 
 func (s *authService) Login(creds models.CustomerAuth) (string, error) {
-	if err := s.validateCredentials(creds); err != nil {
-		return "", err
-	}
+	// TODO: add validation
+	// if err := s.validateCredentials(creds); err != nil {
+	// 	return "", err
+	// }
 
 	storedAuth, err := s.authRepo.GetCustomerAuth(creds.Login)
 	if err != nil {
