@@ -5,11 +5,13 @@ import (
 	"net/http"
 
 	"invacc-backend/internal/middleware"
+	"invacc-backend/internal/models"
 	"invacc-backend/internal/service"
 )
 
 type CustomerHandler interface {
 	GetPesonalInfo(w http.ResponseWriter, r *http.Request)
+	UpdatePesonalInfo(w http.ResponseWriter, r *http.Request)
 }
 type customerHandler struct {
 	customerService service.CustomerService
@@ -17,6 +19,35 @@ type customerHandler struct {
 
 func NewCustomerHandler(customerService service.CustomerService) CustomerHandler {
 	return &customerHandler{customerService: customerService}
+}
+
+func (h *customerHandler) UpdatePesonalInfo(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPut {
+		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	userID, ok := r.Context().Value(middleware.UserCtxKey).(uint)
+	if !ok {
+		http.Error(w, "Необходима авторизация", http.StatusUnauthorized)
+		return
+	}
+
+	var info models.CustomersInfoWithLogin
+	if err := json.NewDecoder(r.Body).Decode(&info); err != nil {
+		http.Error(w, "invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	info.ID = userID
+
+	if err := h.customerService.UpdatePersonalInfo(info); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
 }
 
 func (h *customerHandler) GetPesonalInfo(w http.ResponseWriter, r *http.Request) {
@@ -39,4 +70,5 @@ func (h *customerHandler) GetPesonalInfo(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(personalInfo)
+	w.WriteHeader(http.StatusOK)
 }

@@ -14,7 +14,7 @@ var (
 
 type CustomerService interface {
 	GetPesonalInfo(userID uint) (models.CustomersInfoWithLogin, error)
-	UpdatePersonalInfo(token string, info models.CustomerInfo) error
+	UpdatePersonalInfo(info models.CustomersInfoWithLogin) error
 }
 
 type customerService struct {
@@ -31,6 +31,6 @@ func (s *customerService) GetPesonalInfo(userID uint) (models.CustomersInfoWithL
 	return s.customerRepo.GetInfo(userID)
 }
 
-func (s *customerService) UpdatePersonalInfo(token string, info models.CustomerInfo) error {
+func (s *customerService) UpdatePersonalInfo(info models.CustomersInfoWithLogin) error {
 	return s.customerRepo.UpdateInfo(info)
 }

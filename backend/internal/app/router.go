@@ -40,6 +40,7 @@ func NewRouter(dbConn *gorm.DB, cfg *config.Config) http.Handler {
 	r.Group(func(r chi.Router) {
 		r.Use(custommw.JWTAuthMiddleware(AuthService))
 		r.Get("/account", CostumerHandler.GetPesonalInfo)
+		r.Put("/account", CostumerHandler.UpdatePesonalInfo)
 		r.Get("/cart", RentHandler.GetCart)
 		r.Post("/cart", RentHandler.AddToCart)
 		r.Delete("/cart", RentHandler.RemoveFromCart)
