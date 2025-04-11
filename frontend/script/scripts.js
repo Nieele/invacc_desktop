@@ -441,6 +441,173 @@ function initAccountEdit() {
   });
 }
 
+// Инициализация страницы корзины
+async function initCartPage() {
+  // Проверяем, авторизован ли пользователь
+  if (!isLoggedIn()) {
+    redirectToLogin();
+    return;
+  }
+
+  const cartItemsContainer = document.getElementById('cart-items');
+  const cartEmptyElement = document.querySelector('.cart-empty');
+  const cartSummaryElement = document.querySelector('.cart-summary');
+  const cartTotalPriceElement = document.getElementById('cart-total-price');
+
+  // Функция для создания карточки товара в корзине
+  const createCartItemCard = (item) => {
+    const card = document.createElement('div');
+    card.className = 'cart-item';
+    card.dataset.id = item.id;
+    card.dataset.itemId = item.item_id;
+
+    card.innerHTML = `
+      <div class="cart-item-image">
+        <img src="https://stroylomay.shop/img/${item.img_url}" alt="${item.name}" loading="lazy">
+      </div>
+      <div class="cart-item-details">
+        <div class="cart-item-top">
+          <div class="cart-item-info">
+            <h3 class="cart-item-title">${item.name}</h3>
+            <p class="cart-item-price">${item.price} ₽/день</p>
+            <p class="cart-item-penalty">Штраф за просрочку: ${item.late_penalty} ₽</p>
+            <p class="cart-item-warehouse">
+              <a href="wirehouse.html?id=${item.warehouse_id || ''}" class="warehouse-label">Склад:</a>
+              <a href="wirehouse.html?id=${item.warehouse_id || ''}">${item.warehouse_name}</a>
+            </p>
+          </div>
+          <div class="cart-item-remove">
+            <button class="btn-remove" data-id="${item.id}" data-item-id="${item.item_id}">Удалить</button>
+          </div>
+        </div>
+      </div>
+    `;
+    return card;
+  };
+
+  // Функция для загрузки данных о товаре по его ID
+  const fetchItemDetails = async (itemId) => {
+    try {
+      const response = await fetch(`https://stroylomay.shop/api/v1/items?id=${itemId}`);
+      if (!response.ok) {
+        throw new Error(`Ошибка загрузки информации о товаре: ${response.statusText}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Не удалось загрузить информацию о товаре ID=${itemId}:`, error);
+      return null;
+    }
+  };
+
+  // Функция для удаления товара из корзины
+  const removeFromCart = async (cartId, itemId) => {
+    try {
+      const response = await fetch('https://stroylomay.shop/api/v1/cart', {
+        method: 'DELETE',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ item_id: parseInt(itemId, 10) })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Ошибка удаления товара: ${response.statusText}`);
+      }
+
+      // Удаляем элемент из DOM
+      const itemElement = document.querySelector(`.cart-item[data-id="${cartId}"]`);
+      if (itemElement) {
+        itemElement.remove();
+      }
+
+      // Обновляем итоговую сумму
+      updateCartTotal();
+
+      // Проверяем, не опустела ли корзина
+      if (cartItemsContainer.children.length === 0) {
+        cartItemsContainer.classList.add('hide');
+        cartSummaryElement.classList.add('hide');
+        cartEmptyElement.classList.remove('hide');
+      }
+
+    } catch (error) {
+      console.error('Ошибка при удалении товара из корзины:', error);
+      alert('Не удалось удалить товар из корзины. Пожалуйста, попробуйте позже.');
+    }
+  };
+
+  // Функция для обновления итоговой суммы
+  const updateCartTotal = () => {
+    let total = 0;
+    document.querySelectorAll('.cart-item').forEach(item => {
+      const priceText = item.querySelector('.cart-item-price').textContent;
+      const price = parseFloat(priceText.replace(/[^\d.]/g, '')); // Извлекаем число из строки
+      total += price;
+    });
+    cartTotalPriceElement.textContent = total.toFixed(0);
+  };
+
+  // Загрузка корзины
+  const loadCart = async () => {
+    try {
+      // Запрос на получение списка элементов корзины
+      const cartResponse = await fetch('https://stroylomay.shop/api/v1/cart', {
+        credentials: 'same-origin'
+      });
+      if (!cartResponse.ok) {
+        throw new Error(`Ошибка загрузки корзины: ${cartResponse.statusText}`);
+      }
+      const cartItems = await cartResponse.json();
+
+      // Очищаем контейнер
+      cartItemsContainer.innerHTML = '';
+
+      // Если корзина пуста
+      if (!cartItems || cartItems.length === 0) {
+        cartItemsContainer.classList.add('hide');
+        cartSummaryElement.classList.add('hide');
+        cartEmptyElement.classList.remove('hide');
+        return;
+      }
+
+      // Для каждого элемента корзины загружаем информацию о товаре
+      const itemDetailsPromises = cartItems.map(cartItem => fetchItemDetails(cartItem.item_id));
+      const itemsDetails = await Promise.all(itemDetailsPromises);
+
+      // Объединяем данные корзины и информацию о товарах
+      const cartWithDetails = cartItems.map((cartItem, index) => {
+        return { ...cartItem, ...itemsDetails[index] };
+      });
+
+      // Добавляем товары в DOM
+      cartWithDetails.forEach(item => {
+        cartItemsContainer.appendChild(createCartItemCard(item));
+      });
+
+      // Отображаем итоговую сумму
+      updateCartTotal();
+      cartEmptyElement.classList.add('hide');
+      cartSummaryElement.classList.remove('hide');
+
+      // Обработчик кнопок удаления
+      cartItemsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-remove')) {
+          const cartId = e.target.dataset.id;
+          const itemId = e.target.dataset.itemId;
+          removeFromCart(cartId, itemId);
+        }
+      });
+    } catch (error) {
+      console.error('Ошибка загрузки корзины:', error);
+      cartItemsContainer.innerHTML = `<div class="cart-error">Произошла ошибка при загрузке корзины. Пожалуйста, попробуйте позже.</div>`;
+    }
+  };
+
+  // Загружаем корзину
+  loadCart();
+}
+
 // Основной обработчик загрузки страницы
 document.addEventListener('DOMContentLoaded', () => {
   const path = window.location.pathname;
@@ -452,13 +619,15 @@ document.addEventListener('DOMContentLoaded', () => {
     register();
   }
 
-  // Инициализация страниц каталога, товара и склада
+  // Инициализация страниц каталога, товара, склада и корзины
   if (path.endsWith('catalog.html')) {
     initCatalogPage();
   } else if (path.endsWith('item.html')) {
     initItemPage();
   } else if (path.endsWith('wirehouse.html')) {
     initWirehousePage();
+  } else if (path.endsWith('cart.html')) {
+    initCartPage();
   }
 
   // Если открыта страница аккаунта, проверяем наличие JWT
