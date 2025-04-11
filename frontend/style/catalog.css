@@ -172,3 +172,45 @@
 		width: 100%;
 	}
 }
+
+/* Анимация успешного добавления: лёгкое увеличение + смена цвета */
+@keyframes successAnimation {
+	0% {
+		transform: scale(1);
+		background-color: var(--yellow-button);
+	}
+	50% {
+		transform: scale(1.1);
+		background-color: #28a745; /* зеленый оттенок */
+	}
+	100% {
+		transform: scale(1);
+		background-color: var(--yellow-button);
+	}
+}
+
+/* Анимация ошибки: лёгкая тряска с изменением цвета */
+@keyframes errorAnimation {
+	0%,
+	100% {
+		transform: translateX(0);
+		background-color: var(--yellow-button);
+	}
+	25% {
+		transform: translateX(-5px);
+		background-color: #dc3545; /* красный оттенок */
+	}
+	75% {
+		transform: translateX(5px);
+		background-color: #dc3545;
+	}
+}
+
+/* Классы для проигрывания анимаций */
+.add-to-cart.success {
+	animation: successAnimation 0.5s ease-in-out;
+}
+
+.add-to-cart.error {
+	animation: errorAnimation 0.5s ease-in-out;
+}

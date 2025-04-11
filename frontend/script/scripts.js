@@ -100,7 +100,8 @@ function initCatalogPage() {
   itemsContainer.addEventListener('click', (e) => {
     if (e.target.classList.contains('add-to-cart')) {
       e.preventDefault();
-      handleAddToCart(e.target.dataset.id);
+      // Передаём элемент кнопки и идентификатор товара
+      handleAddToCart(e.target, e.target.dataset.id);
     }
   });
 }
@@ -162,26 +163,40 @@ async function initWirehousePage() {
 }
 
 // Обработчик добавления товара в корзину
-async function handleAddToCart(itemId) {
+async function handleAddToCart(buttonElement, itemId) {
   if (!isLoggedIn()) {
+    // Если пользователь не авторизован — проигрываем анимацию ошибки и выводим сообщение
+    buttonElement.classList.add('error');
+    setTimeout(() => buttonElement.classList.remove('error'), 1000);
     alert('Пожалуйста, авторизуйтесь для добавления товара в корзину');
     return;
   }
   try {
-    const response = await fetch(`https://stroylomay.shop/api/v1/cart?id=${itemId}`, {
+    // Преобразование itemId в число (целое число)
+    const itemIdInt = parseInt(itemId, 10);
+    const response = await fetch('https://stroylomay.shop/api/v1/cart', {
       method: 'POST',
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ item_id: itemIdInt })
     });
+
     if (response.ok) {
-      const cartIcon = document.querySelector('.cart-icon');
-      if (cartIcon) {
-        cartIcon.classList.add('shake');
-        setTimeout(() => cartIcon.classList.remove('shake'), 500);
-      }
+      // Успешное добавление — проигрываем анимацию успеха
+      buttonElement.classList.add('success');
+      setTimeout(() => buttonElement.classList.remove('success'), 1000);
     } else {
+      // Ошибка добавления — проигрываем анимацию ошибки и выводим информацию в консоль
+      buttonElement.classList.add('error');
+      setTimeout(() => buttonElement.classList.remove('error'), 1000);
       console.error('Не удалось добавить в корзину. Статус:', response.status);
     }
   } catch (error) {
+    // При возникновении ошибки в запросе — проигрываем анимацию ошибки
+    buttonElement.classList.add('error');
+    setTimeout(() => buttonElement.classList.remove('error'), 1000);
     console.error('Ошибка при добавлении в корзину:', error);
   }
 }
