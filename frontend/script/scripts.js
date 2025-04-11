@@ -137,6 +137,19 @@ async function initItemPage() {
       }
     }
     document.title = `${data.name} – Строй Ломай`;
+    
+    // Настраиваем кнопку "Добавить в корзину"
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    if (addToCartBtn) {
+      // Устанавливаем класс и ID товара
+      addToCartBtn.className = 'add-to-cart';
+      addToCartBtn.dataset.id = data.id;
+      
+      // Добавляем обработчик клика
+      addToCartBtn.addEventListener('click', function() {
+        handleAddToCart(this, this.dataset.id);
+      });
+    }
   } catch (error) {
     console.error('Ошибка загрузки товара:', error);
   }
