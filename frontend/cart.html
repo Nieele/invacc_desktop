@@ -12,8 +12,8 @@
   <link rel="preload" href="assets/fonts/GreatVibes-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style/reset.css" />
   <link rel="stylesheet" href="style/navbar.css" />
-  <link rel="stylesheet" href="style/cart.css" />
   <link rel="stylesheet" href="style/styles.css" />
+  <link rel="stylesheet" href="style/cart.css" />
 </head>
 
 <body>
@@ -85,22 +85,24 @@
       <div class="cart-wrapper">
         <h1>Ваша корзина</h1>
         
-        <div id="cart-items" class="cart-items">
-          <div class="cart-loading">Загрузка корзины...</div>
-        </div>
-
-        <div class="cart-empty hide">
-          <p>Ваша корзина пуста.</p>
-          <a href="/catalog.html" class="btn btn--primary">Перейти в каталог</a>
-        </div>
-
-        <div class="cart-summary hide">
-          <div class="cart-total">
-            <span>Итого:</span>
-            <span id="cart-total-price">0</span>
-            <span> ₽/день</span>
+        <div class="cart-content">
+          <div id="cart-items" class="cart-items">
+            <div class="cart-loading">Загрузка корзины...</div>
           </div>
-          <button class="btn btn--primary">Оформить заказ</button>
+
+          <div class="cart-empty hide">
+            <p>Ваша корзина пуста.</p>
+            <a href="/catalog.html" class="btn btn--primary">Перейти в каталог</a>
+          </div>
+
+          <div class="cart-summary hide">
+            <div class="cart-total">
+              <span>Итого:</span>
+              <span id="cart-total-price">0</span>
+              <span> ₽/день</span>
+            </div>
+            <button class="btn btn--primary">Оформить заказ</button>
+          </div>
         </div>
       </div>
     </div>
@@ -109,7 +111,8 @@
   <footer class="footer">
     <p>&copy; 2025 Строй Ломай. Все права защищены.</p>
   </footer>
+
+  <script src="script/scripts.js"></script>
 </body>
-<script src="script/scripts.js"></script>
 
 </html> 

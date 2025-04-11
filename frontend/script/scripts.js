@@ -473,6 +473,7 @@ async function initCartPage() {
     card.className = 'cart-item';
     card.dataset.id = item.id;
     card.dataset.itemId = item.item_id;
+    card.dataset.href = `item.html?id=${item.item_id}`;
 
     card.innerHTML = `
       <div class="cart-item-image">
@@ -495,6 +496,16 @@ async function initCartPage() {
         </div>
       </div>
     `;
+
+    // Добавляем обработчик клика для перехода на страницу товара
+    card.addEventListener('click', function(event) {
+      // Проверяем, не происходит ли клик по кнопке удаления или ссылке склада
+      if (!event.target.closest('.btn-remove') && 
+          !event.target.closest('.cart-item-warehouse a')) {
+        window.location.href = this.dataset.href;
+      }
+    });
+
     return card;
   };
 
@@ -603,17 +614,30 @@ async function initCartPage() {
       cartEmptyElement.classList.add('hide');
       cartSummaryElement.classList.remove('hide');
 
-      // Обработчик кнопок удаления
-      cartItemsContainer.addEventListener('click', (e) => {
-        if (e.target.classList.contains('btn-remove')) {
-          const cartId = e.target.dataset.id;
-          const itemId = e.target.dataset.itemId;
-          removeFromCart(cartId, itemId);
-        }
-      });
+      // Удаляем предыдущие обработчики кликов, если они были
+      cartItemsContainer.removeEventListener('click', handleCartContainerClick);
+      
+      // Добавляем новый обработчик кликов для контейнера корзины
+      cartItemsContainer.addEventListener('click', handleCartContainerClick);
     } catch (error) {
       console.error('Ошибка загрузки корзины:', error);
       cartItemsContainer.innerHTML = `<div class="cart-error">Произошла ошибка при загрузке корзины. Пожалуйста, попробуйте позже.</div>`;
+    }
+  };
+
+  // Обработчик кликов для контейнера корзины
+  const handleCartContainerClick = (e) => {
+    // Обработка клика по кнопке удаления
+    if (e.target.classList.contains('btn-remove')) {
+      e.stopPropagation(); // Предотвращаем всплытие события
+      const cartId = e.target.dataset.id;
+      const itemId = e.target.dataset.itemId;
+      removeFromCart(cartId, itemId);
+    }
+    
+    // Предотвращаем всплытие событий для ссылок на склад
+    if (e.target.closest('.cart-item-warehouse a')) {
+      e.stopPropagation();
     }
   };
 
