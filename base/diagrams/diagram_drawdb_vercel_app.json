@@ -529,142 +529,9 @@
     },
     {
       "id": 7,
-      "name": "ItemsDiscounts",
-      "x": 1147.8472342648388,
-      "y": -620.4288458087445,
-      "fields": [
-        {
-          "name": "item_id",
-          "type": "INTEGER",
-          "default": "",
-          "check": "",
-          "primary": true,
-          "unique": true,
-          "notNull": true,
-          "increment": false,
-          "comment": "",
-          "id": 0
-        },
-        {
-          "name": "discount_id",
-          "type": "INTEGER",
-          "default": "",
-          "check": "",
-          "primary": true,
-          "unique": true,
-          "notNull": true,
-          "increment": false,
-          "comment": "",
-          "id": 1,
-          "size": "",
-          "values": []
-        }
-      ],
-      "comment": "",
-      "indices": [],
-      "color": "#89e667",
-      "key": 1742049528267
-    },
-    {
-      "id": 8,
-      "name": "Discounts",
-      "x": 1758.784677121981,
-      "y": -585.0002743801732,
-      "fields": [
-        {
-          "name": "id",
-          "type": "SERIAL",
-          "default": "",
-          "check": "",
-          "primary": true,
-          "unique": true,
-          "notNull": true,
-          "increment": false,
-          "comment": "",
-          "id": 0,
-          "size": "",
-          "values": []
-        },
-        {
-          "name": "name",
-          "type": "VARCHAR",
-          "default": "",
-          "check": "",
-          "primary": false,
-          "unique": false,
-          "notNull": true,
-          "increment": false,
-          "comment": "",
-          "id": 1,
-          "size": 50
-        },
-        {
-          "name": "description",
-          "type": "TEXT",
-          "default": "",
-          "check": "",
-          "primary": false,
-          "unique": false,
-          "notNull": false,
-          "increment": false,
-          "comment": "",
-          "id": 2,
-          "size": "",
-          "values": []
-        },
-        {
-          "name": "percent",
-          "type": "SMALLINT",
-          "default": "",
-          "check": "percent > 0 AND percent < 100",
-          "primary": false,
-          "unique": false,
-          "notNull": true,
-          "increment": false,
-          "comment": "",
-          "id": 3,
-          "size": "",
-          "values": []
-        },
-        {
-          "name": "start_date",
-          "type": "DATE",
-          "default": "NOW()",
-          "check": "",
-          "primary": false,
-          "unique": false,
-          "notNull": true,
-          "increment": false,
-          "comment": "CHECK (start_date >= current_date)",
-          "id": 4,
-          "size": "",
-          "values": []
-        },
-        {
-          "name": "end_date",
-          "type": "DATE",
-          "default": "",
-          "check": "",
-          "primary": false,
-          "unique": false,
-          "notNull": true,
-          "increment": false,
-          "comment": "CHECK (end_date > current_date)",
-          "id": 5,
-          "size": "",
-          "values": []
-        }
-      ],
-      "comment": "",
-      "indices": [],
-      "color": "#89e667",
-      "key": 1742049530436
-    },
-    {
-      "id": 9,
       "name": "CustomersInfo",
-      "x": 1204.5746217511035,
-      "y": 115.05277934612957,
+      "x": 1198.9462200604785,
+      "y": 117.86698019144217,
       "fields": [
         {
           "name": "id",
@@ -720,7 +587,21 @@
           "size": 30
         },
         {
-          "name": "pnone_verified",
+          "name": "passport",
+          "type": "VARCHAR",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": false,
+          "increment": false,
+          "comment": "",
+          "id": 4,
+          "size": 30,
+          "values": []
+        },
+        {
+          "name": "email_verified",
           "type": "BOOLEAN",
           "default": "false",
           "check": "",
@@ -729,26 +610,12 @@
           "notNull": true,
           "increment": false,
           "comment": "",
-          "id": 4,
+          "id": 5,
           "size": "",
           "values": []
         },
         {
-          "name": "email",
-          "type": "VARCHAR",
-          "default": "",
-          "check": "",
-          "primary": false,
-          "unique": true,
-          "notNull": false,
-          "increment": false,
-          "comment": "",
-          "id": 5,
-          "size": 50,
-          "values": []
-        },
-        {
-          "name": "email_verified",
+          "name": "pnone_verified",
           "type": "BOOLEAN",
           "default": "false",
           "check": "",
@@ -762,20 +629,6 @@
           "values": []
         },
         {
-          "name": "passport",
-          "type": "VARCHAR",
-          "default": "",
-          "check": "",
-          "primary": false,
-          "unique": false,
-          "notNull": false,
-          "increment": false,
-          "comment": "",
-          "id": 7,
-          "size": 30,
-          "values": []
-        },
-        {
           "name": "passport_verified",
           "type": "BOOLEAN",
           "default": "false",
@@ -785,7 +638,7 @@
           "notNull": true,
           "increment": false,
           "comment": "",
-          "id": 8,
+          "id": 7,
           "size": "",
           "values": []
         }
@@ -796,7 +649,7 @@
       "key": 1742050292871
     },
     {
-      "id": 10,
+      "id": 8,
       "name": "CustomersAuth",
       "x": 1827.981662521642,
       "y": 111.04517748827124,
@@ -816,7 +669,7 @@
           "values": []
         },
         {
-          "name": "login",
+          "name": "email",
           "type": "VARCHAR",
           "default": "",
           "check": "",
@@ -848,7 +701,7 @@
       "key": 1742050293566
     },
     {
-      "id": 11,
+      "id": 9,
       "name": "Rent",
       "x": 1145.5895018438077,
       "y": -333.0623660530853,
@@ -986,7 +839,7 @@
       "key": 1742050686844
     },
     {
-      "id": 12,
+      "id": 10,
       "name": "RentHistory",
       "x": 510.7410442952761,
       "y": 8.38554965083813,
@@ -1138,7 +991,7 @@
       "key": 1742051554151
     },
     {
-      "id": 13,
+      "id": 11,
       "name": "DeliveryStatus",
       "x": -474.9088013328752,
       "y": -1092.1614493491534,
@@ -1192,7 +1045,7 @@
       "key": 1742052189589
     },
     {
-      "id": 14,
+      "id": 12,
       "name": "WarehousesOrders",
       "x": 39.35549692698527,
       "y": -1308.5298964185101,
@@ -1311,7 +1164,7 @@
       "key": 1742052280717
     },
     {
-      "id": 15,
+      "id": 13,
       "name": "logged_actions",
       "x": -1058.5472538422175,
       "y": -1202.4529697912803,
@@ -1433,7 +1286,7 @@
       "key": 1742052979001
     },
     {
-      "id": 16,
+      "id": 14,
       "name": "itemsServiceHistory",
       "x": 1152.310427236391,
       "y": -1487.8198402776404,
@@ -1515,7 +1368,7 @@
       "key": 1742053954301
     },
     {
-      "id": 17,
+      "id": 15,
       "name": "Cart",
       "x": 496.55404384729195,
       "y": 521.8790398230349,
@@ -1574,6 +1427,113 @@
       ],
       "color": "#ff4f81",
       "key": 1742802417898
+    },
+    {
+      "id": 16,
+      "name": "Promocodes",
+      "x": 1146.6940511896362,
+      "y": -688.0360921038454,
+      "fields": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "default": "",
+          "check": "",
+          "primary": true,
+          "unique": true,
+          "notNull": true,
+          "increment": true,
+          "comment": "",
+          "id": 0
+        },
+        {
+          "name": "code",
+          "type": "VARCHAR",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": true,
+          "notNull": true,
+          "increment": false,
+          "comment": "",
+          "id": 1,
+          "size": 50
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": false,
+          "increment": false,
+          "comment": "",
+          "id": 2,
+          "size": "",
+          "values": []
+        },
+        {
+          "name": "percent",
+          "type": "INTEGER",
+          "default": "",
+          "check": "percent > 0 AND percent < 100",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "",
+          "id": 3,
+          "size": "",
+          "values": []
+        },
+        {
+          "name": "start_date",
+          "type": "DATE",
+          "default": "CURRENT_DATE",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "CHECK (start_date >= CURRENT_DATE)",
+          "id": 4,
+          "size": "",
+          "values": []
+        },
+        {
+          "name": "end_date",
+          "type": "DATE",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "CHECK (end_date > CURRENT_DATE)",
+          "id": 5,
+          "size": "",
+          "values": []
+        },
+        {
+          "name": "number_of_uses",
+          "type": "INTEGER",
+          "default": "0",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": true,
+          "increment": false,
+          "comment": "",
+          "id": 6,
+          "size": "",
+          "values": []
+        }
+      ],
+      "comment": "",
+      "indices": [],
+      "color": "#54fa0c",
+      "key": 1744558840024
     }
   ],
   "relationships": [
@@ -1633,40 +1593,18 @@
       "id": 4
     },
     {
-      "startTableId": 7,
-      "startFieldId": 0,
-      "endTableId": 3,
-      "endFieldId": 0,
-      "cardinality": "one_to_one",
-      "updateConstraint": "Cascade",
-      "deleteConstraint": "Restrict",
-      "name": "fk_itemsdiscounts_items",
-      "id": 5
-    },
-    {
       "startTableId": 8,
       "startFieldId": 0,
       "endTableId": 7,
-      "endFieldId": 1,
-      "cardinality": "one_to_one",
-      "updateConstraint": "Cascade",
-      "deleteConstraint": "Restrict",
-      "name": "fk_itemsdiscounts_discounts",
-      "id": 6
-    },
-    {
-      "startTableId": 10,
-      "startFieldId": 0,
-      "endTableId": 9,
       "endFieldId": 0,
       "cardinality": "one_to_one",
       "updateConstraint": "Cascade",
       "deleteConstraint": "Cascade",
       "name": "fk_customersinfo_customersauth",
-      "id": 7
+      "id": 5
     },
     {
-      "startTableId": 11,
+      "startTableId": 9,
       "startFieldId": 1,
       "endTableId": 3,
       "endFieldId": 0,
@@ -1674,21 +1612,21 @@
       "updateConstraint": "Cascade",
       "deleteConstraint": "Restrict",
       "name": "fk_rent_items",
-      "id": 8
+      "id": 6
     },
     {
-      "startTableId": 9,
+      "startTableId": 7,
       "startFieldId": 0,
-      "endTableId": 11,
+      "endTableId": 9,
       "endFieldId": 2,
       "cardinality": "one_to_one",
       "updateConstraint": "Cascade",
       "deleteConstraint": "Restrict",
       "name": "fk_rent_customers",
-      "id": 9
+      "id": 7
     },
     {
-      "startTableId": 12,
+      "startTableId": 10,
       "startFieldId": 1,
       "endTableId": 3,
       "endFieldId": 0,
@@ -1696,21 +1634,21 @@
       "updateConstraint": "Cascade",
       "deleteConstraint": "Restrict",
       "name": "fk_renthistory_items",
-      "id": 10
+      "id": 8
     },
     {
-      "startTableId": 9,
+      "startTableId": 7,
       "startFieldId": 0,
-      "endTableId": 12,
+      "endTableId": 10,
       "endFieldId": 3,
       "cardinality": "one_to_one",
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
       "name": "fk_renthistory_customers",
-      "id": 11
+      "id": 9
     },
     {
-      "startTableId": 12,
+      "startTableId": 10,
       "startFieldId": 2,
       "endTableId": 2,
       "endFieldId": 0,
@@ -1718,7 +1656,7 @@
       "updateConstraint": "Cascade",
       "deleteConstraint": "Restrict",
       "name": "fk_renthistory_warehouses",
-      "id": 12
+      "id": 10
     },
     {
       "startTableId": 1,
@@ -1729,21 +1667,21 @@
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
       "name": "fk_Employees_warehouse_id_Warehouses",
-      "id": 13
+      "id": 11
     },
     {
-      "startTableId": 13,
+      "startTableId": 11,
       "startFieldId": 0,
-      "endTableId": 14,
+      "endTableId": 12,
       "endFieldId": 6,
       "cardinality": "one_to_one",
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
       "name": "fk_wo_status",
-      "id": 14
+      "id": 12
     },
     {
-      "startTableId": 14,
+      "startTableId": 12,
       "startFieldId": 1,
       "endTableId": 3,
       "endFieldId": 0,
@@ -1751,10 +1689,10 @@
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
       "name": "fk_wo_items",
-      "id": 15
+      "id": 13
     },
     {
-      "startTableId": 14,
+      "startTableId": 12,
       "startFieldId": 3,
       "endTableId": 2,
       "endFieldId": 0,
@@ -1762,10 +1700,10 @@
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
       "name": "fk_wo_destination",
-      "id": 16
+      "id": 14
     },
     {
-      "startTableId": 14,
+      "startTableId": 12,
       "startFieldId": 2,
       "endTableId": 2,
       "endFieldId": 0,
@@ -1773,10 +1711,10 @@
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
       "name": "fk_wo_source",
-      "id": 17
+      "id": 15
     },
     {
-      "startTableId": 16,
+      "startTableId": 14,
       "startFieldId": 1,
       "endTableId": 3,
       "endFieldId": 0,
@@ -1784,21 +1722,21 @@
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
       "name": "fk_itemsservice_items",
-      "id": 18
+      "id": 16
     },
     {
-      "startTableId": 17,
+      "startTableId": 15,
       "startFieldId": 1,
-      "endTableId": 9,
+      "endTableId": 7,
       "endFieldId": 0,
       "cardinality": "one_to_one",
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
       "name": "fk_cart_customers",
-      "id": 19
+      "id": 17
     },
     {
-      "startTableId": 17,
+      "startTableId": 15,
       "startFieldId": 2,
       "endTableId": 3,
       "endFieldId": 0,
@@ -1806,7 +1744,7 @@
       "updateConstraint": "No action",
       "deleteConstraint": "No action",
       "name": "fk_cart_items",
-      "id": 20
+      "id": 18
     }
   ],
   "notes": [
@@ -1817,7 +1755,7 @@
       "title": "Статусы",
       "content": "1) in stock - на \n           складе\n2) request - запрос \n           на отправку\n3) cancelled - \n           отменено\n4) shipped - \n           отправлно\n5) received - \n           получено\n6) returning - \n           возвращение",
       "color": "#fcf7ac",
-      "height": 352
+      "height": 330
     }
   ],
   "subjectAreas": [],
