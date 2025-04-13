@@ -207,6 +207,7 @@ CREATE TABLE IF NOT EXISTS Rent (
     id                  serial          PRIMARY KEY,
     item_id             int             NOT NULL  UNIQUE,
     customer_id         int             NOT NULL,
+    promocode_id        int             NULL,
     address             varchar(255)    NOT NULL,
     delivery_status_id  int             NOT NULL  DEFAULT 2, -- 2 corresponds to 'request'
     number_of_days      int             NOT NULL,
@@ -217,6 +218,7 @@ CREATE TABLE IF NOT EXISTS Rent (
     CONSTRAINT fk_rent_items            FOREIGN KEY (item_id)               REFERENCES Items (id)           ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_rent_customers        FOREIGN KEY (customer_id)           REFERENCES CustomersInfo (id)   ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_rent_deliverystatus   FOREIGN KEY (delivery_status_id)    REFERENCES DeliveryStatus (id)  ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_rent_promocode        FOREIGN KEY (promocode_id)          REFERENCES Promocodes (id)      ON DELETE RESTRICT ON UPDATE CASCADE,
     CHECK (start_rent_time < end_rent_time)
 );
 CREATE INDEX idx_rent_delivery ON Rent(delivery_status_id);
