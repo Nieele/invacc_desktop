@@ -146,27 +146,18 @@ CREATE TABLE IF NOT EXISTS ItemsCategories (
 
 
 --------------------------------------------------
--- Discounts tables
+-- Promo tables
 --------------------------------------------------
 
 
-CREATE TABLE IF NOT EXISTS Discounts (
-    id          serial       PRIMARY KEY,
-    name        varchar(50)  NOT NULL,
-    description text         NULL,
-    percent     smallint     NOT NULL                 CHECK (percent > 0 AND percent < 100),
-    start_date  date         NOT NULL  DEFAULT CURRENT_DATE  CHECK (start_date >= CURRENT_DATE),
-    end_date    date         NOT NULL                 CHECK (end_date > CURRENT_DATE)
-);
-CREATE INDEX idx_discounts_dates ON Discounts(start_date, end_date);
-
-
-CREATE TABLE IF NOT EXISTS ItemsDiscounts (
-    item_id      int,
-    discount_id  int,
-    PRIMARY KEY (item_id, discount_id),
-    CONSTRAINT fk_itemsdiscounts_items      FOREIGN KEY (item_id)       REFERENCES Items (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_itemsdiscounts_discounts  FOREIGN KEY (discount_id)   REFERENCES Discounts (id) ON DELETE RESTRICT ON UPDATE CASCADE
+CREATE TABLE Promocodes (
+    id              serial       PRIMARY KEY,
+    code            varchar(50)  NOT NULL  UNIQUE,
+    description     text         NULL,
+    percent         int          NOT NULL                        CHECK (percent > 0 AND percent < 100),
+    start_date      date         NOT NULL  DEFAULT CURRENT_DATE  CHECK (start_date >= CURRENT_DATE),
+    end_date        date         NOT NULL                        CHECK (end_date > CURRENT_DATE),
+    number_of_uses  int          NOT NULL  DEFAULT 0,
 );
 
 
