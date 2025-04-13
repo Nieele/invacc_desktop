@@ -17,19 +17,15 @@ INSERT INTO Employees_roles(role_id, role)
     VALUES  (1, 'admin'),
             (2, 'unkown'),
             (3, 'worker'),
-            (4, 'inventory_manager'),
-            (5, 'marketing_specialist'),
-            (6, 'moderator'),
-            (7, 'director');
+            (4, 'inventory_manager');
 
 
--- TODO: Внести поправки - должна быть возможность создавать пустого пользователя с ролью (unknown)
 CREATE TABLE IF NOT EXISTS Employees (
     id              serial          PRIMARY KEY,
     username        varchar(50)     NOT NULL UNIQUE,
     full_name       varchar(100)    NOT NULL,
     warehouse_id    int             NOT NULL,
-    role_id         int             NOT NULL,
+    role_id         int             NOT NULL DEFAULT 2, -- 2 corresponds to 'unknown'
     active          boolean         NOT NULL DEFAULT true,
     CONSTRAINT fk_Employees_role FOREIGN KEY (role_id) REFERENCES Employees_roles (role_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
