@@ -110,7 +110,7 @@ CREATE INDEX idx_wo_ ON WarehousesOrders(delivery_status_id);
 CREATE TABLE IF NOT EXISTS ItemsServiceHistory (
     id             serial  PRIMARY KEY,
     item_id        int     NOT NULL,
-    old_quality    int     NOT NULL  DEFAULT 0  CHECK (old_quality >= 0 AND old_quality <= 100),
+    old_quality    int     NULL                 CHECK (old_quality >= 0 AND old_quality <= 100),
     new_quality    int     NOT NULL             CHECK (new_quality >= 0 AND new_quality <= 100),
     change_reason  text    NOT NULL,
     CONSTRAINT fk_itemsservice_items FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
