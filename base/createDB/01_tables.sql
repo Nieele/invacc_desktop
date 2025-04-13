@@ -168,7 +168,7 @@ CREATE TABLE Promocodes (
 
 CREATE TABLE IF NOT EXISTS CustomersAuth (
     id          serial          PRIMARY KEY,
-    login       varchar(50)     NOT NULL UNIQUE,
+    email       varchar(50)     NOT NULL UNIQUE,
     password    varchar(60)     NOT NULL -- bcrypt hash
 );
 
@@ -179,10 +179,9 @@ CREATE TABLE IF NOT EXISTS CustomersInfo (
     firstname           varchar(50)   NULL,
     lastname            varchar(50)   NULL,
     phone               varchar(30)   NULL,
-    phone_verified      boolean       NOT NULL  DEFAULT false,
-    email               varchar(50)   NULL,
-    email_verified      boolean       NOT NULL  DEFAULT false,
     passport            varchar(30)   NULL,
+    phone_verified      boolean       NOT NULL  DEFAULT false,
+    email_verified      boolean       NOT NULL  DEFAULT false,
     passport_verified   boolean       NOT NULL  DEFAULT false,
     CONSTRAINT fk_customersinfo_customersauth FOREIGN KEY (id) REFERENCES CustomersAuth (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
