@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS Items (
     quality          int            NOT NULL  DEFAULT 100  CHECK (quality >= 0 AND quality <= 100),
     price            decimal(10,2)  NOT NULL               CHECK (price > 0),
     late_penalty     decimal(10,2)  NOT NULL               CHECK (late_penalty > 0),
+    deposit          decimal(10,2)  NOT NULL               CHECK (deposit >= 0),
     active           boolean        NOT NULL  DEFAULT TRUE,
     img_url          text           NULL,
     CONSTRAINT fk_items_warehouses FOREIGN KEY (warehouse_id) REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE
