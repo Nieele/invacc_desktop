@@ -16,9 +16,15 @@ import (
 
 type Config struct {
 	Env        string `yaml:"env"`
+	Logger     `yaml:"logger"`
 	Database   `yaml:"database"`
 	HTTPServer `yaml:"http_server"`
 	Auth       `yaml:"auth"`
+}
+
+type Logger struct {
+	Level  string `yaml:"level"`
+	Output string `yaml:"output"`
 }
 
 type Database struct {
