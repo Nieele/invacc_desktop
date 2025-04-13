@@ -4,6 +4,7 @@ import (
 	"invacc-backend/internal/app"
 	"invacc-backend/internal/config"
 	"invacc-backend/pkg/db"
+	"invacc-backend/pkg/valid"
 	"log"
 	"net/http"
 	"strconv"
@@ -16,6 +17,8 @@ func main() {
 	if err != nil {
 		panic("config is not load")
 	}
+
+	valid.Init()
 
 	dbConn, err := db.GetDB(config.GetConnStringDB())
 	if err != nil {
