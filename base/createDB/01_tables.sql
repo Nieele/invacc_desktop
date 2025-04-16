@@ -157,7 +157,7 @@ CREATE TABLE Promocodes (
     percent         int          NOT NULL                        CHECK (percent > 0 AND percent < 100),
     start_date      date         NOT NULL  DEFAULT CURRENT_DATE  CHECK (start_date >= CURRENT_DATE),
     end_date        date         NOT NULL                        CHECK (end_date > CURRENT_DATE),
-    number_of_uses  int          NOT NULL  DEFAULT 0,
+    number_of_uses  int          NOT NULL  DEFAULT 0
 );
 
 
