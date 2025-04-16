@@ -71,21 +71,11 @@ INSERT INTO ItemsCategories VALUES (15, 4);
 INSERT INTO ItemsCategories VALUES (16, 5);
 INSERT INTO ItemsCategories VALUES (16, 9);
 
--- INSERT Discounts
-INSERT INTO Discounts VALUES (1, 'Недельная господдержка промышленного производства', 'По указу №5 президента РФ на промышленное оборудование возлагается скидка 10%', 10, NOW(), NOW() + INTERVAL '7 days');
-INSERT INTO Discounts VALUES (2, 'Пора накачать колеса!',                             'Давно проверяли давление в шинах? Скидка 5% на аренду компрессора',              5, NOW(), NOW() + INTERVAL '3 day');
-SELECT setval('discounts_id_seq', (SELECT MAX(id) FROM Discounts));
+-- INSERT Promocodes
 
--- INSERT ItemsDiscounts - скидка на котегорию "Промышленная машина"
-INSERT INTO ItemsDiscounts
-    SELECT i.id, 1
-    FROM Items AS i 
-    JOIN ItemsCategories AS ic  
-        ON i.id = ic.item_id
-    JOIN Categories AS c
-        ON ic.category_id = c.id
-    WHERE c.category_name = 'Промышленная машина';
--- Скидка на компрессор
+INSERT INTO Promocodes VALUES (1, 'summer', 'Скидка 10% на все товары при использовании промокода', 10, NOW(), NOW() + INTERVAL '7 days', 5);
+SELECT setval('promocodes_id_seq', (SELECT MAX(id) FROM Promocodes));
+
 INSERT INTO ItemsCategories VALUES (10, 2);
 
 -- INSERT CustomersAuth
