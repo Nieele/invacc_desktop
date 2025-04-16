@@ -13,7 +13,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewRouter(dbConn *gorm.DB, cfg *config.Config) http.Handler {
+func NewRouter(db *gorm.DB, cfg *config.Config) http.Handler {
 	r := chi.NewRouter()
 
 	// Use chi middleware
@@ -21,10 +21,10 @@ func NewRouter(dbConn *gorm.DB, cfg *config.Config) http.Handler {
 	r.Use(middleware.Heartbeat("/ping"))
 
 	// Initialize services
-	AuthService := service.NewAuthService(dbConn, cfg.Auth)
-	ItemService := service.NewItemService(dbConn)
-	CostumerService := service.NewCustomerService(dbConn)
-	RentService := service.NewRentService(dbConn)
+	AuthService := service.NewAuthService(db, cfg.Auth)
+	ItemService := service.NewItemService(db)
+	CostumerService := service.NewCustomerService(db)
+	RentService := service.NewRentService(db)
 
 	// Initialize handlers
 	AuthHandler := handlers.NewAuthHandler(AuthService)
