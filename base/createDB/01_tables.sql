@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS Items (
     CONSTRAINT fk_items_warehouses FOREIGN KEY (warehouse_id) REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 CREATE INDEX idx_items_warehouse ON Items(warehouse_id);
+CREATE INDEX idx_items_active ON Items(active);
 
 
 --------------------------------------------------
