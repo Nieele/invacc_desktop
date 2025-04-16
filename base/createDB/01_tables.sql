@@ -143,6 +143,7 @@ CREATE TABLE IF NOT EXISTS ItemsCategories (
     CONSTRAINT fk_itemscategories_items FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_itemscategories_categories FOREIGN KEY (category_id) REFERENCES Categories (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+CREATE INDEX idx_itemscategories ON items_categories (category_id, item_id);
 
 
 --------------------------------------------------
