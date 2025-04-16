@@ -19,7 +19,7 @@ $$ LANGUAGE plpgsql;
 -- Service
 --------------------------------------------------
 
--- Set old_quality from item before insert to ItemsServiceHistory
+-- Set old_quality from item before insert to ItemServiceHistory
 CREATE OR REPLACE FUNCTION set_actual_old_quality()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -28,7 +28,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Update quality in Items after insert to ItemsServiceHistory
+-- Update quality in Items after insert to ItemServiceHistory
 CREATE OR REPLACE FUNCTION update_quality_items()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -330,7 +330,7 @@ BEGIN
     END IF;
 
     -- Check if item is decommissioned
-    IF EXISTS (SELECT * FROM ItemsDecommissioning WHERE item_id = NEW.item_id) THEN
+    IF EXISTS (SELECT * FROM ItemDecommissioning WHERE item_id = NEW.item_id) THEN
         RAISE EXCEPTION 'Cannot rent item (id: %). Item is decommissioned', NEW.item_id;
     END IF;
 
@@ -357,6 +357,16 @@ BEGIN
 
     -- reducing the number of promocode usage
     IF NEW.promocode_id IS NOT NULL THEN
+        -- Check if promocode is valid
+        IF NOT EXISTS (
+            SELECT * 
+            FROM Promocodes 
+            WHERE id = NEW.promocode_id 
+            AND number_of_uses > 0
+        ) THEN
+            RAISE EXCEPTION 'Promocode (id: %) is invalid or has no remaining uses', NEW.promocode_id;
+        END IF;
+
         UPDATE Promocodes
         SET number_of_uses = number_of_uses - 1
         WHERE id = NEW.promocode_id;

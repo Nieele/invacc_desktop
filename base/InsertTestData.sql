@@ -102,12 +102,12 @@ UPDATE CustomersInfo SET firstname = 'Дмитрий',  lastname = 'Коршик
 UPDATE CustomersInfo SET firstname = 'Григорий', lastname = 'Кубланов', phone = '+7(908)302-45-12', passport = '4396 255125', phone_verified = TRUE,  email_verified = FALSE, passport_verified = TRUE  WHERE id = 9;
 SELECT setval('customersinfo_id_seq', (SELECT MAX(id) FROM CustomersInfo));
 
--- INSERT ItemsDecommissioning
-INSERT INTO ItemsDecommissioning VALUES (1, 9, 'Сгорели блок питания и плата управления. Восстановление не рентабельно.');
-SELECT setval('itemsdecommissioning_id_seq', (SELECT MAX(id) FROM ItemsDecommissioning));
+-- INSERT ItemDecommissioning
+INSERT INTO ItemDecommissioning VALUES (1, 9, 'Сгорели блок питания и плата управления. Восстановление не рентабельно.');
+SELECT setval('itemdecommissioning_id_seq', (SELECT MAX(id) FROM ItemDecommissioning));
 
 -- INSERT ItemsServiceHistory
-INSERT INTO ItemsServiceHistory(item_id, new_quality, change_reason) VALUES (2, 60, 'Треснул корпус');
-SELECT setval('itemsservicehistory_id_seq', (SELECT MAX(id) FROM ItemsServiceHistory));
+INSERT INTO ItemServiceHistory(item_id, new_quality, change_reason) VALUES (2, 60, 'Треснул корпус');
+SELECT setval('itemservicehistory_id_seq', (SELECT MAX(id) FROM ItemServiceHistory));
 
 COMMIT;

@@ -6,15 +6,15 @@ AFTER INSERT ON CustomersAuth
 FOR EACH ROW
 EXECUTE FUNCTION add_customer_info();
 
--- Set old_quality from item before insert to ItemsServiceHistory
-CREATE TRIGGER trg_add_items_service_history
-BEFORE INSERT ON ItemsServiceHistory
+-- Set old_quality from item before insert to ItemServiceHistory
+CREATE TRIGGER trg_add_item_service_history
+BEFORE INSERT ON ItemServiceHistory
 FOR EACH ROW
 EXECUTE FUNCTION set_actual_old_quality();
 
--- Update quality in Items after insert to ItemsServiceHistory
+-- Update quality in Items after insert to ItemServiceHistory
 CREATE TRIGGER trg_update_quality_items
-AFTER INSERT ON ItemsServiceHistory
+AFTER INSERT ON ItemServiceHistory
 FOR EACH ROW
 EXECUTE FUNCTION update_quality_items();
 
@@ -42,13 +42,13 @@ EXECUTE FUNCTION update_warehouses_order_status();
 
 -- Validate item before decommissioning
 CREATE TRIGGER trg_validate_item_decommissioning
-BEFORE INSERT ON ItemsDecommissioning
+BEFORE INSERT ON ItemDecommissioning
 FOR EACH ROW
 EXECUTE FUNCTION validate_item_decommissioning();
 
 -- Update item status to inactive when decommissioned
 CREATE TRIGGER trg_set_item_inactive_on_decommission
-AFTER INSERT ON ItemsDecommissioning
+AFTER INSERT ON ItemDecommissioning
 FOR EACH ROW
 EXECUTE FUNCTION set_item_inactive_on_decommission();
 

@@ -8,12 +8,12 @@ BEGIN;
 -- Internal employee roles
 --------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS Employees_roles (
+CREATE TABLE IF NOT EXISTS EmployeesRoles (
     role_id     serial      PRIMARY KEY,
     role        varchar(50) NOT NULL UNIQUE
 );
 
-INSERT INTO Employees_roles(role_id, role) 
+INSERT INTO EmployeesRoles(role_id, role) 
     VALUES  (1, 'admin'),
             (2, 'unkown'),
             (3, 'worker'),
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS Employees (
     warehouse_id    int             NOT NULL,
     role_id         int             NOT NULL DEFAULT 2, -- 2 corresponds to 'unknown'
     active          boolean         NOT NULL DEFAULT true,
-    CONSTRAINT fk_Employees_role FOREIGN KEY (role_id) REFERENCES Employees_roles (role_id) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT fk_EmployeesRole FOREIGN KEY (role_id) REFERENCES EmployeesRoles (role_id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 
@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS Items (
     CONSTRAINT fk_items_warehouses FOREIGN KEY (warehouse_id) REFERENCES Warehouses (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 CREATE INDEX idx_items_warehouse ON Items(warehouse_id);
+CREATE INDEX idx_items_active ON Items(active);
 
 
 --------------------------------------------------
@@ -107,21 +108,21 @@ CREATE INDEX idx_wo_ ON WarehousesOrders(delivery_status_id);
 --------------------------------------------------
 
 
-CREATE TABLE IF NOT EXISTS ItemsServiceHistory (
+CREATE TABLE IF NOT EXISTS ItemServiceHistory (
     id             serial  PRIMARY KEY,
     item_id        int     NOT NULL,
     old_quality    int     NULL                 CHECK (old_quality >= 0 AND old_quality <= 100),
     new_quality    int     NOT NULL             CHECK (new_quality >= 0 AND new_quality <= 100),
     change_reason  text    NOT NULL,
-    CONSTRAINT fk_itemsservice_items FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_itemservice_items FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
-CREATE TABLE IF NOT EXISTS ItemsDecommissioning (
+CREATE TABLE IF NOT EXISTS ItemDecommissioning (
     id       serial  PRIMARY KEY,
     item_id  int     NOT NULL  UNIQUE,
     reason   text    NOT NULL,
-    CONSTRAINT fk_itemsdecommissioning_items FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT fk_itemdecommissioning_items FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -143,6 +144,7 @@ CREATE TABLE IF NOT EXISTS ItemsCategories (
     CONSTRAINT fk_itemscategories_items FOREIGN KEY (item_id) REFERENCES Items (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT fk_itemscategories_categories FOREIGN KEY (category_id) REFERENCES Categories (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+CREATE INDEX idx_itemscategories ON itemscategories (category_id, item_id);
 
 
 --------------------------------------------------
@@ -222,6 +224,7 @@ CREATE TABLE IF NOT EXISTS Rent (
     CHECK (start_rent_time < end_rent_time)
 );
 CREATE INDEX idx_rent_delivery ON Rent(delivery_status_id);
+CREATE INDEX idx_rent_customer ON Rent(customer_id);
 
 
 CREATE TABLE IF NOT EXISTS RentHistory (
