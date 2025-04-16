@@ -223,6 +223,7 @@ CREATE TABLE IF NOT EXISTS Rent (
     CHECK (start_rent_time < end_rent_time)
 );
 CREATE INDEX idx_rent_delivery ON Rent(delivery_status_id);
+CREATE INDEX idx_rent_customer ON Rent(customer_id);
 
 
 CREATE TABLE IF NOT EXISTS RentHistory (
