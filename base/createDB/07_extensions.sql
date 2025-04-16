@@ -2,6 +2,8 @@
 -- pg_cron schedules
 ---------------------------------------------------------------------
 
+BEGIN;
+
 -- update overdue rents
 SELECT cron.schedule(
     'daily_update_overdue_rent_job', 
@@ -15,3 +17,6 @@ SELECT cron.schedule(
   '0 1 1 * *',                          -- every month at 1:00 AM
   'REFRESH MATERIALIZED VIEW monthly_rent_summary'
 );
+
+
+COMMIT;
