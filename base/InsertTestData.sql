@@ -10,22 +10,22 @@ INSERT INTO Warehouses VALUES (5, 'Сильва',  '+79165946514', 'silva@rental
 SELECT setval('warehouses_id_seq', (SELECT MAX(id) FROM Warehouses));
 
 -- INSERT Items
-INSERT INTO Items VALUES (1,  1, 'плиткорез',                            'Для точной резки плитки и керамики.',                    NULL, 91,  300,  400 , TRUE, 'plitkorez.webp');
-INSERT INTO Items VALUES (2,  1, 'пневматический гайковерт',             'Для быстрого и эффективного закручивания гаек.',         NULL, 62,  900,  1300, TRUE, 'pnevmaticheskij_gajkovert.webp');
-INSERT INTO Items VALUES (3,  1, 'лазерный уровень',                     'Для точной установки и выравнивания объектов.',          NULL, 100, 400,  600 , TRUE, 'lazernyj_uroven.webp');
-INSERT INTO Items VALUES (4,  2, 'тележка с ручным подъемником',         'Для легкого подъема и перемещения грузов.',              NULL, 85,  1200, 1500, TRUE, 'telezhka_s_ruchnym_podemnikom.webp');
-INSERT INTO Items VALUES (5,  2, 'складской робот',                      'Автоматизированное устройство для перемещения товаров.', NULL, 64,  4000, 5500, TRUE, 'skladskoj_robot.webp');
-INSERT INTO Items VALUES (6,  3, 'кран-балка',                           'Для перемещения тяжелых предметов в пределах склада.',   NULL, 54,  4000, 5500, TRUE, 'kran-balka.webp');
-INSERT INTO Items VALUES (7,  2, 'конвейер',                             'Используется для перемещения товаров на складе.',        NULL, 80,  1500, 2000, FALSE, 'konvejer.webp');
-INSERT INTO Items VALUES (8,  1, 'электрический погрузчик',              'Используется для перемещения тяжелых грузов.',           NULL, 56,  2000, 2500, TRUE, 'elektricheskij_pogruzchik.webp');
-INSERT INTO Items VALUES (9,  4, 'сварочный аппарат',                    'Для сварки металлов и других материалов.',               NULL, 0,   700,  1000, FALSE, 'svarochnyj_apparat.webp');
-INSERT INTO Items VALUES (10, 4, 'компрессор',                           'Для подачи сжатого воздуха.',                            NULL, 10,  700,  1000, TRUE, 'kompressor.webp');
-INSERT INTO Items VALUES (11, 5, 'фрезерный станок',                     'Для точной фрезеровки различных материалов.',            NULL, 77,  2500, 3000, TRUE, 'frezernyj_stanok.webp');
-INSERT INTO Items VALUES (12, 1, 'газовый резак',                        'Для резки металлов и других твердых материалов.',        NULL, 95,  600,  800,  TRUE, 'gazovyj_rezak.webp');
-INSERT INTO Items VALUES (13, 5, 'дрель-шуруповерт',                     'Для сверления и закручивания шурупов.',                  NULL, 68,  700,  900,  TRUE, 'drel-shurupovert.webp');
-INSERT INTO Items VALUES (14, 3, 'плоскогубцы с изолированными ручками', 'Для работы с электрическими проводами и кабелями.',      NULL, 35,  200,  300,  TRUE, 'ploskogubcy_s_izolirovannymi_ruchkami.webp');
-INSERT INTO Items VALUES (15, 3, 'бетононасос',                          'Для перекачивания бетона на строительных площадках.',    NULL, 84,  4000, 5500, TRUE, 'betononasos.webp');
-INSERT INTO Items VALUES (16, 3, 'вакуумный упаковщик',                  'Для упаковки продуктов в вакуумной упаковке.',           NULL, 90,  2000, 2400, TRUE, 'vakuumnyj_upakovschik.webp');
+INSERT INTO Items VALUES (1,  1, 'плиткорез',                            'Для точной резки плитки и керамики.',                    NULL, 91,  300,  400 , 1000, TRUE, 'plitkorez.webp');
+INSERT INTO Items VALUES (2,  1, 'пневматический гайковерт',             'Для быстрого и эффективного закручивания гаек.',         NULL, 62,  900,  1300, 2000, TRUE, 'pnevmaticheskij_gajkovert.webp');
+INSERT INTO Items VALUES (3,  1, 'лазерный уровень',                     'Для точной установки и выравнивания объектов.',          NULL, 100, 400,  600 , 3000, TRUE, 'lazernyj_uroven.webp');
+INSERT INTO Items VALUES (4,  2, 'тележка с ручным подъемником',         'Для легкого подъема и перемещения грузов.',              NULL, 85,  1200, 1500, 2000, TRUE, 'telezhka_s_ruchnym_podemnikom.webp');
+INSERT INTO Items VALUES (5,  2, 'складской робот',                      'Автоматизированное устройство для перемещения товаров.', NULL, 64,  4000, 5500, 10000, TRUE, 'skladskoj_robot.webp');
+INSERT INTO Items VALUES (6,  3, 'кран-балка',                           'Для перемещения тяжелых предметов в пределах склада.',   NULL, 54,  4000, 5500, 10000, TRUE, 'kran-balka.webp');
+INSERT INTO Items VALUES (7,  2, 'конвейер',                             'Используется для перемещения товаров на складе.',        NULL, 80,  1500, 2000, 8000, FALSE, 'konvejer.webp');
+INSERT INTO Items VALUES (8,  1, 'электрический погрузчик',              'Используется для перемещения тяжелых грузов.',           NULL, 56,  2000, 2500, 5000, TRUE, 'elektricheskij_pogruzchik.webp');
+INSERT INTO Items VALUES (9,  4, 'сварочный аппарат',                    'Для сварки металлов и других материалов.',               NULL, 0,   700,  1000, 2000, FALSE, 'svarochnyj_apparat.webp');
+INSERT INTO Items VALUES (10, 4, 'компрессор',                           'Для подачи сжатого воздуха.',                            NULL, 10,  700,  1000, 2000, TRUE, 'kompressor.webp');
+INSERT INTO Items VALUES (11, 5, 'фрезерный станок',                     'Для точной фрезеровки различных материалов.',            NULL, 77,  2500, 3000, 7000, TRUE, 'frezernyj_stanok.webp');
+INSERT INTO Items VALUES (12, 1, 'газовый резак',                        'Для резки металлов и других твердых материалов.',        NULL, 95,  600,  800,  1000, TRUE, 'gazovyj_rezak.webp');
+INSERT INTO Items VALUES (13, 5, 'дрель-шуруповерт',                     'Для сверления и закручивания шурупов.',                  NULL, 68,  700,  900,  1000, TRUE, 'drel-shurupovert.webp');
+INSERT INTO Items VALUES (14, 3, 'плоскогубцы с изолированными ручками', 'Для работы с электрическими проводами и кабелями.',      NULL, 35,  200,  300,  1000, TRUE, 'ploskogubcy_s_izolirovannymi_ruchkami.webp');
+INSERT INTO Items VALUES (15, 3, 'бетононасос',                          'Для перекачивания бетона на строительных площадках.',    NULL, 84,  4000, 5500, 10000, TRUE, 'betononasos.webp');
+INSERT INTO Items VALUES (16, 3, 'вакуумный упаковщик',                  'Для упаковки продуктов в вакуумной упаковке.',           NULL, 90,  2000, 2400, 5000, TRUE, 'vakuumnyj_upakovschik.webp');
 SELECT setval('items_id_seq', (SELECT MAX(id) FROM Items));
 
 -- INSERT Categories
