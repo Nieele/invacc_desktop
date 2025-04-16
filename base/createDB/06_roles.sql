@@ -74,8 +74,7 @@ BEGIN
     GRANT SELECT                         ON TABLE Warehouses, RentHistory, Employees, Employees_roles                TO inventory_manager;
 
     GRANT USAGE, SELECT ON SEQUENCE itemsdecommissioning_id_seq, items_id_seq, 
-        itemsservicehistory_id_seq, warehousesorders_id_seq, categories_id_seq, 
-        itemscategories_id_seq TO inventory_manager;
+        itemsservicehistory_id_seq, warehousesorders_id_seq, categories_id_seq TO inventory_manager;
 END $$;
 
 COMMIT;
