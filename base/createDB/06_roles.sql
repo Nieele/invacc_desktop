@@ -57,7 +57,7 @@ BEGIN
     GRANT SELECT, UPDATE         ON TABLE CustomersInfo                             TO worker;
     GRANT SELECT, INSERT         ON TABLE RentHistory                               TO worker;
     GRANT SELECT                 ON TABLE CustomersAuth, DeliveryStatus, Warehouses,
-        WarehousesOrders, Employees, Employees_roles, ItemsDecommissioning          TO worker;
+        WarehousesOrders, Employees, EmployeesRoles, ItemDecommissioning          TO worker;
 
     GRANT USAGE, SELECT ON SEQUENCE renthistory_id_seq TO worker;
 END $$;
@@ -68,13 +68,13 @@ BEGIN
     ALTER ROLE inventory_manager WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB NOLOGIN NOREPLICATION NOBYPASSRLS;
     
     -- Inventory Manager permissions
-    GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE ItemsDecommissioning                                               TO inventory_manager;
-    GRANT SELECT, INSERT, UPDATE         ON TABLE Items, ItemsDecommissioning, ItemsServiceHistory, WarehousesOrders TO inventory_manager;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE ItemDecommissioning                                               TO inventory_manager;
+    GRANT SELECT, INSERT, UPDATE         ON TABLE Items, ItemDecommissioning, ItemServiceHistory, WarehousesOrders TO inventory_manager;
     GRANT SELECT, INSERT, UPDATE         ON TABLE Categories, ItemsCategories                                        TO inventory_manager;
-    GRANT SELECT                         ON TABLE Warehouses, RentHistory, Employees, Employees_roles                TO inventory_manager;
+    GRANT SELECT                         ON TABLE Warehouses, RentHistory, Employees, EmployeesRoles                TO inventory_manager;
 
-    GRANT USAGE, SELECT ON SEQUENCE itemsdecommissioning_id_seq, items_id_seq, 
-        itemsservicehistory_id_seq, warehousesorders_id_seq, categories_id_seq TO inventory_manager;
+    GRANT USAGE, SELECT ON SEQUENCE ItemDecommissioning_id_seq, items_id_seq, 
+        ItemServiceHistory_id_seq, warehousesorders_id_seq, categories_id_seq TO inventory_manager;
 END $$;
 
 COMMIT;
