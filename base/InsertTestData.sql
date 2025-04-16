@@ -79,27 +79,27 @@ SELECT setval('promocodes_id_seq', (SELECT MAX(id) FROM Promocodes));
 INSERT INTO ItemsCategories VALUES (10, 2);
 
 -- INSERT CustomersAuth
-INSERT INTO CustomersAuth VALUES (1, 'user1', '$2a$10$5HuBPDLMfeeTLRpLGE45T.E4P3Hsf/klVh49QE4aXg.uOkZovCyQe');
-INSERT INTO CustomersAuth VALUES (2, 'user2', '$2a$10$ggSprWpngDlu67b3vJ1MgOS5RN/o4tmvHNBjXbPgQHTHr5FWHOvu6');
-INSERT INTO CustomersAuth VALUES (3, 'user3', '$2a$10$SN0Yp3oLp69h9i1WlAhUbuA47ULaAnkq5YGs4FdgLivP6ix3i6Cem');
-INSERT INTO CustomersAuth VALUES (4, 'user4', '$2a$10$ouT74F/az1issWaGZYz6nOhpcTX7ktrRciXQ1FpVYQciVcKX7H3KG');
-INSERT INTO CustomersAuth VALUES (5, 'user5', '$2a$10$W/aQACmhkhGCUFVdBCiF4OuLWTORxubiDKMUZU8i9.WKGOZ7fcTuC');
-INSERT INTO CustomersAuth VALUES (6, 'user6', '$2a$10$rx5Offi3VObA2LUgUR2yzu4HO2Txv3R3EVvI.ln2Qy81IR1ZTv.nm');
-INSERT INTO CustomersAuth VALUES (7, 'user7', '$2a$10$L0aqk0w675Rt2f8EdNq5g.pFccEMcN0aJ8ExnXl89fJ1cXwLkKW1K');
-INSERT INTO CustomersAuth VALUES (8, 'user8', '$2a$10$6EplL.Zn.EgEOjmOa5wp4.2JvHHhWE.yGrdB21Pce0QW6jcaFe9AC');
-INSERT INTO CustomersAuth VALUES (9, 'user9', '$2a$10$LQxqrfHQ3zEeSC2ZWPjare9f4a4I7gsYXHjssn17eBRb5iYZFiADq');
+INSERT INTO CustomersAuth VALUES (1, 'user1@mail.ru', '$2a$10$5HuBPDLMfeeTLRpLGE45T.E4P3Hsf/klVh49QE4aXg.uOkZovCyQe');
+INSERT INTO CustomersAuth VALUES (2, 'user2@mail.ru', '$2a$10$ggSprWpngDlu67b3vJ1MgOS5RN/o4tmvHNBjXbPgQHTHr5FWHOvu6');
+INSERT INTO CustomersAuth VALUES (3, 'user3@mail.ru', '$2a$10$SN0Yp3oLp69h9i1WlAhUbuA47ULaAnkq5YGs4FdgLivP6ix3i6Cem');
+INSERT INTO CustomersAuth VALUES (4, 'user4@mail.ru', '$2a$10$ouT74F/az1issWaGZYz6nOhpcTX7ktrRciXQ1FpVYQciVcKX7H3KG');
+INSERT INTO CustomersAuth VALUES (5, 'user5@mail.ru', '$2a$10$W/aQACmhkhGCUFVdBCiF4OuLWTORxubiDKMUZU8i9.WKGOZ7fcTuC');
+INSERT INTO CustomersAuth VALUES (6, 'user6@mail.ru', '$2a$10$rx5Offi3VObA2LUgUR2yzu4HO2Txv3R3EVvI.ln2Qy81IR1ZTv.nm');
+INSERT INTO CustomersAuth VALUES (7, 'user7@mail.ru', '$2a$10$L0aqk0w675Rt2f8EdNq5g.pFccEMcN0aJ8ExnXl89fJ1cXwLkKW1K');
+INSERT INTO CustomersAuth VALUES (8, 'user8@mail.ru', '$2a$10$6EplL.Zn.EgEOjmOa5wp4.2JvHHhWE.yGrdB21Pce0QW6jcaFe9AC');
+INSERT INTO CustomersAuth VALUES (9, 'user9@mail.ru', '$2a$10$LQxqrfHQ3zEeSC2ZWPjare9f4a4I7gsYXHjssn17eBRb5iYZFiADq');
 SELECT setval('customersauth_id_seq', (SELECT MAX(id) FROM CustomersAuth));
 
 -- INSERT CustomersInfo
-UPDATE CustomersInfo SET firstname = 'Арсений',  lastname = 'Корнилов', phone = '+7(909)445-14-88', phone_verified = TRUE,  email = 'arseniy6950@mail.ru',         email_verified = TRUE,  passport = '4128 355647', passport_verified = TRUE  WHERE id = 1;
-UPDATE CustomersInfo SET firstname = 'Лариса',   lastname = 'Горелова', phone = '+7(924)855-68-37', phone_verified = TRUE,  email = 'larisa58@mail.ru',            email_verified = FALSE, passport = '4794 949570', passport_verified = FALSE WHERE id = 2;
-UPDATE CustomersInfo SET firstname = 'Иван',     lastname = 'Аксаков',  phone = '+7(962)409-79-76', phone_verified = TRUE,  email = 'ivan03071980@mail.ru',        email_verified = FALSE, passport = '4459 152953', passport_verified = TRUE  WHERE id = 3;
-UPDATE CustomersInfo SET firstname = 'Павел',    lastname = 'Исаев',    phone = '+7(909)189-17-81', phone_verified = FALSE, email = 'pavel62@yandex.ru',           email_verified = FALSE, passport = '4338 106639', passport_verified = FALSE WHERE id = 4;
-UPDATE CustomersInfo SET firstname = 'Роман',    lastname = 'Ельченко', phone = NULL,               phone_verified = FALSE, email = NULL,                          email_verified = FALSE, passport = NULL,          passport_verified = FALSE WHERE id = 5;
-UPDATE CustomersInfo SET firstname = NULL,       lastname = NULL,       phone = NULL,               phone_verified = FALSE, email = NULL,                          email_verified = FALSE, passport = NULL,          passport_verified = FALSE WHERE id = 6;
-UPDATE CustomersInfo SET firstname = 'Максим',   lastname = 'Гребнев',  phone = '+7(925)930-73-21', phone_verified = TRUE,  email = 'max47@rambler.ru',            email_verified = TRUE,  passport = '4522 205106', passport_verified = TRUE  WHERE id = 7;
-UPDATE CustomersInfo SET firstname = 'Дмитрий',  lastname = 'Коршиков', phone = '+7(908)329-79-43', phone_verified = TRUE,  email = 'dmitriy.korshikov@gmail.com', email_verified = TRUE,  passport = NULL,          passport_verified = FALSE WHERE id = 8;
-UPDATE CustomersInfo SET firstname = 'Григорий', lastname = 'Кубланов', phone = '+7(908)302-45-12', phone_verified = TRUE,  email = NULL,                          email_verified = FALSE, passport = '4396 255125', passport_verified = TRUE  WHERE id = 9;
+UPDATE CustomersInfo SET firstname = 'Арсений',  lastname = 'Корнилов', phone = '+7(909)445-14-88', passport = '4128 355647', phone_verified = TRUE,  email_verified = TRUE,  passport_verified = TRUE  WHERE id = 1;
+UPDATE CustomersInfo SET firstname = 'Лариса',   lastname = 'Горелова', phone = '+7(924)855-68-37', passport = '4794 949570', phone_verified = TRUE,  email_verified = FALSE, passport_verified = FALSE WHERE id = 2;
+UPDATE CustomersInfo SET firstname = 'Иван',     lastname = 'Аксаков',  phone = '+7(962)409-79-76', passport = '4459 152953', phone_verified = TRUE,  email_verified = FALSE, passport_verified = TRUE  WHERE id = 3;
+UPDATE CustomersInfo SET firstname = 'Павел',    lastname = 'Исаев',    phone = '+7(909)189-17-81', passport = '4338 106639', phone_verified = FALSE, email_verified = FALSE, passport_verified = FALSE WHERE id = 4;
+UPDATE CustomersInfo SET firstname = 'Роман',    lastname = 'Ельченко', phone = NULL,               passport = NULL,          phone_verified = FALSE, email_verified = FALSE, passport_verified = FALSE WHERE id = 5;
+UPDATE CustomersInfo SET firstname = NULL,       lastname = NULL,       phone = NULL,               passport = NULL,          phone_verified = FALSE, email_verified = FALSE, passport_verified = FALSE WHERE id = 6;
+UPDATE CustomersInfo SET firstname = 'Максим',   lastname = 'Гребнев',  phone = '+7(925)930-73-21', passport = '4522 205106', phone_verified = TRUE,  email_verified = TRUE,  passport_verified = TRUE  WHERE id = 7;
+UPDATE CustomersInfo SET firstname = 'Дмитрий',  lastname = 'Коршиков', phone = '+7(908)329-79-43', passport = NULL,          phone_verified = TRUE,  email_verified = TRUE,  passport_verified = FALSE WHERE id = 8;
+UPDATE CustomersInfo SET firstname = 'Григорий', lastname = 'Кубланов', phone = '+7(908)302-45-12', passport = '4396 255125', phone_verified = TRUE,  email_verified = FALSE, passport_verified = TRUE  WHERE id = 9;
 SELECT setval('customersinfo_id_seq', (SELECT MAX(id) FROM CustomersInfo));
 
 -- INSERT ItemsDecommissioning
