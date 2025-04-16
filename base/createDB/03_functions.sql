@@ -357,6 +357,16 @@ BEGIN
 
     -- reducing the number of promocode usage
     IF NEW.promocode_id IS NOT NULL THEN
+        -- Check if promocode is valid
+        IF NOT EXISTS (
+            SELECT * 
+            FROM Promocodes 
+            WHERE id = NEW.promocode_id 
+            AND number_of_uses > 0
+        ) THEN
+            RAISE EXCEPTION 'Promocode (id: %) is invalid or has no remaining uses', NEW.promocode_id;
+        END IF;
+
         UPDATE Promocodes
         SET number_of_uses = number_of_uses - 1
         WHERE id = NEW.promocode_id;
