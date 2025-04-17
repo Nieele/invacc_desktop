@@ -256,16 +256,13 @@ function register() {
   regForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    // Получаем значения полей формы
     const firstname = document.getElementById("firstname").value.trim();
     const lastname = document.getElementById("lastname").value.trim();
-    const loginValue = document.getElementById("login").value.trim();
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const password = document.getElementById("password").value;
     const passwordConfirm = document.getElementById("password-confirm").value;
 
-    // Проверка паролей и базовая валидация email и телефона
     if (password !== passwordConfirm) {
       return alert("Пароли не совпадают!");
     }
@@ -277,16 +274,15 @@ function register() {
     }
 
     const registrationData = {
-      login: loginValue,
-      password,
       firstname,
       lastname,
       email,
-      phone
+      phone,
+      password
     };
 
     try {
-      const response = await fetch("https://stroylomay.shop/api/v1/register", {
+      const response = await fetch(`${API_BASE}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(registrationData)
@@ -301,16 +297,6 @@ function register() {
           errorMessage = errorText || response.statusText;
         }
         throw new Error("Ошибка регистрации: " + errorMessage);
-      }
-      // Обрабатываем ответ (если он есть)
-      const responseText = await response.text();
-      let data = null;
-      if (responseText) {
-        try {
-          data = JSON.parse(responseText);
-        } catch (e) {
-          data = responseText;
-        }
       }
       alert("Регистрация прошла успешно. Теперь вы можете войти.");
       window.location.href = "/login.html";
@@ -329,12 +315,12 @@ function login() {
   authForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const loginValue = document.getElementById("login").value.trim();
+    const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-    const credentials = { login: loginValue, password };
+    const credentials = { email, password };
 
     try {
-      const response = await fetch("https://stroylomay.shop/api/v1/login", {
+      const response = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials)
@@ -359,13 +345,12 @@ function login() {
 // Функция загрузки информации о пользователе и рендеринга внутри .account-details
 async function initAccountPage() {
   try {
-    const response = await fetch('https://stroylomay.shop/api/v1/account', { credentials: 'same-origin' });
+    const response = await fetch(`${API_BASE}/account`, { credentials: 'same-origin' });
     if (!response.ok) throw new Error('Ошибка загрузки: ' + response.statusText);
 
     const d = await response.json();
     const rows = [
       { label: 'ID', id: 'account-id', value: d.id },
-      { label: 'Логин', id: 'account-login', value: d.login },
       { label: 'Имя', id: 'account-firstname', value: d.firstname },
       { label: 'Фамилия', id: 'account-lastname', value: d.lastname },
       { label: 'Телефон', id: 'account-phone', value: d.phone, verified: d.phone_verified },
@@ -408,7 +393,7 @@ function initAccountEdit() {
   editBtn.addEventListener('click', () => {
     if (!isEditing) {
       // Переводим поля в режим редактирования: заменяем содержимое input'ами
-      const fields = ['account-login', 'account-firstname', 'account-lastname', 'account-phone', 'account-email', 'account-passport'];
+      const fields = ['account-firstname', 'account-lastname', 'account-phone', 'account-email', 'account-passport'];
       fields.forEach(id => {
         const valueElem = document.getElementById(id);
         if (valueElem) {
@@ -417,13 +402,12 @@ function initAccountEdit() {
           input.type = 'text';
           input.value = currentValue;
           input.className = 'edit-input';
-          input.id = id;  // сохраняем тот же ID
+          input.id = id;
           valueElem.parentNode.replaceChild(input, valueElem);
         }
       });
       isEditing = true;
       editBtn.textContent = "Готово";
-      // Добавляем кнопку Отмена
       cancelBtn = document.createElement('button');
       cancelBtn.textContent = "Отмена";
       cancelBtn.className = "btn btn--secondary";
@@ -438,14 +422,13 @@ function initAccountEdit() {
     } else {
       // Собираем данные из input'ов
       const updateData = {
-        login: document.getElementById('account-login').value.trim(),
         firstname: document.getElementById('account-firstname').value.trim(),
         lastname: document.getElementById('account-lastname').value.trim(),
         phone: document.getElementById('account-phone').value.trim(),
         email: document.getElementById('account-email').value.trim(),
         passport: document.getElementById('account-passport').value.trim()
       };
-      fetch('https://stroylomay.shop/api/v1/account', {
+      fetch(`${API_BASE}/account`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
