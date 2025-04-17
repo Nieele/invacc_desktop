@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"invacc/internal/middleware"
 	"invacc/internal/models"
 	"invacc/internal/service"
@@ -207,6 +208,8 @@ func (h *rentHandler) Rent(w http.ResponseWriter, r *http.Request) {
 		Address:      mrent_nonID.Address,
 		NumberOfDays: mrent_nonID.NumberOfDays,
 	}
+
+	fmt.Println(mrent)
 
 	if err := h.rentService.Rent(mrent); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

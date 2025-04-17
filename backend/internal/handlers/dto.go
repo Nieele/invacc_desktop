@@ -87,7 +87,7 @@ type RentDTO struct {
 	ItemID             uint    `json:"item_id"`
 	ItemName           string  `json:"item_name"`
 	ItemImgURL         *string `json:"item_img_url,omitempty"`
-	NumberOfDays       int     `json:"number_of_days"`
+	NumberOfDays       uint    `json:"number_of_days"`
 	Address            string  `json:"address"`
 	DeliveryStatusName string  `json:"delivery_status_name"`
 	TotalPrice         float64 `json:"total_price"`

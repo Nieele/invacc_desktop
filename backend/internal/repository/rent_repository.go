@@ -80,9 +80,10 @@ func (r *rentRepo) Rent(mrent models.MultiRent) error {
 
 	for _, itemID := range mrent.ItemsID {
 		rent := models.Rent{
-			CustomerID: mrent.CustomerID,
-			ItemID:     itemID,
-			Address:    mrent.Address,
+			CustomerID:   mrent.CustomerID,
+			ItemID:       itemID,
+			Address:      mrent.Address,
+			NumberOfDays: mrent.NumberOfDays,
 		}
 		result := tx.Create(&rent)
 
