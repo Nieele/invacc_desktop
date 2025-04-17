@@ -1,3 +1,8 @@
+// @title       Invacc API
+// @version     1.0
+// @description Inventory rental API
+// @host        localhost:8080
+// @BasePath    /
 package main
 
 import (
