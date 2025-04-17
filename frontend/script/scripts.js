@@ -1,5 +1,10 @@
 // scripts.js
 
+// Базовые константы
+const API_BASE = 'https://stroylomay.shop/api/v1';
+const IMG_BASE = 'https://stroylomay.shop/img';
+const ITEMS_LIMIT = 20;
+
 // Функция проверки аутентификации пользователя
 const isLoggedIn = () =>
   document.cookie.split(';').some(c => c.trim().startsWith('jwt='));
@@ -15,92 +20,97 @@ const redirectToLogin = () => {
 function initCatalogPage() {
   const itemsContainer = document.getElementById('catalog-items');
   let currentPage = 1;
-  let totalPages = null;
+  let totalPages = 1;
   let isLoading = false;
 
-  // Функция рендеринга карточки товара с использованием шаблонных строк
+  // Функция создания карточки товара
   const createProductCard = (item) => {
     const card = document.createElement('div');
     card.className = 'card';
-
-    // Формирование контента карточки через innerHTML
     card.innerHTML = `
       <a href="item.html?id=${item.id}" class="card-content">
         <div class="card-image">
-          <img src="https://stroylomay.shop/img/${item.img_url}" alt="${item.name}" loading="lazy">
+          <img src="${IMG_BASE}/${item.img_url}" alt="${item.name}" loading="lazy">
         </div>
         <div class="card-info">
-          <div class="card-text">
-            <h3 class="card-title">${item.name}</h3>
-            <p class="card-desc">${item.description && item.description.length > 60
-        ? item.description.substring(0, 60) + '...'
-        : item.description || ''
-      }</p>
-          </div>
+          <h3 class="card-title">${item.name}</h3>
           <div class="card-bottom">
-            <p class="card-price">${item.price} ₽/День</p>
-            <p class="card-warehouse"><a href="wirehouse.html?id=${item.warehouse_id || ''}" class="warehouse-label">Склад:</a>&nbsp;<a href="wirehouse.html?id=${item.warehouse_id || ''}">${item.warehouse_name}</a></p>
+            <p class="card-price">${item.price} ₽/день</p>
+            <p class="card-warehouse">
+              <a href="wirehouse.html?id=${item.warehouse_id}" class="warehouse-label">Склад:</a>
+              <a href="wirehouse.html?id=${item.warehouse_id}">${item.warehouse_name}</a>
+            </p>
           </div>
         </div>
-      </a>
-    `;
-    // Отдельный блок для кнопки "Добавить в корзину"
+      </a>`;
+
+    // Кнопка "Добавить в корзину"
     const buttonBlock = document.createElement('div');
     buttonBlock.className = 'card-button';
     const addBtn = document.createElement('button');
-    addBtn.textContent = 'Добавить в корзину';
+    addBtn.textContent = 'Добавить в корзину';
     addBtn.className = 'add-to-cart';
     addBtn.dataset.id = item.id;
     buttonBlock.appendChild(addBtn);
     card.appendChild(buttonBlock);
+
     return card;
   };
 
+  // Добавление массива товаров в контейнер
   const appendItems = (items) => {
-    items.forEach(item => {
-      itemsContainer.appendChild(createProductCard(item));
-    });
+    items.forEach(item => itemsContainer.appendChild(createProductCard(item)));
   };
 
-  // Асинхронная загрузка данных товаров с API
+  // Загрузка страницы товаров
   const loadItems = async (page) => {
-    if (isLoading) return;
+    if (isLoading || page > totalPages) return;
     isLoading = true;
     try {
-      const response = await fetch(`https://stroylomay.shop/api/v1/items?page=${page}`);
-      const data = await response.json();
-      const items = data.items || data;
-      if (items && items.length) {
+      const response = await fetch(`${API_BASE}/items?limit=${ITEMS_LIMIT}&page=${page}`);
+      if (!response.ok) {
+        console.error('Ошибка загрузки товаров. Статус:', response.status);
+        return;
+      }
+      const json = await response.json();
+      const items = json.data || [];
+      // Надёжно извлекаем meta и links
+      const meta = json.meta || {};
+      const links = json.links || {};
+
+      // Вычисляем общее число страниц
+      const limit = meta.limit || ITEMS_LIMIT;
+      const total = meta.total || 0;
+      const pageIndex = meta.page || page;
+      totalPages = Math.ceil(total / limit);
+      currentPage = pageIndex;
+
+      if (items.length) {
         appendItems(items);
-        currentPage = page;
-        totalPages = data.total_pages ?? currentPage;
-      } else {
-        totalPages = currentPage;
       }
     } catch (error) {
-      console.error('Ошибка загрузки товаров:', error);
+      console.error('Ошибка при загрузке товаров:', error);
     } finally {
       isLoading = false;
     }
   };
 
-  // Первоначальная загрузка первой страницы товаров
+  // Первая загрузка
   loadItems(1);
 
   // Бесконечная прокрутка
   window.addEventListener('scroll', () => {
     const nearBottom =
       window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
-    if (nearBottom && !isLoading && (totalPages === null || currentPage < totalPages)) {
+    if (nearBottom && !isLoading && currentPage < totalPages) {
       loadItems(currentPage + 1);
     }
   });
 
-  // Делегирование событий для добавления товара в корзину
+  // Обработка клика по кнопке "Добавить в корзину"
   itemsContainer.addEventListener('click', (e) => {
     if (e.target.classList.contains('add-to-cart')) {
       e.preventDefault();
-      // Передаём элемент кнопки и идентификатор товара
       handleAddToCart(e.target, e.target.dataset.id);
     }
   });
