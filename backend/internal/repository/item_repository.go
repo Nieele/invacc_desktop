@@ -53,6 +53,7 @@ func (r *itemRepo) ListItems(ctx context.Context, filter *ItemFilter, offset, li
 
 	// name filter
 	if filter.Name != nil {
+		// TODO: replace ILIKE? Only postgres supports ILIKE
 		q = q.Where("items.name ILIKE ?", "%"+*filter.Name+"%")
 	}
 

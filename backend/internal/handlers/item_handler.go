@@ -3,83 +3,226 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 	"strconv"
 
-	"invacc-backend/internal/models"
+	"github.com/go-chi/chi/v5"
+
+	"invacc-backend/internal/apierrors"
+	"invacc-backend/internal/repository"
 	"invacc-backend/internal/service"
 )
 
-type ItemHandler interface {
-	GetItems(w http.ResponseWriter, r *http.Request)
+type ItemHandler struct {
+	svc service.ItemService
 }
 
-type itemHandler struct {
-	itemService service.ItemService
+func NewItemHandler(svc service.ItemService) *ItemHandler {
+	return &ItemHandler{svc: svc}
 }
 
-func NewItemHandler(itemService service.ItemService) ItemHandler {
-	return &itemHandler{itemService: itemService}
-}
+// ListItems godoc
+// @Summary     List items
+// @Description Returns a paginated list of items with optional filtering by category, warehouse, and name.
+// @Tags        items
+// @Accept      json
+// @Produce     json
+// @Param       page         query   int     false  "Page number"       default(1)
+// @Param       limit        query   int     false  "Page size"         default(20)
+// @Param       category_id  query   int     false  "Category ID to filter by"
+// @Param       warehouse_id query   int     false  "Warehouse ID to filter by"
+// @Param       name         query   string  false  "Search substring in name"
+// @Success     200 {object} handlers.PaginatedResponse
+// @Failure     400 {object} handlers.ErrorResponse
+// @Failure     500 {object} handlers.ErrorResponse
+// @Router      /items [get]
+func (h *ItemHandler) ListItems(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	q := r.URL.Query()
 
-func (h *itemHandler) GetItems(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	query := r.URL.Query()
-	if id := query.Get("id"); id != "" {
-		h.handleGetItemById(w, id)
-		return
+	// Pagination
+	// Read page and limit from query parameters
+	// Default values: page=1, limit=20
+	page, _ := strconv.Atoi(q.Get("page"))
+	if page < 1 {
+		page = 1
 	}
 
-	if page := query.Get("page"); page != "" {
-		h.handleGetItemsByPage(w, page)
-		return
+	limit, _ := strconv.Atoi(q.Get("limit"))
+	if limit < 1 {
+		limit = 20
 	}
 
-	http.Error(w, "either 'id' or 'page' query parameter must be provided", http.StatusBadRequest)
-}
+	offset := (page - 1) * limit
 
-func (h *itemHandler) handleGetItemById(w http.ResponseWriter, idParam string) {
-	id, err := strconv.ParseUint(idParam, 10, 32)
+	// Filtering
+	// Read category_id
+	filter := &repository.ItemFilter{}
+	if v := q.Get("category_id"); v != "" {
+		id, err := strconv.ParseUint(v, 10, 32)
+		if err != nil {
+			writeError(w, apierrors.NewBadRequestError("invalid_query", "category_id must be uint", nil))
+			return
+		}
+		u := uint(id)
+		filter.CategoryID = &u
+	}
+
+	// Read warehouse_id
+	if v := q.Get("warehouse_id"); v != "" {
+		id, err := strconv.ParseUint(v, 10, 32)
+		if err != nil {
+			writeError(w, apierrors.NewBadRequestError("invalid_query", "warehouse_id must be uint", nil))
+			return
+		}
+		u := uint(id)
+		filter.WarehouseID = &u
+	}
+
+	// Read name
+	if v := q.Get("name"); v != "" {
+		filter.Name = &v
+	}
+
+	// Call service layer
+	items, total, err := h.svc.ListItems(ctx, filter, offset, limit)
 	if err != nil {
-		http.Error(w, "invalid id parameter", http.StatusBadRequest)
+		writeError(w, err)
 		return
 	}
 
-	item, err := h.itemService.GetItemModel(uint(id))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	// Build DTO response
+	var data []ItemDTO
+	for _, it := range items {
+		cats := make([]string, len(it.Categories))
+		for i, c := range it.Categories {
+			cats[i] = c.CategoryName
+		}
+		data = append(data, ItemDTO{
+			ID:            it.ID,
+			Name:          it.Name,
+			Price:         it.Price,
+			WarehouseName: it.Warehouse.Name,
+			Categories:    cats,
+		})
 	}
 
-	encodeResponse(w, item)
+	// Build pagination metadata
+	// TODO: rewrite
+
+	// Save parameters and path
+	orig := r.URL.Query()
+	base := r.URL.Path + "?"
+
+	// Create map parameters, change page and limit, generate link
+	makeLink := func(p int) string {
+		q := url.Values{}
+		for k, vs := range orig {
+			for _, v := range vs {
+				q.Add(k, v)
+			}
+		}
+		q.Set("page", strconv.Itoa(p))
+		q.Set("limit", strconv.Itoa(limit))
+		return base + q.Encode()
+	}
+
+	meta := map[string]interface{}{
+		"page":  page,
+		"limit": limit,
+		"total": total,
+	}
+
+	links := map[string]string{
+		"self": makeLink(page),
+		"prev": "",
+		"next": makeLink(page + 1),
+	}
+
+	if page > 1 {
+		links["prev"] = makeLink(page - 1)
+	}
+
+	writeJSON(w, http.StatusOK,
+		map[string]interface{}{
+			"data":  data,
+			"meta":  meta,
+			"links": links,
+		})
 }
 
-func (h *itemHandler) handleGetItemsByPage(w http.ResponseWriter, pageParam string) {
-	page, err := strconv.ParseUint(pageParam, 10, 32)
-	if err != nil || page < 1 {
-		http.Error(w, "invalid page parameter", http.StatusBadRequest)
-		return
-	}
+// GetItem godoc
+// @Summary     Get item details by ID
+// @Description Returns full details of a single item, including warehouse and categories.
+// @Tags        items
+// @Accept      json
+// @Produce     json
+// @Param       id   path      int  true  "Item ID"
+// @Success     200 {object} handlers.ItemDetailResponse
+// @Failure     400 {object} handlers.ErrorResponse
+// @Failure     404 {object} handlers.ErrorResponse
+// @Failure     500 {object} handlers.ErrorResponse
+// @Router      /items/{id} [get]
+func (h *ItemHandler) GetItem(w http.ResponseWriter, r *http.Request) {
+	// Parse ID from URL
+	ctx := r.Context()
+	idStr := chi.URLParam(r, "id")
+	id64, err := strconv.ParseUint(idStr, 10, 32)
 
-	items, err := h.itemService.GetItemModelList(uint(page))
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		writeError(w, apierrors.NewBadRequestError("invalid_id", "id must be uint", nil))
 		return
 	}
 
-	response := struct {
-		Count int                            `json:"count"`
-		Items []models.ItemWithWarehouseName `json:"items"`
-	}{
-		Count: len(items),
-		Items: items,
+	// Call service layer
+	it, err := h.svc.GetItem(ctx, uint(id64))
+	if err != nil {
+		writeError(w, err)
+		return
 	}
 
-	encodeResponse(w, response)
-}
+	// Make DTO response
 
-func encodeResponse(w http.ResponseWriter, data interface{}) {
-	if err := json.NewEncoder(w).Encode(data); err != nil {
-		http.Error(w, "failed to encode response", http.StatusInternalServerError)
+	// Parse categories, make Category DTO
+	catsDTO := make([]CategoryDTO, len(it.Categories))
+	for i, c := range it.Categories {
+		catsDTO[i] = CategoryDTO{ID: c.ID, CategoryName: c.CategoryName}
 	}
+
+	// Parse warehouse, make Warehouse DTO
+	whDTO := WarehouseDTO{
+		ID:      it.Warehouse.ID,
+		Name:    it.Warehouse.Name,
+		Phone:   it.Warehouse.Phone,
+		Email:   it.Warehouse.Email,
+		Address: it.Warehouse.Address,
+		Active:  it.Warehouse.Active,
+	}
+
+	// Parse extra attributes
+	extraAttrs := make(map[string]interface{})
+	if it.ExtraAttributes != nil {
+		if err := json.Unmarshal(it.ExtraAttributes, &extraAttrs); err != nil {
+			writeError(w, apierrors.NewInternalError(err))
+			return
+		}
+	}
+
+	// Build response
+	detail := ItemDetailDTO{
+		ID:              it.ID,
+		Name:            it.Name,
+		Description:     it.Description,
+		ExtraAttributes: extraAttrs,
+		Quality:         it.Quality,
+		Price:           it.Price,
+		LatePenalty:     it.LatePenalty,
+		Deposit:         it.Deposit,
+		Active:          it.Active,
+		ImgURL:          it.ImgURL,
+		Warehouse:       whDTO,
+		Categories:      catsDTO,
+	}
+
+	writeJSON(w, http.StatusOK, map[string]interface{}{"data": detail})
 }
