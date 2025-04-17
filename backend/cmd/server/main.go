@@ -6,11 +6,11 @@
 package main
 
 import (
-	"invacc-backend/internal/app"
-	"invacc-backend/internal/config"
-	"invacc-backend/internal/logger"
-	"invacc-backend/pkg/db"
-	"invacc-backend/pkg/valid"
+	"invacc/internal/app"
+	"invacc/internal/config"
+	"invacc/internal/logger"
+	"invacc/pkg/db"
+	"invacc/pkg/valid"
 	"log/slog"
 	"net/http"
 	"os"

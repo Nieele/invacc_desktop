@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"encoding/json"
-	"invacc-backend/internal/middleware"
-	"invacc-backend/internal/models"
-	"invacc-backend/internal/service"
+	"invacc/internal/middleware"
+	"invacc/internal/models"
+	"invacc/internal/service"
 	"net/http"
 )
 

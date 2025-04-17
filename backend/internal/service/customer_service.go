@@ -2,8 +2,8 @@ package service
 
 import (
 	"errors"
-	"invacc-backend/internal/models"
-	"invacc-backend/internal/repository"
+	"invacc/internal/models"
+	"invacc/internal/repository"
 
 	"gorm.io/gorm"
 )

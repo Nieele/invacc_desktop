@@ -2,7 +2,7 @@ package repository
 
 import (
 	"fmt"
-	"invacc-backend/internal/models"
+	"invacc/internal/models"
 
 	"gorm.io/gorm"
 )

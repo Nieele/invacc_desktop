@@ -4,9 +4,9 @@ package service
 import (
 	"context"
 	"fmt"
-	"invacc-backend/internal/apierrors"
-	"invacc-backend/internal/models"
-	"invacc-backend/internal/repository"
+	"invacc/internal/apierrors"
+	"invacc/internal/models"
+	"invacc/internal/repository"
 )
 
 type ItemService interface {

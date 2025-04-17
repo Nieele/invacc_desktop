@@ -8,9 +8,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"invacc-backend/internal/apierrors"
-	"invacc-backend/internal/repository"
-	"invacc-backend/internal/service"
+	"invacc/internal/apierrors"
+	"invacc/internal/repository"
+	"invacc/internal/service"
 )
 
 type ItemHandler struct {

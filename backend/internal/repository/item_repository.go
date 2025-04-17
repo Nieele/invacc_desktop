@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"invacc-backend/internal/models"
+	"invacc/internal/models"
 
 	"gorm.io/gorm"
 )

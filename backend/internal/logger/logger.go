@@ -2,7 +2,7 @@ package logger
 
 import (
 	"fmt"
-	"invacc-backend/internal/config"
+	"invacc/internal/config"
 	"log/slog"
 	"os"
 )

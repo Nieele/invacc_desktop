@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"invacc-backend/internal/apierrors"
+	"invacc/internal/apierrors"
 )
 
 // Structs for API-Errors

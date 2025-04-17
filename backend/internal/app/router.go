@@ -3,13 +3,13 @@ package app
 import (
 	"net/http"
 
-	"invacc-backend/internal/config"
-	"invacc-backend/internal/handlers"
-	custommw "invacc-backend/internal/middleware"
-	"invacc-backend/internal/repository"
-	"invacc-backend/internal/service"
+	"invacc/internal/config"
+	"invacc/internal/handlers"
+	custommw "invacc/internal/middleware"
+	"invacc/internal/repository"
+	"invacc/internal/service"
 
-	_ "invacc-backend/docs"
+	_ "invacc/docs"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
