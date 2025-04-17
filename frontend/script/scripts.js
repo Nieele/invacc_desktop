@@ -456,6 +456,33 @@ function initAccountEdit() {
   });
 }
 
+async function initRentalsSection() {
+  if (!isLoggedIn()) return;
+  const container = document.querySelector('.rentals-list');
+  try {
+    const response = await fetch(`${API_BASE}/rent`, { credentials: 'same-origin' });
+    if (!response.ok) throw new Error(response.statusText);
+    const rents = await response.json();
+    if (!Array.isArray(rents) || rents.length === 0) {
+      container.innerHTML = '<p>Нет активных аренд.</p>';
+      return;
+    }
+    container.innerHTML = rents.map(r => `
+      <div class="rental-item">
+        <p><strong>Аренда №${r.id}</strong></p>
+        <p>Товар ID: ${r.item_id}</p>
+        <p>Адрес: ${r.address}</p>
+        <p>Статус доставки: ${r.delivery_status_id}</p>
+        <p>С ${new Date(r.start_rent_time).toLocaleDateString()} по ${new Date(r.end_rent_time).toLocaleDateString()}</p>
+        <p>Оплачено: ${r.total_payments} ₽ ${r.overdue ? '(Просрочка)' : ''}</p>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error('Ошибка загрузки аренд:', err);
+    container.innerHTML = '<p>Не удалось загрузить аренды.</p>';
+  }
+}
+
 // Инициализация страницы корзины
 async function initCartPage() {
   // Проверяем, авторизован ли пользователь
@@ -689,6 +716,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       initAccountPage().then(() => {
         initAccountEdit();
+        initRentalsSection();
       });
     }
   }
