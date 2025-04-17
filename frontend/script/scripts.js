@@ -630,6 +630,19 @@ async function initCartPage() {
   loadCart();
 }
 
+function logout() {
+  fetch('stroylomay.shop/api/v1/logout', {
+    method: 'POST',
+    credentials: 'same-origin'
+  })
+    .finally(() => {
+      // Стираем cookie с JWT
+      document.cookie = 'jwt=; Max-Age=0; path=/;';
+      // Перенаправляем на страницу входа
+      window.location.href = '/login.html';
+    });
+}
+
 // Основной обработчик загрузки страницы
 document.addEventListener('DOMContentLoaded', () => {
   const path = window.location.pathname;
@@ -662,4 +675,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
+
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) logoutBtn.addEventListener('click', logout);
 });
