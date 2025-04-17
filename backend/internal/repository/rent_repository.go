@@ -60,12 +60,16 @@ func (r *rentRepo) RemoveFromCart(cart models.Cart) error {
 
 func (r *rentRepo) GetRents(CustomerID uint) ([]models.Rent, error) {
 	var rents []models.Rent
-	result := r.db.Model(&models.Rent{}).
-		Where("customer_id = ?", CustomerID).
-		Find(&rents)
 
-	if result.Error != nil {
-		return nil, result.Error
+	err := r.db.
+		Preload("Item").
+		Preload("DeliveryStatus").
+		Where("customer_id = ?", CustomerID).
+		Find(&rents).
+		Error
+
+	if err != nil {
+		return []models.Rent{}, err
 	}
 
 	return rents, nil
@@ -76,10 +80,9 @@ func (r *rentRepo) Rent(mrent models.MultiRent) error {
 
 	for _, itemID := range mrent.ItemsID {
 		rent := models.Rent{
-			CustomerID:   mrent.CustomerID,
-			ItemID:       itemID,
-			Address:      mrent.Address,
-			NumberOfDays: mrent.NumberOfDays,
+			CustomerID: mrent.CustomerID,
+			ItemID:     itemID,
+			Address:    mrent.Address,
 		}
 		result := tx.Create(&rent)
 

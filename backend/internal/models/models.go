@@ -1,9 +1,5 @@
 package models
 
-import (
-	"time"
-)
-
 type ItemWithWarehouseName struct {
 	Item
 	WarehouseName string `json:"warehouse_name"`
@@ -49,23 +45,6 @@ type Cart struct {
 
 func (Cart) TableName() string {
 	return "cart"
-}
-
-type Rent struct {
-	ID               uint      `gorm:"primaryKey" json:"id"`
-	ItemID           uint      `gorm:"not null;column:item_id" json:"item_id"`
-	CustomerID       uint      `gorm:"not null;column:customer_id" json:"customer_id"`
-	Address          string    `gorm:"type:varchar(255);not null" json:"address"`
-	DeliveryStatusID uint      `gorm:"not null;column:delivery_status_id" json:"delivery_status_id"`
-	NumberOfDays     uint      `gorm:"not null" json:"number_of_days"`
-	StartRentTime    time.Time `gorm:"null;default:now()" json:"start_rent_time"`
-	EndRentTime      time.Time `gorm:"null" json:"end_rent_time"`
-	TotalPayments    float64   `gorm:"type:decimal(10,2);null;default:0" json:"total_payments"`
-	Overdue          bool      `gorm:"not null;default:false" json:"overdue"`
-}
-
-func (Rent) TableName() string {
-	return "rent"
 }
 
 // not in db

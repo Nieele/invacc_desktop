@@ -129,7 +129,12 @@ func (h *rentHandler) RemoveFromCart(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "item removed from cart"})
 }
 
-// GET /rent
+// @Summary      Get list rents
+// @Description  Return list of rents
+// @Tags         rent
+// @Produce      json
+// @Success      200  {array}   RentDTO
+// @Router       /rents [get]
 func (h *rentHandler) GetRents(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "method is not allowed", http.StatusMethodNotAllowed)
@@ -148,8 +153,29 @@ func (h *rentHandler) GetRents(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	rentDTOs := make([]RentDTO, 0, len(rents))
+	for _, rent := range rents {
+		dto := RentDTO{
+			ID:                 rent.ID,
+			ItemID:             rent.ItemID,
+			ItemName:           rent.Item.Name,
+			ItemImgURL:         rent.Item.ImgURL,
+			NumberOfDays:       rent.NumberOfDays,
+			Address:            rent.Address,
+			DeliveryStatusName: rent.DeliveryStatus.Description,
+			Overdue:            rent.Overdue,
+		}
+		// TotalPrice в модели — *float64, в DTO — float64
+		if rent.TotalPayments != nil {
+			dto.TotalPrice = *rent.TotalPayments
+		}
+		rentDTOs = append(rentDTOs, dto)
+	}
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(rents)
+	if err := json.NewEncoder(w).Encode(rentDTOs); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 // POST /rent {"item_id": [], "address": "", "number_of_days": }
