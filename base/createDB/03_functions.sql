@@ -348,10 +348,10 @@ BEGIN
     NEW.delivery_status_id := delivery_status_request;
 
     -- calculate expected payment
-    NEW.total_payments  = calculate_payment(
+    NEW.total_payments  := calculate_payment(
         NEW.item_id,
-        NEW.start_rent_time,
-        NEW.end_rent_time,
+        CURRENT_TIMESTAMP::timestamp,
+        (CURRENT_TIMESTAMP + INTERVAL '1 day' * NEW.number_of_days)::timestamp,
         NEW.promocode_id
     );
 
