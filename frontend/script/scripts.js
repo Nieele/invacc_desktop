@@ -121,32 +121,42 @@ async function initItemPage() {
   const params = new URLSearchParams(window.location.search);
   const itemId = params.get('id');
   if (!itemId) return;
-  try {
-    const response = await fetch(`https://stroylomay.shop/api/v1/items?id=${itemId}`);
-    const data = await response.json();
 
-    document.getElementById('item-name').textContent = data.name;
-    document.getElementById('item-desc').textContent = data.description;
-    document.getElementById('item-price').textContent = data.price;
-    document.getElementById('item-penalty').textContent = data.late_penalty;
-    document.getElementById('item-active').textContent = data.active ? 'Да' : 'Нет';
+  try {
+    const res = await fetch(`${API_BASE}/items/${itemId}`);
+    if (!res.ok) throw new Error(res.statusText);
+    const json = await res.json();
+    const item = json.data;
+
+    const {
+      name,
+      description,
+      price,
+      late_penalty,
+      active,
+      img_url,
+      warehouse
+    } = item;
+
+    document.getElementById('item-name').textContent = name;
+    document.getElementById('item-desc').textContent = description;
+    document.getElementById('item-price').textContent = price;
+    document.getElementById('item-penalty').textContent = late_penalty;
+    document.getElementById('item-active').textContent = active ? 'Да' : 'Нет';
 
     const imgElem = document.getElementById('item-image');
     if (imgElem) {
-      imgElem.src = `https://stroylomay.shop/img/${data.img_url}`;
-      imgElem.alt = data.name;
+      imgElem.src = `${IMG_BASE}/${img_url}`;
+      imgElem.alt = name;
     }
+
     const whLink = document.getElementById('item-warehouse-link');
     if (whLink) {
-      whLink.textContent = data.warehouse_name;
-      if (data.warehouse_id) {
-        whLink.href = `wirehouse.html?id=${data.warehouse_id}`;
-      } else {
-        whLink.removeAttribute('href');
-        whLink.style.cursor = 'default';
-      }
+      whLink.textContent = warehouse.name;
+      whLink.href = `wirehouse.html?id=${warehouse.id}`;
     }
-    document.title = `${data.name} – Строй Ломай`;
+
+    document.title = `${name} – Строй Ломай`;
 
     // Настраиваем кнопку "Добавить в корзину"
     const addToCartBtn = document.getElementById('add-to-cart-btn');
@@ -464,40 +474,45 @@ async function initCartPage() {
 
   // Функция для создания карточки товара в корзине
   const createCartItemCard = (item) => {
+    const {
+      id,
+      item_id,
+      name,
+      price,
+      late_penalty,
+      img_url,
+      warehouse   // <-- здесь будет объект { id, name, … }
+    } = item;
+
     const card = document.createElement('div');
     card.className = 'cart-item';
-    card.dataset.id = item.id;
-    card.dataset.itemId = item.item_id;
-    card.dataset.href = `item.html?id=${item.item_id}`;
+    card.dataset.id = id;
+    card.dataset.itemId = item_id;
+    card.dataset.href = `item.html?id=${item_id}`;
 
     card.innerHTML = `
       <div class="cart-item-image">
-        <img src="https://stroylomay.shop/img/${item.img_url}" alt="${item.name}" loading="lazy">
+        <img src="${IMG_BASE}/${img_url}" alt="${name}" loading="lazy">
       </div>
       <div class="cart-item-details">
-        <div class="cart-item-top">
-          <div class="cart-item-info">
-            <h3 class="cart-item-title">${item.name}</h3>
-            <p class="cart-item-price">${item.price} ₽/день</p>
-            <p class="cart-item-penalty">Штраф за просрочку: ${item.late_penalty} ₽</p>
-            <p class="cart-item-warehouse">
-              <a href="wirehouse.html?id=${item.warehouse_id || ''}" class="warehouse-label">Склад:</a>
-              <a href="wirehouse.html?id=${item.warehouse_id || ''}">${item.warehouse_name}</a>
-            </p>
-          </div>
-          <div class="cart-item-remove">
-            <button class="btn-remove" data-id="${item.id}" data-item-id="${item.item_id}">Удалить</button>
-          </div>
-        </div>
+        <h3 class="cart-item-title">${name}</h3>
+        <p class="cart-item-price">${price} ₽/день</p>
+        <p class="cart-item-penalty">Штраф за просрочку: ${late_penalty} ₽</p>
+        <p class="cart-item-warehouse">
+          <a href="wirehouse.html?id=${warehouse.id}" class="warehouse-label">Склад:</a>
+          <a href="wirehouse.html?id=${warehouse.id}">${warehouse.name}</a>
+        </p>
+      </div>
+      <div class="cart-item-remove">
+        <button class="btn-remove" data-id="${id}" data-item-id="${item_id}">Удалить</button>
       </div>
     `;
 
-    // Добавляем обработчик клика для перехода на страницу товара
-    card.addEventListener('click', function (event) {
-      // Проверяем, не происходит ли клик по кнопке удаления или ссылке склада
-      if (!event.target.closest('.btn-remove') &&
-        !event.target.closest('.cart-item-warehouse a')) {
-        window.location.href = this.dataset.href;
+    // переход на страницу товара
+    card.addEventListener('click', (e) => {
+      if (!e.target.closest('.btn-remove') &&
+        !e.target.closest('.cart-item-warehouse a')) {
+        window.location.href = card.dataset.href;
       }
     });
 
@@ -506,16 +521,11 @@ async function initCartPage() {
 
   // Функция для загрузки данных о товаре по его ID
   const fetchItemDetails = async (itemId) => {
-    try {
-      const response = await fetch(`https://stroylomay.shop/api/v1/items?id=${itemId}`);
-      if (!response.ok) {
-        throw new Error(`Ошибка загрузки информации о товаре: ${response.statusText}`);
-      }
-      return await response.json();
-    } catch (error) {
-      console.error(`Не удалось загрузить информацию о товаре ID=${itemId}:`, error);
-      return null;
-    }
+    const res = await fetch(`${API_BASE}/items/${itemId}`, { credentials: 'same-origin' });
+    if (!res.ok) throw new Error(`Ошибка загрузки товара ID=${itemId}: ${res.statusText}`);
+    const json = await res.json();
+    // целиком объект data
+    return json.data;
   };
 
   // Функция для удаления товара из корзины
