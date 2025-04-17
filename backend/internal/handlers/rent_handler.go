@@ -232,7 +232,7 @@ func (h *rentHandler) CancelRent(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: make model
 	var payload struct {
-		RentsID []uint `json:"rents_id"`
+		RentID uint `json:"rent_id"`
 	}
 
 	decoder := json.NewDecoder(r.Body)
@@ -243,7 +243,7 @@ func (h *rentHandler) CancelRent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.rentService.CancelRent(userID, payload.RentsID); err != nil {
+	if err := h.rentService.CancelRent(userID, payload.RentID); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

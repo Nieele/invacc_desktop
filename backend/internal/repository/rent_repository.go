@@ -13,7 +13,7 @@ type RentRepository interface {
 
 	GetRents(CustomerID uint) ([]models.Rent, error)
 	Rent(mrent models.MultiRent) error
-	CancelRent(CustomerID uint, rentsID []uint) error
+	CancelRent(CustomerID uint, rentID uint) error
 }
 
 type rentRepo struct {
@@ -98,16 +98,14 @@ func (r *rentRepo) Rent(mrent models.MultiRent) error {
 	return nil
 }
 
-func (r *rentRepo) CancelRent(CustomerID uint, rentsID []uint) error {
+func (r *rentRepo) CancelRent(CustomerID uint, rentID uint) error {
 	tx := r.db.Begin()
 
-	for _, rentID := range rentsID {
-		result := tx.Delete(&models.Rent{}, "customer_id = ? AND id = ?", CustomerID, rentID)
+	result := tx.Delete(&models.Rent{}, "customer_id = ? AND id = ?", CustomerID, rentID)
 
-		if result.Error != nil {
-			tx.Rollback()
-			return result.Error
-		}
+	if result.Error != nil {
+		tx.Rollback()
+		return result.Error
 	}
 
 	tx.Commit()
