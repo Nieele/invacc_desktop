@@ -648,7 +648,7 @@ async function initCartPage() {
 }
 
 function logout() {
-  fetch('stroylomay.shop/api/v1/logout', {
+  fetch('/api/v1/logout', {
     method: 'POST',
     credentials: 'same-origin'
   })
