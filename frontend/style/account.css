@@ -98,21 +98,35 @@
 @media (max-width: 768px) {
 	.account-card {
 		padding: 1.5rem;
-		margin: 1.5rem;
+		margin: 1.5rem auto; /* вместо margin: 1.5rem; */
+		max-width: 100%; /* на случай узких экранов */
 	}
 	.account-row {
-		grid-template-columns: 120px 1fr auto;
-		font-size: 1rem;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 0.5rem 0;
+		gap: 0.25rem;
+		border-bottom: 1px solid #f0f0f0;
+	}
+	.account-label,
+	.account-value {
+		width: 100%;
+		overflow-wrap: break-word;
+		word-break: break-word;
+		hyphens: auto;
 	}
 	.account-label {
-		width: 120px;
-		padding-right: 0.5rem;
+		text-align: left;
 		font-size: 0.95rem;
+		margin: 0;
 	}
 	.account-value {
 		font-size: 1rem;
+		margin: 0;
 	}
 	.account-verification {
+		margin: 0;
 		font-size: 0.85rem;
 	}
 	.page-header {
@@ -120,5 +134,60 @@
 	}
 	.account-actions button {
 		width: 100%;
+	}
+}
+
+/* ---------- Сводка статусов проверки ---------- */
+.verification-summary {
+	display: none; /* видно только на мобилках */
+	margin-top: 1.25rem;
+	padding-top: 0.75rem;
+	border-top: 2px solid var(--yellow);
+	font-size: 0.95rem;
+}
+.verification-summary h2 {
+	font-size: 1.05rem;
+	margin-bottom: 0.5rem;
+}
+.verification-summary ul {
+	list-style: none;
+	padding: 0;
+}
+.verification-summary li {
+	display: flex;
+	justify-content: space-between;
+	padding: 0.25rem 0;
+	border-bottom: 1px solid #eee;
+}
+.verification-summary strong {
+	font-weight: 600;
+}
+
+/* ---------- Правила для узких экранов ---------- */
+@media (max-width: 768px) {
+	/* прячем индикаторы внутри строк */
+	.account-row .account-verification {
+		display: none;
+	}
+
+	/* показываем сводку */
+	.verification-summary {
+		display: block;
+	}
+}
+
+/* ---------- Ещё уже (≤ 380 px) ---------- */
+@media (max-width: 380px) {
+	.account-card {
+		font-size: 0.9rem;
+	}
+	.page-header {
+		font-size: 1.6rem;
+	}
+	.account-label,
+	.account-value {
+		overflow-wrap: break-word;
+		word-break: break-word;
+		hyphens: auto;
 	}
 }

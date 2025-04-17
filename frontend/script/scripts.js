@@ -137,16 +137,16 @@ async function initItemPage() {
       }
     }
     document.title = `${data.name} – Строй Ломай`;
-    
+
     // Настраиваем кнопку "Добавить в корзину"
     const addToCartBtn = document.getElementById('add-to-cart-btn');
     if (addToCartBtn) {
       // Устанавливаем класс и ID товара
       addToCartBtn.className = 'add-to-cart';
       addToCartBtn.dataset.id = data.id;
-      
+
       // Добавляем обработчик клика
-      addToCartBtn.addEventListener('click', function() {
+      addToCartBtn.addEventListener('click', function () {
         handleAddToCart(this, this.dataset.id);
       });
     }
@@ -326,54 +326,39 @@ function login() {
 async function initAccountPage() {
   try {
     const response = await fetch('https://stroylomay.shop/api/v1/account', { credentials: 'same-origin' });
-    if (!response.ok) {
-      throw new Error('Ошибка загрузки: ' + response.statusText);
-    }
-    const data = await response.json();
-    const container = document.querySelector('.account-details');
-    container.innerHTML = `
+    if (!response.ok) throw new Error('Ошибка загрузки: ' + response.statusText);
+
+    const d = await response.json();
+    const rows = [
+      { label: 'ID', id: 'account-id', value: d.id },
+      { label: 'Логин', id: 'account-login', value: d.login },
+      { label: 'Имя', id: 'account-firstname', value: d.firstname },
+      { label: 'Фамилия', id: 'account-lastname', value: d.lastname },
+      { label: 'Телефон', id: 'account-phone', value: d.phone, verified: d.phone_verified },
+      { label: 'Email', id: 'account-email', value: d.email, verified: d.email_verified },
+      { label: 'Паспорт', id: 'account-passport', value: d.passport, verified: d.passport_verified }
+    ];
+
+    /* --- строки с данными --- */
+    const details = document.querySelector('.account-details');
+    details.innerHTML = rows.map(r => `
       <div class="account-row">
-        <div class="account-label">ID:</div>
-        <div class="account-value" id="account-id">${data.id}</div>
-        <div></div>
-      </div>
-      <div class="account-row">
-        <div class="account-label">Логин:</div>
-        <div class="account-value" id="account-login">${data.login}</div>
-        <div></div>
-      </div>
-      <div class="account-row">
-        <div class="account-label">Имя:</div>
-        <div class="account-value" id="account-firstname">${data.firstname}</div>
-        <div></div>
-      </div>
-      <div class="account-row">
-        <div class="account-label">Фамилия:</div>
-        <div class="account-value" id="account-lastname">${data.lastname}</div>
-        <div></div>
-      </div>
-      <div class="account-row">
-        <div class="account-label">Телефон:</div>
-        <div class="account-value" id="account-phone">${data.phone}</div>
-        <div class="account-verification ${data.phone_verified ? 'verified' : 'not-verified'}" id="account-phone-verified">
-          ${data.phone_verified ? 'Проверено' : 'Не проверено'}
+        <div class="account-label">${r.label}:</div>
+        <div class="account-value" id="${r.id}">${r.value ?? ''}</div>
+        <div class="account-verification ${r.verified ? 'verified' : 'not-verified'}">
+          ${r.verified !== undefined ? (r.verified ? 'Подтверждено' : 'Не&nbsp;подтверждено') : ''}
         </div>
-      </div>
-      <div class="account-row">
-        <div class="account-label">Email:</div>
-        <div class="account-value" id="account-email">${data.email}</div>
-        <div class="account-verification ${data.email_verified ? 'verified' : 'not-verified'}" id="account-email-verified">
-          ${data.email_verified ? 'Проверено' : 'Не проверено'}
-        </div>
-      </div>
-      <div class="account-row">
-        <div class="account-label">Паспорт:</div>
-        <div class="account-value" id="account-passport">${data.passport}</div>
-        <div class="account-verification ${data.passport_verified ? 'verified' : 'not-verified'}" id="account-passport-verified">
-          ${data.passport_verified ? 'Проверено' : 'Не проверено'}
-        </div>
-      </div>
-    `;
+      </div>`).join('');
+
+    /* --- сводка статусов --- */
+    const summary = document.querySelector('.verification-summary');
+    summary.innerHTML = `
+      <h2>Подтверждения</h2>
+      <ul>
+        <li><strong>Телефон:</strong> <span class="account-verification ${d.phone_verified ? 'verified' : 'not-verified'}">${d.phone_verified ? '✔️' : '❌'}</span></li>
+        <li><strong>Email:</strong>   <span class="account-verification ${d.email_verified ? 'verified' : 'not-verified'}">${d.email_verified ? '✔️' : '❌'}</span></li>
+        <li><strong>Паспорт:</strong> <span class="account-verification ${d.passport_verified ? 'verified' : 'not-verified'}">${d.passport_verified ? '✔️' : '❌'}</span></li>
+      </ul>`;
   } catch (err) {
     console.error('Ошибка загрузки информации о пользователе:', err);
     alert('Не удалось загрузить информацию о пользователе.');
@@ -498,10 +483,10 @@ async function initCartPage() {
     `;
 
     // Добавляем обработчик клика для перехода на страницу товара
-    card.addEventListener('click', function(event) {
+    card.addEventListener('click', function (event) {
       // Проверяем, не происходит ли клик по кнопке удаления или ссылке склада
-      if (!event.target.closest('.btn-remove') && 
-          !event.target.closest('.cart-item-warehouse a')) {
+      if (!event.target.closest('.btn-remove') &&
+        !event.target.closest('.cart-item-warehouse a')) {
         window.location.href = this.dataset.href;
       }
     });
@@ -616,7 +601,7 @@ async function initCartPage() {
 
       // Удаляем предыдущие обработчики кликов, если они были
       cartItemsContainer.removeEventListener('click', handleCartContainerClick);
-      
+
       // Добавляем новый обработчик кликов для контейнера корзины
       cartItemsContainer.addEventListener('click', handleCartContainerClick);
     } catch (error) {
@@ -634,7 +619,7 @@ async function initCartPage() {
       const itemId = e.target.dataset.itemId;
       removeFromCart(cartId, itemId);
     }
-    
+
     // Предотвращаем всплытие событий для ссылок на склад
     if (e.target.closest('.cart-item-warehouse a')) {
       e.stopPropagation();
