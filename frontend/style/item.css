@@ -1,4 +1,5 @@
-/* Обеспечиваем, чтобы тело страницы занимало всю высоту и корректно размещало footer */
+/* item.css — обновлённый дизайн карточки товара */
+
 body {
 	display: flex;
 	flex-direction: column;
@@ -10,141 +11,182 @@ main {
 	flex: 1;
 }
 
-/* Общие стили контейнера */
 .container {
-	max-width: 1200px;
+	max-width: 1400px;
 	margin: 0 auto;
 	padding: 1rem;
+	justify-self: center;
 }
 
-/* Блок с информацией о товаре */
+/* Карточка товара */
 .item-wrapper {
 	display: flex;
-	gap: 2rem;
-	margin: 2rem 0;
-	align-items: flex-start;
-}
-
-/* Левая колонка – изображение товара */
-.item-image {
-	flex: 0 0 40%;
-	max-width: 400px;
-	align-self: center;
-}
-.item-image img {
+	flex-wrap: wrap;
+	justify-content: center;
+	background-color: var(--white);
+	padding: 1.5rem;
+	border-radius: 15px;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	gap: 1.5rem;
+	margin: 2rem auto;
+	align-items: center;
 	width: 100%;
-	border: 2px solid #ccc;
-	border-radius: 8px;
-	object-fit: cover;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Правая колонка – информация о товаре */
+/* Изображение: ограничиваем размер до 400x400 */
+.item-image {
+	width: 100%;
+	max-width: 400px;
+	height: auto;
+	max-height: 400px;
+	border: 2px solid var(--dirty-white);
+	border-radius: 8px;
+	overflow: hidden;
+	box-sizing: border-box; /* чтобы бордеры/паддинги учитывались в размере */
+}
+
+.item-image img {
+	display: block;
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+}
+
+/* Информация о товаре */
 .item-info {
-	flex: 1;
+	flex: 1 1 auto; /* позволяет колонке ужиматься */
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
-}
-.item-info h1 {
-	font-size: 2rem;
-	margin-bottom: 0.5rem;
-	color: #333;
-}
-.item-desc {
-	font-size: 1.1rem;
-	line-height: 1.5;
-	color: #555;
+	min-width: 0; /* важно для корректного flex-ужатия */
 }
 
-/* Сетка с детальной информацией */
+.item-info h1 {
+	font-family: "Exo 2", sans-serif;
+	font-size: 2.2rem;
+	color: var(--black);
+	margin: 0;
+}
+
+.item-desc {
+	font-size: 1.1rem;
+	line-height: 1.6;
+	color: var(--hero-h3);
+}
+
 .item-details-grid {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 	gap: 1rem;
 	margin-top: 1rem;
 }
+
 .item-detail {
-	font-size: 1.1rem;
-	color: #333;
-	padding: 0.5rem;
-	background: #f7f7f7;
-	border-radius: 4px;
+	background-color: #f7f7f7;
+	padding: 0.75rem 1rem;
+	border-radius: 8px;
+	font-size: 1rem;
+	color: var(--black);
 }
+
 .detail-label {
-	font-weight: bold;
-	margin-right: 0.5rem;
+	font-weight: 600;
+	display: block;
+	margin-bottom: 0.25rem;
+	color: var(--black);
 }
+
 .detail-value {
-	font-weight: normal;
+	font-weight: 400;
+	color: var(--black);
 }
+
 .item-detail a {
-	color: #0066cc;
-	text-decoration: none;
-}
-.item-detail a:hover {
+	color: var(--yellow-select);
 	text-decoration: underline;
 }
 
-/* Кнопка "Добавить в корзину" */
+/* Категории */
+#item-categories {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	grid-column: 1 / -1;
+}
+
+#item-categories .badge {
+	background-color: var(--yellow);
+	color: var(--black);
+	padding: 0.25rem 0.75rem;
+	border-radius: 12px;
+	font-size: 0.9rem;
+}
+
+/* Дополнительные атрибуты */
+#item-extra {
+	font-family: monospace;
+	font-size: 0.9rem;
+	background-color: #f7f7f7;
+	color: var(--black);
+	border: none;
+	padding: 0.75rem;
+	border-radius: 6px;
+	max-height: 200px;
+	overflow: auto;
+	white-space: pre-wrap;
+	word-break: break-word; /* предотвращаем вылаз текста */
+	grid-column: 1 / -1;
+}
+
+/* Кнопка добавления в корзину */
 .item-action {
-	margin-top: 1rem;
-	/* Для desktop-версии выравниваем кнопку по левому краю */
+	margin-top: 1.5rem;
 	text-align: left;
 }
 
 .add-to-cart {
-	padding: 0.75rem 1.25rem;
+	padding: 0.75rem 1.5rem;
 	font-size: 1rem;
 	background-color: var(--yellow-button);
-	color: var(--white, #fff);
+	color: var(--button-text);
 	border: none;
-	border-radius: 6px;
+	border-radius: 8px;
 	cursor: pointer;
-	transition: background-color 0.3s ease;
-	/* Автоматическая ширина для desktop */
-	width: auto;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+	width: 100%;
 }
 
 .add-to-cart:hover {
 	background-color: var(--yellow-select);
+	transform: translateY(-2px);
 }
 
-/* Анимации для кнопки "Добавить в корзину" */
-/* Анимация успешного добавления: лёгкое увеличение + смена цвета */
+/* Анимации успех/ошибка */
 @keyframes successAnimation {
-	0% {
+	0%,
+	100% {
 		transform: scale(1);
 		background-color: var(--yellow-button);
 	}
 	50% {
 		transform: scale(1.1);
-		background-color: #28a745; /* зеленый оттенок */
-	}
-	100% {
-		transform: scale(1);
-		background-color: var(--yellow-button);
+		background-color: #28a745;
 	}
 }
 
-/* Анимация ошибки: лёгкая тряска с изменением цвета */
 @keyframes errorAnimation {
 	0%,
 	100% {
 		transform: translateX(0);
 		background-color: var(--yellow-button);
 	}
-	25% {
-		transform: translateX(-5px);
-		background-color: #dc3545; /* красный оттенок */
-	}
+	25%,
 	75% {
-		transform: translateX(5px);
+		transform: translateX(-5px);
 		background-color: #dc3545;
 	}
 }
 
-/* Классы для проигрывания анимаций */
 .add-to-cart.success {
 	animation: successAnimation 0.5s ease-in-out;
 }
@@ -153,22 +195,24 @@ main {
 	animation: errorAnimation 0.5s ease-in-out;
 }
 
-/* Responsive: на устройствах с шириной до 768px все блоки располагаются вертикально */
+/* Адаптивность */
 @media (max-width: 768px) {
 	.item-wrapper {
 		flex-direction: column;
-		align-items: center;
+		padding: 1rem;
+		align-items: stretch;
 	}
+
 	.item-image,
 	.item-info {
 		width: 100%;
+		max-width: 100%;
 	}
+
 	.item-details-grid {
 		grid-template-columns: 1fr;
 	}
-	.item-action {
-		text-align: center;
-	}
+
 	.add-to-cart {
 		width: 100%;
 	}

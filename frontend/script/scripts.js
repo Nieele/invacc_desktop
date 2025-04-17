@@ -132,46 +132,60 @@ async function initItemPage() {
       name,
       description,
       price,
+      deposit,
       late_penalty,
+      quality,
       active,
       img_url,
-      warehouse
+      warehouse,
+      categories,
+      extra_attributes
     } = item;
 
     document.getElementById('item-name').textContent = name;
     document.getElementById('item-desc').textContent = description;
     document.getElementById('item-price').textContent = price;
+    document.getElementById('item-deposit').textContent = deposit;
     document.getElementById('item-penalty').textContent = late_penalty;
+    document.getElementById('item-quality').textContent = quality;
     document.getElementById('item-active').textContent = active ? 'Да' : 'Нет';
 
+    // Изображение
     const imgElem = document.getElementById('item-image');
     if (imgElem) {
       imgElem.src = `${IMG_BASE}/${img_url}`;
       imgElem.alt = name;
     }
 
+    // Склад
     const whLink = document.getElementById('item-warehouse-link');
     if (whLink) {
       whLink.textContent = warehouse.name;
       whLink.href = `wirehouse.html?id=${warehouse.id}`;
     }
 
-    document.title = `${name} – Строй Ломай`;
-
-    // Настраиваем кнопку "Добавить в корзину"
-    const addToCartBtn = document.getElementById('add-to-cart-btn');
-    if (addToCartBtn) {
-      // Устанавливаем класс и ID товара
-      addToCartBtn.className = 'add-to-cart';
-      addToCartBtn.dataset.id = data.id;
-
-      // Добавляем обработчик клика
-      addToCartBtn.addEventListener('click', function () {
-        handleAddToCart(this, this.dataset.id);
-      });
+    // Список категорий
+    const catElem = document.getElementById('item-categories');
+    if (catElem && Array.isArray(categories)) {
+      catElem.textContent = categories.map(c => c.category_name).join(', ');
     }
-  } catch (error) {
-    console.error('Ошибка загрузки товара:', error);
+
+    // Дополнительные атрибуты (отображаем в формате JSON)
+    const extraElem = document.getElementById('item-extra');
+    if (extraElem) {
+      extraElem.textContent = JSON.stringify(extra_attributes, null, 2);
+    }
+
+    // Кнопка "Добавить в корзину"
+    const addBtn = document.getElementById('add-to-cart-btn');
+    if (addBtn) {
+      addBtn.dataset.id = item.id;
+      addBtn.addEventListener('click', () => handleAddToCart(addBtn, addBtn.dataset.id));
+    }
+
+    document.title = `${name} – Строй Ломай`;
+  } catch (err) {
+    console.error('Ошибка загрузки товара:', err);
   }
 }
 
