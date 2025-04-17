@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"invacc-backend/internal/models"
+	"invacc/internal/models"
 
 	"gorm.io/gorm"
 )

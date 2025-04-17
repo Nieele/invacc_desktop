@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"invacc-backend/internal/service"
+	"invacc/internal/service"
 )
 
 type contextKey string

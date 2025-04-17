@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"invacc-backend/internal/models"
-	"invacc-backend/internal/service"
+	"invacc/internal/models"
+	"invacc/internal/service"
 )
 
 type AuthHandler interface {

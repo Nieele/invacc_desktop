@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"invacc-backend/internal/config"
-	"invacc-backend/internal/models"
-	"invacc-backend/internal/repository"
+	"invacc/internal/config"
+	"invacc/internal/models"
+	"invacc/internal/repository"
 
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"

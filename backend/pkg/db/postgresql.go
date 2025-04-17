@@ -19,3 +19,11 @@ func GetDB(connStr string) (*gorm.DB, error) {
 	})
 	return db, err
 }
+
+func CloseConnection() error {
+	sqlDB, err := db.DB()
+	if err != nil {
+		return err
+	}
+	return sqlDB.Close()
+}

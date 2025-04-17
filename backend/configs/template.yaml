@@ -1,4 +1,7 @@
 env: "local"
+logger:
+  level:
+  output:
 database: # postgresql://<username>:<password>@<host>:<port>/<dbname>?sslmode=<sslmode>
   username:
   password:

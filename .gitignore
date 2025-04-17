@@ -12,6 +12,9 @@ frontend/img/
 
 !template.yaml
 
+# Auto generate docs
+backend/docs/
+
 # User-specific files
 *.rsuser
 *.suo

@@ -1,5 +1,9 @@
 BEGIN;
 
+--------------------------------------------------
+-- Customers
+--------------------------------------------------
+
 -- Adding user information when creating an account (insert customer auth)
 CREATE OR REPLACE FUNCTION add_customer_info()
 RETURNS TRIGGER AS $$
@@ -10,7 +14,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Set old_quality from item before insert to ItemsServiceHistory
+
+--------------------------------------------------
+-- Service
+--------------------------------------------------
+
+-- Set old_quality from item before insert to ItemServiceHistory
 CREATE OR REPLACE FUNCTION set_actual_old_quality()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -19,7 +28,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Update quality in Items after insert to ItemsServiceHistory
+-- Update quality in Items after insert to ItemServiceHistory
 CREATE OR REPLACE FUNCTION update_quality_items()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -29,6 +38,55 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Validate item before decommissioning
+CREATE OR REPLACE FUNCTION validate_item_decommissioning()
+RETURNS TRIGGER AS $$
+DECLARE
+    delivery_status_in_stock CONSTANT int := 1;
+    delivery_status_cancel   CONSTANT int := 3;
+    delivery_status_received CONSTANT int := 5;
+BEGIN
+    -- Check if item is currently rented
+    IF EXISTS (
+        SELECT *
+        FROM Rent 
+        WHERE item_id = NEW.item_id 
+        AND delivery_status_id NOT IN (delivery_status_in_stock, delivery_status_cancel)
+    ) THEN
+        RAISE EXCEPTION 'Cannot decommission item (id: %). Item is currently rented', NEW.item_id;
+    END IF;
+
+    -- Check if item is in transit between warehouses
+    IF EXISTS (
+        SELECT *
+        FROM WarehousesOrders
+        WHERE item_id = NEW.item_id 
+        AND delivery_status_id NOT IN (delivery_status_cancel, delivery_status_received)
+    ) THEN
+        RAISE EXCEPTION 'Cannot decommission item (id: %). Item is currently in transit', NEW.item_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Update item status to inactive when decommissioned
+CREATE OR REPLACE FUNCTION set_item_inactive_on_decommission()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE Items
+    SET active = FALSE
+    WHERE id = NEW.item_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+--------------------------------------------------
+-- Warehouses orders (transfer)
+--------------------------------------------------
 
 -- Validation function before creating a warehouse transfer order
 CREATE OR REPLACE FUNCTION prevent_add_order()
@@ -40,7 +98,7 @@ DECLARE
     delivery_status_cancel   CONSTANT int := 3;
     delivery_status_shipped  CONSTANT int := 4;
 BEGIN
-    -- Check if destination warehouse exists and is active
+    -- Check if destination warehouse is active
     SELECT active INTO warehouse_active_status
     FROM Warehouses
     WHERE id = NEW.destination_warehouse_id;
@@ -49,7 +107,7 @@ BEGIN
         RAISE EXCEPTION 'Cannot transfer to inactive warehouse (id: %)', NEW.destination_warehouse_id;
     END IF;
 
-    -- Get current warehouse and validate same warehouse transfer
+    -- Prevent shipping to the same warehouse
     NEW.source_warehouse_id := (SELECT warehouse_id FROM Items WHERE id = NEW.item_id);
     
     IF NEW.destination_warehouse_id = NEW.source_warehouse_id THEN
@@ -80,6 +138,7 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
 
 -- Prevent updates to warehouse transfer orders
 CREATE OR REPLACE FUNCTION prevent_update_status_warehouses_order()
@@ -145,6 +204,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 -- Update warehouse transfer order status
 CREATE OR REPLACE FUNCTION update_warehouses_order_status()
 RETURNS TRIGGER AS $$
@@ -182,93 +242,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Validate item before decommissioning
-CREATE OR REPLACE FUNCTION validate_item_decommissioning()
-RETURNS TRIGGER AS $$
-DECLARE
-    delivery_status_in_stock CONSTANT int := 1;
-    delivery_status_cancel   CONSTANT int := 3;
-    delivery_status_received CONSTANT int := 5;
-BEGIN
-    -- Check if item is currently rented
-    IF EXISTS (
-        SELECT *
-        FROM Rent 
-        WHERE item_id = NEW.item_id 
-        AND delivery_status_id NOT IN (delivery_status_in_stock, delivery_status_cancel)
-    ) THEN
-        RAISE EXCEPTION 'Cannot decommission item (id: %). Item is currently rented', NEW.item_id;
-    END IF;
 
-    -- Check if item is in transit between warehouses
-    IF EXISTS (
-        SELECT *
-        FROM WarehousesOrders
-        WHERE item_id = NEW.item_id 
-        AND delivery_status_id NOT IN (delivery_status_cancel, delivery_status_received)
-    ) THEN
-        RAISE EXCEPTION 'Cannot decommission item (id: %). Item is currently in transit', NEW.item_id;
-    END IF;
+--------------------------------------------------
+-- Rent
+--------------------------------------------------
 
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Update item status to inactive when decommissioned
-CREATE OR REPLACE FUNCTION set_item_inactive_on_decommission()
-RETURNS TRIGGER AS $$
-BEGIN
-    UPDATE Items
-    SET active = FALSE
-    WHERE id = NEW.item_id;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Validate item availability before creating a rent
-CREATE OR REPLACE FUNCTION prevent_rent()
-RETURNS TRIGGER AS $$
-DECLARE
-    delivery_status_in_stock CONSTANT int := 1;
-    delivery_status_request  CONSTANT int := 2;
-    delivery_status_cancel   CONSTANT int := 3;
-    delivery_status_received CONSTANT int := 5;
-BEGIN
-    -- Check if item exists and is active
-    IF EXISTS (SELECT * FROM Items WHERE id = NEW.item_id AND active = FALSE) THEN
-        RAISE EXCEPTION 'Cannot rent item (id: %). Item is inactive or does not exist', NEW.item_id;
-    END IF;
-
-    -- Check if item is decommissioned
-    IF EXISTS (SELECT * FROM ItemsDecommissioning WHERE item_id = NEW.item_id) THEN
-        RAISE EXCEPTION 'Cannot rent item (id: %). Item is decommissioned', NEW.item_id;
-    END IF;
-
-    -- Check if item is in warehouse transfer
-    IF EXISTS (
-        SELECT * 
-        FROM WarehousesOrders 
-        WHERE item_id = NEW.item_id 
-        AND delivery_status_id NOT IN (delivery_status_cancel, delivery_status_received)
-    ) THEN
-        RAISE EXCEPTION 'Cannot rent item (id: %). Item is currently in transfer', NEW.item_id;
-    END IF;
-
-    -- Set initial status
-    NEW.delivery_status_id := delivery_status_request;
-
-    -- calculate expected payment
-    NEW.total_payments  = calculate_total_interim_payment_rent(
-                        NEW.item_id,
-                        NOW()::timestamp,
-                        (NOW() + (INTERVAL '1 day' * NEW.number_of_days))::timestamp
-                        );
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
+-- Calculate total rental days
 CREATE OR REPLACE FUNCTION get_total_rental_days(start_time timestamp, end_time timestamp)
 RETURNS int AS $$
 DECLARE
@@ -299,39 +278,27 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Calculate total rental cost including discounts
-CREATE OR REPLACE FUNCTION calculate_discounted_payment(p_item_id int, p_item_price decimal, p_start_date date, p_days int)
-RETURNS decimal AS $$
-BEGIN
-    RETURN (
-        WITH daily_discounts AS (
-            SELECT d.start_date, d.end_date, SUM(d.percent) as total_percent
-            FROM Discounts d
-            JOIN ItemsDiscounts itds ON itds.discount_id = d.id
-            WHERE itds.item_id = p_item_id
-            GROUP BY d.start_date, d.end_date
-        )
-        SELECT SUM(
-            p_item_price * (1 - LEAST(COALESCE(dd.total_percent, 0), 100) / 100.0)
-        )
-        FROM generate_series(p_start_date, p_start_date + (p_days - 1), '1 day') AS rental_day
-        LEFT JOIN daily_discounts dd ON rental_day BETWEEN dd.start_date AND dd.end_date
-    );
-END;
-$$ LANGUAGE plpgsql;
 
--- calculate total payment for interim rent
-CREATE OR REPLACE FUNCTION calculate_total_interim_payment_rent(item_id int, start_time timestamp, end_time timestamp)
+-- calculate total payment with promocode
+CREATE OR REPLACE FUNCTION calculate_payment(item_id int, start_time timestamp, end_time timestamp, promocode_id int)
 RETURNS DECIMAL AS $$
 DECLARE
     total_days int;
     item_price decimal(10,2);
+    promocode_percent int;
     total_payment decimal(10,2);
 BEGIN
-    -- Validate item exists and get price
+    -- Get item price
     SELECT price INTO STRICT item_price 
     FROM Items 
     WHERE id = item_id;
+
+    -- Get promocode discount percent
+    SELECT COALESCE(
+        (SELECT percent
+        FROM Promocodes
+        WHERE id = promocode_id), 0
+    ) INTO promocode_percent;
 
     -- Calculate rental duration
     IF start_time IS NULL OR end_time IS NULL THEN
@@ -340,17 +307,75 @@ BEGIN
     
     total_days := get_total_rental_days(start_time, end_time);
     
-    -- Calculate total payment with discounts
-    total_payment := calculate_discounted_payment(
-        item_id,
-        item_price,
-        start_time::date,
-        total_days
-    );
+    -- Calculate total payment with promocode
+    total_payment := item_price * total_days * (1 - promocode_percent::decimal / 100.0);
 
     RETURN total_payment;
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- Validate item availability before creating a rent
+CREATE OR REPLACE FUNCTION prevent_rent()
+RETURNS TRIGGER AS $$
+DECLARE
+    delivery_status_in_stock CONSTANT int := 1;
+    delivery_status_request  CONSTANT int := 2;
+    delivery_status_cancel   CONSTANT int := 3;
+    delivery_status_received CONSTANT int := 5;
+BEGIN
+    -- Check if item is active
+    IF EXISTS (SELECT * FROM Items WHERE id = NEW.item_id AND active = FALSE) THEN
+        RAISE EXCEPTION 'Cannot rent item (id: %). Item is inactive', NEW.item_id;
+    END IF;
+
+    -- Check if item is decommissioned
+    IF EXISTS (SELECT * FROM ItemDecommissioning WHERE item_id = NEW.item_id) THEN
+        RAISE EXCEPTION 'Cannot rent item (id: %). Item is decommissioned', NEW.item_id;
+    END IF;
+
+    -- Check if item is in warehouse transfer
+    IF EXISTS (
+        SELECT * 
+        FROM WarehousesOrders 
+        WHERE item_id = NEW.item_id 
+        AND delivery_status_id NOT IN (delivery_status_cancel, delivery_status_received)
+    ) THEN
+        RAISE EXCEPTION 'Cannot rent item (id: %). Item is currently in transfer', NEW.item_id;
+    END IF;
+
+    -- Set initial status
+    NEW.delivery_status_id := delivery_status_request;
+
+    -- calculate expected payment
+    NEW.total_payments  = calculate_payment(
+        NEW.item_id,
+        NEW.start_rent_time,
+        NEW.end_rent_time,
+        NEW.promocode_id
+    );
+
+    -- reducing the number of promocode usage
+    IF NEW.promocode_id IS NOT NULL THEN
+        -- Check if promocode is valid
+        IF NOT EXISTS (
+            SELECT * 
+            FROM Promocodes 
+            WHERE id = NEW.promocode_id 
+            AND number_of_uses > 0
+        ) THEN
+            RAISE EXCEPTION 'Promocode (id: %) is invalid or has no remaining uses', NEW.promocode_id;
+        END IF;
+
+        UPDATE Promocodes
+        SET number_of_uses = number_of_uses - 1
+        WHERE id = NEW.promocode_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 
 -- Process rent status updates
 CREATE OR REPLACE FUNCTION process_rent_status_update()
@@ -403,10 +428,11 @@ BEGIN
 
     -- Calculate final rental cost when item is being returned (if not overdue)
     IF NEW.delivery_status_id = delivery_status_returning AND NEW.overdue = FALSE THEN
-        new_total_payment = calculate_total_interim_payment_rent(
+        new_total_payment = calculate_payment (
             NEW.item_id,
             NEW.start_rent_time,
-            CURRENT_TIMESTAMP::timestamp
+            CURRENT_TIMESTAMP::timestamp,
+            NEW.promocode_id
         );
 
         -- TODO: optimize
@@ -443,6 +469,7 @@ BEGIN
     FROM Items 
     WHERE id = OLD.item_id;
 
+    -- TODO: optimize (use get_total_rental_days?)
     -- Calculate overdue days if rental was overdue
     IF OLD.overdue THEN
         start_overdue_time := CASE  
