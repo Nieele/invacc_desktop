@@ -91,7 +91,7 @@ func (s *authService) Login(creds models.CustomerAuth) (string, error) {
 	// 	return "", err
 	// }
 
-	storedAuth, err := s.authRepo.GetCustomerAuth(creds.Login)
+	storedAuth, err := s.authRepo.GetCustomerAuth(creds.Email)
 	if err != nil {
 		return "", err
 	}

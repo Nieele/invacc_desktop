@@ -33,7 +33,7 @@ func (h *customerHandler) UpdatePesonalInfo(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	var info models.CustomersInfoWithLogin
+	var info models.CustomersInfoWithEmail
 	if err := json.NewDecoder(r.Body).Decode(&info); err != nil {
 		http.Error(w, "invalid request payload", http.StatusBadRequest)
 		return

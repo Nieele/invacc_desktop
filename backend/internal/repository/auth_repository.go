@@ -21,19 +21,19 @@ func NewAuthRepository(db *gorm.DB) AuthRepository {
 	return &authRepo{db: db}
 }
 
-func (r *authRepo) GetCustomerAuth(login string) (models.CustomerAuth, error) {
+func (r *authRepo) GetCustomerAuth(email string) (models.CustomerAuth, error) {
 	var auth models.CustomerAuth
 
-	result := r.db.Where("login = ?", login).First(&auth)
+	result := r.db.Where("email = ?", email).First(&auth)
 	if result.Error != nil {
-		return models.CustomerAuth{}, fmt.Errorf("couldn't get customer info by login %s: %w", login, result.Error)
+		return models.CustomerAuth{}, fmt.Errorf("couldn't get customer info by email %s: %w", email, result.Error)
 	}
 	return auth, nil
 }
 
 func (r *authRepo) InsertCustomer(regInfo models.CustomerAuthRegistration) error {
 	cAuth := models.CustomerAuth{
-		Login:    regInfo.Login,
+		Email:    regInfo.Email,
 		Password: regInfo.Password,
 	}
 
@@ -41,10 +41,9 @@ func (r *authRepo) InsertCustomer(regInfo models.CustomerAuthRegistration) error
 		FirstName:         regInfo.FirstName,
 		LastName:          regInfo.LastName,
 		Phone:             regInfo.Phone,
-		Phone_verified:    false,
-		Email:             regInfo.Email,
-		Email_verified:    false,
 		Passport:          regInfo.Passport,
+		Phone_verified:    false,
+		Email_verified:    false,
 		Passport_verified: false,
 	}
 

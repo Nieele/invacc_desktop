@@ -8,8 +8,8 @@ import (
 )
 
 type CustomerRepository interface {
-	GetInfo(id uint) (models.CustomersInfoWithLogin, error)
-	UpdateInfo(info models.CustomersInfoWithLogin) error
+	GetInfo(id uint) (models.CustomersInfoWithEmail, error)
+	UpdateInfo(info models.CustomersInfoWithEmail) error
 }
 
 type customerRepo struct {
@@ -20,22 +20,22 @@ func NewCustomerRepository(db *gorm.DB) CustomerRepository {
 	return &customerRepo{db: db}
 }
 
-func (r *customerRepo) GetInfo(id uint) (models.CustomersInfoWithLogin, error) {
-	var info models.CustomersInfoWithLogin
+func (r *customerRepo) GetInfo(id uint) (models.CustomersInfoWithEmail, error) {
+	var info models.CustomersInfoWithEmail
 	result := r.db.Model(&models.CustomerInfo{}).
-		Select("customersinfo.*, customersauth.login").
+		Select("customersinfo.*, customersauth.email").
 		Joins("JOIN customersauth ON customersinfo.id = customersauth.id").
 		Where("customersinfo.id = ?", id).
 		First(&info)
 
 	if result.Error != nil {
-		return models.CustomersInfoWithLogin{}, fmt.Errorf("couldn't get customer info by id %d: %w", id, result.Error)
+		return models.CustomersInfoWithEmail{}, fmt.Errorf("couldn't get customer info by id %d: %w", id, result.Error)
 	}
 
 	return info, nil
 }
 
-func (r *customerRepo) UpdateInfo(info models.CustomersInfoWithLogin) error {
+func (r *customerRepo) UpdateInfo(info models.CustomersInfoWithEmail) error {
 	tx := r.db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -48,7 +48,6 @@ func (r *customerRepo) UpdateInfo(info models.CustomersInfoWithLogin) error {
 		Updates(models.CustomerInfo{
 			FirstName: info.FirstName,
 			LastName:  info.LastName,
-			Email:     info.Email,
 			Phone:     info.Phone,
 			Passport:  info.Passport,
 		})
@@ -62,7 +61,7 @@ func (r *customerRepo) UpdateInfo(info models.CustomersInfoWithLogin) error {
 	result = tx.Model(&models.CustomerAuth{}).
 		Where("id = ?", info.ID).
 		Updates(models.CustomerAuth{
-			Login: info.Login,
+			Email: info.Email,
 		})
 
 	if result.Error != nil {

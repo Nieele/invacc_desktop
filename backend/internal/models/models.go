@@ -12,7 +12,7 @@ type ItemWithWarehouseName struct {
 // CustomersAuth in db
 type CustomerAuth struct {
 	ID       uint   `gorm:"primaryKey" json:"id"`
-	Login    string `gorm:"type:varchar(50);not null;unique" json:"login"`
+	Email    string `gorm:"type:varchar(50);not null;unique" json:"email"`
 	Password string `gorm:"type:varchar(60);not null" json:"password"`
 }
 
@@ -26,10 +26,9 @@ type CustomerInfo struct {
 	FirstName         string `gorm:"column:firstname;type:varchar(50);not null" json:"firstname"`
 	LastName          string `gorm:"column:lastname;type:varchar(50);not null" json:"lastname"`
 	Phone             string `gorm:"column:phone;type:varchar(30);not null;unique" json:"phone"`
-	Phone_verified    bool   `gorm:"column:phone_verified;type:boolean;not null;default:false" json:"phone_verified"`
-	Email             string `gorm:"column:email;type:varchar(50);not null;default:'empty'" json:"email"`
-	Email_verified    bool   `gorm:"column:email_verified;type:boolean;not null;default:false" json:"email_verified"`
 	Passport          string `gorm:"column:passport;type:varchar(30);not null;default:'empty'" json:"passport"`
+	Phone_verified    bool   `gorm:"column:phone_verified;type:boolean;not null;default:false" json:"phone_verified"`
+	Email_verified    bool   `gorm:"column:email_verified;type:boolean;not null;default:false" json:"email_verified"`
 	Passport_verified bool   `gorm:"column:passport_verified;type:boolean;not null;default:false" json:"passport_verified"`
 }
 
@@ -37,9 +36,9 @@ func (CustomerInfo) TableName() string {
 	return "customersinfo"
 }
 
-type CustomersInfoWithLogin struct {
+type CustomersInfoWithEmail struct {
 	CustomerInfo
-	Login string `json:"login"`
+	Email string `json:"email"`
 }
 
 type Cart struct {
