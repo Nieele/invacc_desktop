@@ -6,10 +6,14 @@ import (
 	"invacc-backend/internal/config"
 	"invacc-backend/internal/handlers"
 	custommw "invacc-backend/internal/middleware"
+	"invacc-backend/internal/repository"
 	"invacc-backend/internal/service"
+
+	_ "invacc-backend/docs"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"gorm.io/gorm"
 )
 
@@ -20,9 +24,12 @@ func NewRouter(db *gorm.DB, cfg *config.Config) http.Handler {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Heartbeat("/ping"))
 
+	// Initialize repositories
+	ItemRepo := repository.NewItemRepository(db)
+
 	// Initialize services
 	AuthService := service.NewAuthService(db, cfg.Auth)
-	ItemService := service.NewItemService(db)
+	ItemService := service.NewItemService(ItemRepo)
 	CostumerService := service.NewCustomerService(db)
 	RentService := service.NewRentService(db)
 
@@ -36,7 +43,12 @@ func NewRouter(db *gorm.DB, cfg *config.Config) http.Handler {
 	r.Post("/register", AuthHandler.Register)
 	r.Post("/login", AuthHandler.Login)
 	r.Post("/logout", AuthHandler.Logout)
-	r.Get("/items", ItemHandler.GetItems)
+
+	r.Get("/items", ItemHandler.ListItems)
+	r.Get("/items/{id}", ItemHandler.GetItem)
+
+	r.Get("/swagger/*", httpSwagger.WrapHandler)
+
 	r.Group(func(r chi.Router) {
 		r.Use(custommw.JWTAuthMiddleware(AuthService))
 		r.Get("/account", CostumerHandler.GetPesonalInfo)
