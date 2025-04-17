@@ -10,11 +10,12 @@ package handlers
 //	warehouse_name: "Main Depot"
 //	categories: ["Tools", "Hardware"]
 type ItemDTO struct {
-	ID            uint     `json:"id"`
-	Name          string   `json:"name"`
-	Price         float64  `json:"price"`
-	WarehouseName string   `json:"warehouse_name"`
-	Categories    []string `json:"categories"`
+	ID            uint    `json:"id"`
+	Name          string  `json:"name"`
+	Price         float64 `json:"price"`
+	WarehouseID   uint    `json:"warehouse_id"`
+	WarehouseName string  `json:"warehouse_name"`
+	ImgURL        *string `json:"img_url,omitempty"`
 }
 
 // CategoryDTO represents a category in item details.

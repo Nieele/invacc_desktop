@@ -94,16 +94,13 @@ func (h *ItemHandler) ListItems(w http.ResponseWriter, r *http.Request) {
 	// Build DTO response
 	var data []ItemDTO
 	for _, it := range items {
-		cats := make([]string, len(it.Categories))
-		for i, c := range it.Categories {
-			cats[i] = c.CategoryName
-		}
 		data = append(data, ItemDTO{
 			ID:            it.ID,
 			Name:          it.Name,
 			Price:         it.Price,
+			WarehouseID:   it.Warehouse.ID,
 			WarehouseName: it.Warehouse.Name,
-			Categories:    cats,
+			ImgURL:        it.ImgURL,
 		})
 	}
 
